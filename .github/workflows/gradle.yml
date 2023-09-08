@@ -21,6 +21,10 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
+    env:
+      DB_HOST: ${{ secrets.DB_HOST }} # 시크릿으로 설정한 MySQL 호스트 주소
+      DB_PORT: 3306 # MySQL 포트 번호
+      DB_NAME: ${{ secrets.DB_NAME }} # 시크릿으로 설정한 MySQL 데이터베이스 이름
 
     steps:
       - uses: actions/checkout@v3
@@ -29,6 +33,13 @@ jobs:
         with:
           java-version: '20'
           distribution: 'temurin'
+
+      - name: Set up MySQL username and password
+        run: |
+          echo "spring.datasource.url=jdbc:mysql://${DB_HOST}:${DB_PORT}/${DB_NAME}" >> src/main/resources/application.properties
+          echo "spring.datasource.username=${{ secrets.DB_USERNAME }}" >> src/main/resources/application.properties
+          echo "spring.datasource.password=${{ secrets.DB_PASSWORD }}" >> src/main/resources/application.properties
+        working-directory: ${{ github.workspace }}
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
