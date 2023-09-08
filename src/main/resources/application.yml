@@ -1,0 +1,12 @@
+spring:
+  datasource:
+    username: ${SPRING_DATASOURCE_USERNAME}
+    url: ${SPRING_DATASOURCE_URL}
+    password: ${SPRING_DATASOURCE_PASSWORD}
+  profiles:
+    include: mysql
+  jpa:
+    hibernate:
+      ddl-auto: update
+server:
+  port: '8090'
