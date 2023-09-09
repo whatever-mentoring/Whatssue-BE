@@ -15,19 +15,19 @@ public class AbsentControllerImpl implements AbsentController {
     }
 
     @Override
-    public void getAbsentRequest(Long scheduleId) throws NotImplementedException {
+    public void getAbsentRequest() throws NotImplementedException {
         //"TODO: This api should be implemented"
         throw new NotImplementedException("hi");
     }
 
     @Override
-    public void acceptAbsentRequest(Long scheduleId) throws NotImplementedException {
+    public void acceptAbsentRequest(Long absentId) throws NotImplementedException {
         //"TODO: This api should be implemented"
         throw new NotImplementedException("hi");
     }
 
     @Override
-    public void refuseAbsentRequest(Long scheduleId) throws NotImplementedException {
+    public void refuseAbsentRequest(Long absentId) throws NotImplementedException {
         //"TODO: This api should be implemented"
         throw new NotImplementedException("hi");
     }
