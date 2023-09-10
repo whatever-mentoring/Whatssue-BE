@@ -1,6 +1,7 @@
 package gdg.whatssue.controller.inter;
 
 import jdk.jshell.spi.ExecutionControl.NotImplementedException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,15 +15,15 @@ public interface ScheduleController {
 
     //특정 일자의 일정들 조회
     @GetMapping("/list/{date}")
-    public void getScheduleListOnDate() throws NotImplementedException;
+    public ResponseEntity getScheduleListOnDate() throws NotImplementedException;
 
     //전체 일정 조회
     @GetMapping("/list")
-    public void getScheduleList() throws NotImplementedException;
+    public ResponseEntity getScheduleList() throws NotImplementedException;
 
     //세부 일정 조회
     @GetMapping("/{scheduleId}")
-    public void getSchedule(@PathVariable Long scheduleId) throws NotImplementedException;
+    public ResponseEntity getSchedule(@PathVariable Long scheduleId) throws NotImplementedException;
 
     /**
      * Admin api
@@ -30,13 +31,13 @@ public interface ScheduleController {
 
     //일정 수정
     @PatchMapping("/{scheduleId}")
-    public void updateSchedule(@PathVariable Long scheduleId) throws NotImplementedException;
+    public ResponseEntity updateSchedule(@PathVariable Long scheduleId) throws NotImplementedException;
 
     //일정 추가
     @PostMapping("/")
-    public void createSchedule() throws NotImplementedException;
+    public ResponseEntity createSchedule() throws NotImplementedException;
 
     //일정 삭제
     @DeleteMapping("/{scheduleId}")
-    public void deleteSchedule(@PathVariable Long scheduleId) throws NotImplementedException;
+    public ResponseEntity deleteSchedule(@PathVariable Long scheduleId) throws NotImplementedException;
 }

@@ -2,6 +2,7 @@ package gdg.whatssue.controller;
 
 import gdg.whatssue.controller.inter.AbsentController;
 import jdk.jshell.spi.ExecutionControl.NotImplementedException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -9,25 +10,25 @@ public class AbsentControllerImpl implements AbsentController {
 
 
     @Override
-    public void requestAbsent(Long scheduleId) throws NotImplementedException {
+    public ResponseEntity requestAbsent(Long scheduleId) throws NotImplementedException {
         //"TODO: This api should be implemented"
         throw new NotImplementedException("hi");
     }
 
     @Override
-    public void getAbsentRequest() throws NotImplementedException {
+    public ResponseEntity getAbsentRequest() throws NotImplementedException {
         //"TODO: This api should be implemented"
         throw new NotImplementedException("hi");
     }
 
     @Override
-    public void acceptAbsentRequest(Long absentId) throws NotImplementedException {
+    public ResponseEntity acceptAbsentRequest(Long absentId) throws NotImplementedException {
         //"TODO: This api should be implemented"
         throw new NotImplementedException("hi");
     }
 
     @Override
-    public void refuseAbsentRequest(Long absentId) throws NotImplementedException {
+    public ResponseEntity refuseAbsentRequest(Long absentId) throws NotImplementedException {
         //"TODO: This api should be implemented"
         throw new NotImplementedException("hi");
     }
