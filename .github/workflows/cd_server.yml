@@ -58,5 +58,6 @@ jobs:
             sudo docker rm -f $(docker ps -q -a)
             sudo docker pull ghcr.io/${{ github.repository }}/whatssue:1.0
             sudo docker run -d -p 8090:8090 --name whatssue ghcr.io/${{ github.repository }}/whatssue:1.0 
+            sudo docker rm -f $(docker ps -q -a)
             docker image prune -f
 
