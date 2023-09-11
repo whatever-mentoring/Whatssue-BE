@@ -9,13 +9,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class ScheduleControllerImpl implements ScheduleController {
 
     @Override
-    public ResponseEntity getScheduleListOnDate() throws NotImplementedException {
-        //"TODO: This api should be implemented"
-        throw new NotImplementedException("hi");
-    }
-
-    @Override
-    public ResponseEntity getScheduleList() throws NotImplementedException {
+    public ResponseEntity getScheduleByMonth(int month) throws NotImplementedException{
         //"TODO: This api should be implemented"
         throw new NotImplementedException("hi");
     }
