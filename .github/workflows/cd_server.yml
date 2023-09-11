@@ -14,13 +14,13 @@ jobs:
     runs-on: ubuntu-18.04
 
     steps:
-      ## Project JDK 20 Setting
+      ## Project JDK 17 Setting
       - name: Checkout
         uses: actions/checkout@v3
-      - name: Set up JDK 20
+      - name: Set up JDK 17
         uses: actions/setup-java@v3
         with:
-          java-version: '20'
+          java-version: '17'
           distribution: 'temurin'
 
 
@@ -58,6 +58,5 @@ jobs:
             sudo docker rm -f $(docker ps -q -a)
             sudo docker pull ghcr.io/${{ github.repository }}/whatssue:1.0
             sudo docker run -d -p 8090:8090 --name whatssue ghcr.io/${{ github.repository }}/whatssue:1.0 
-            sudo docker rm -f $(docker ps -q -a)
             docker image prune -f
 
