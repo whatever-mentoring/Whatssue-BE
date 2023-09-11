@@ -58,7 +58,7 @@ jobs:
           password: ${{ secrets.NCP_DEV_SERVER_PASSWORD }}
           port: ${{ secrets.NCP_DEV_SERVER_SSH_PORT }}
           script: |
-            echo "${{ secrets.GITHUB_TOKEN }}" | sudo docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            echo "${{ secrets.SONG_TOKEN }}" | sudo docker login ghcr.io -u ${{ github.actor }} --password-stdin
             if [ "$(docker ps -aq)" ]; then
             sudo docker rm -f $(docker ps -aq)
             fi
