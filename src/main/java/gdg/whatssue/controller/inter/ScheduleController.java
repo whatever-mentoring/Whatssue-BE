@@ -28,8 +28,8 @@ public interface ScheduleController {
 */
     
     //월별일정 조회 api 추가
-    @GetMapping("/list/month:{month}")
-    public ResponseEntity getScheduleByMonth(@PathVariable int month) throws NotImplementedException;
+    @GetMapping("/list/month:{yearMonth}")
+    public ResponseEntity getScheduleByMonth(@PathVariable String yearMonth) throws NotImplementedException;
     
     //세부 일정 조회
     @GetMapping("/{scheduleId}")
