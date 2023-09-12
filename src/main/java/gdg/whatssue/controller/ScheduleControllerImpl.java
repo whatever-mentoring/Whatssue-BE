@@ -48,7 +48,7 @@ public class ScheduleControllerImpl implements ScheduleController {
     public ResponseEntity getSchedule(Long scheduleId) {
         ScheduleDetailDto detailDto = scheduleService.getSchedule(scheduleId);
 
-        if(detailDto == null){
+        if (detailDto == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("존재하지 않는 일정입니다.");
         }
 

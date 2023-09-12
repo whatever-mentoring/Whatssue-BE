@@ -15,12 +15,10 @@ public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
 
-    public ScheduleDetailDto getSchedule(Long scheduleId){
+    public ScheduleDetailDto getSchedule(Long scheduleId) {
         Schedule schedule = scheduleRepository.findById(scheduleId).orElse(null);
 
-//        log.info("getScheduleDetail = {}", schedule);
-
-        if(schedule != null ){
+        if (schedule != null) {
             ScheduleDetailDto scheduleDetailDto = ScheduleDetailDto.builder()
                 .scheduleTitle(schedule.getScheduleTitle())
                 .scheduleContent(schedule.getScheduleContent())
