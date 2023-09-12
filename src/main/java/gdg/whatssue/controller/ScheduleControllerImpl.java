@@ -4,6 +4,7 @@ import gdg.whatssue.controller.inter.ScheduleController;
 import gdg.whatssue.mockdata.Schedule;
 import gdg.whatssue.mockdata.ScheduleByMonth;
 import gdg.whatssue.service.ScheduleService;
+import gdg.whatssue.service.dto.ScheduleByMonthDto;
 import gdg.whatssue.service.dto.ScheduleDetailDto;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,27 +22,11 @@ public class ScheduleControllerImpl implements ScheduleController {
     private final ScheduleService scheduleService;
 
     @Override
-    public ResponseEntity getScheduleByMonth(int month) {
-        //"TODO: This api should be implemented"
-        ScheduleByMonth mockData1 = ScheduleByMonth.builder()
-            .scheduleId(1L)
-            .scheduleTitle("일정1")
-            .scheduleDate("2023-09-05").build();
-        ScheduleByMonth mockData2 = ScheduleByMonth.builder()
-            .scheduleId(4L)
-            .scheduleTitle("일정2")
-            .scheduleDate("2023-09-07").build();
-        ScheduleByMonth mockData3 = ScheduleByMonth.builder()
-            .scheduleId(5L)
-            .scheduleTitle("일정3")
-            .scheduleDate("2023-09-09").build();
+    public ResponseEntity getScheduleByMonth(String yearMonth) {
 
-        List<ScheduleByMonth> mockDataList = new ArrayList<>();
-        mockDataList.add(mockData1);
-        mockDataList.add(mockData2);
-        mockDataList.add(mockData3);
+        List<ScheduleByMonthDto> scheduleListByMonth = scheduleService.getScheduleByMonth(yearMonth);
 
-        return ResponseEntity.status(200).body(mockDataList);
+        return ResponseEntity.status(HttpStatus.OK).body(scheduleListByMonth);
     }
 
     @Override
