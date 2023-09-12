@@ -42,10 +42,9 @@ public class ScheduleService {
         //어떤 클럽의 schedule을 찾을 것인지 모르니 일단 임시로 1번 user가 속한 클럽의 스케줄을 조회
         Long userId = 1L;
         Club club = memberRepository.findById(userId).get().getClub();
+        List<Schedule> scheduleList = club.getScheduleList();
 
-        List<Schedule> allByClubId = scheduleRepository.findAllByClub(club);
-
-        List<ScheduleByMonthDto> scheduleListByMonth = allByClubId.stream()
+        List<ScheduleByMonthDto> scheduleListByMonth = scheduleList.stream()
             .filter(s -> s.getScheduleDate().toString().substring(0, 7).equals(yearMonth))
             .map(s-> ScheduleByMonthDto.builder()
                 .scheduleId(s.getScheduleId())
