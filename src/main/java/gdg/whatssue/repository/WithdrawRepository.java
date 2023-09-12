@@ -1,2 +1,4 @@
-package gdg.whatssue.repository;public interface WithdrawRepository {
+package gdg.whatssue.repository;
+
+public interface WithdrawRepository {
 }

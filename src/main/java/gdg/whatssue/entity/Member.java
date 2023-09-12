@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import jakarta.xml.bind.annotation.XmlAnyAttribute;
 import lombok.Getter;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 public class Member {
@@ -35,5 +38,14 @@ public class Member {
     @JoinColumn(name = "checked_list_by_user_id")
     private CheckedListByUser checkedListByUser;
 
+    @OneToOne(mappedBy = "member")
+    private Admin admin;
+
+    @OneToMany(mappedBy = "member")
+    private List<Deposit> depositList;
+
+    @ManyToOne
+    @JoinColumn(name = "deposit_id")
+    private Deposit deposit;
 
 }

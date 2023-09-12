@@ -3,8 +3,12 @@ package gdg.whatssue.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 
+
+
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -27,7 +31,10 @@ public class Schedule {
     @OneToOne(mappedBy = "schedule")
     private ApplyOfficialAbsent applyOfficialAbsent;
 
-
     @OneToOne(mappedBy = "schedule")
     private Link link;
+
+    @OneToMany(mappedBy = "schedule")
+    private List<AttendanceByUserBySchedule> attendanceByUserByScheduleList;
+
 }

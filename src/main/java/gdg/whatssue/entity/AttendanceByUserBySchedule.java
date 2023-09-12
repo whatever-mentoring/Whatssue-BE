@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Entity
 @Getter
-public class AttendanceByUser {
+public class AttendanceByUserBySchedule {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
     private Long attendanceByUserId;
@@ -19,5 +19,7 @@ public class AttendanceByUser {
     @ManyToOne
     @JoinColumn(name="schedule_id")
     private Schedule schedule;
+
+
 
 }
