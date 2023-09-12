@@ -24,4 +24,6 @@ public class Admin {
 
     @OneToMany(mappedBy = "admin")
     private List<Withdraw> withdrawList;
+
+
 }

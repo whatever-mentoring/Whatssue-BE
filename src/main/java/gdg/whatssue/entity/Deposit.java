@@ -24,11 +24,5 @@ public class Deposit {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "deposit")
-    private List<Deposit> depositList;
-
-    @OneToMany(mappedBy = "withdraw")
-    private List<Withdraw> withdrawList;
-
 
 }

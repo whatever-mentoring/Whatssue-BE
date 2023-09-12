@@ -44,8 +44,5 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<Deposit> depositList;
 
-    @ManyToOne
-    @JoinColumn(name = "deposit_id")
-    private Deposit deposit;
 
 }
