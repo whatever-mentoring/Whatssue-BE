@@ -3,15 +3,22 @@ package gdg.whatssue.controller;
 import gdg.whatssue.controller.inter.ScheduleController;
 import gdg.whatssue.mockdata.Schedule;
 import gdg.whatssue.mockdata.ScheduleByMonth;
+import gdg.whatssue.service.ScheduleService;
+import gdg.whatssue.service.dto.ScheduleDetailDto;
 import java.util.ArrayList;
 import java.util.List;
 import jdk.jshell.spi.ExecutionControl.NotImplementedException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@RequiredArgsConstructor
 public class ScheduleControllerImpl implements ScheduleController {
+
+    private final ScheduleService scheduleService;
 
     @Override
     public ResponseEntity getScheduleByMonth(int month) {
@@ -39,15 +46,13 @@ public class ScheduleControllerImpl implements ScheduleController {
 
     @Override
     public ResponseEntity getSchedule(Long scheduleId) {
-        //"TODO: This api should be implemented"
-        Schedule mockData = Schedule.builder()
-            .scheduleTitle("gdg 회의")
-            .scheduleContent("다같이 회의합니다")
-            .scheduleDate("2023-09-11")
-            .scheduleTime("13:34")
-            .isChecked(true).build();
+        ScheduleDetailDto detailDto = scheduleService.getSchedule(scheduleId);
 
-        return ResponseEntity.status(200).body(mockData);
+        if(detailDto == null){
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("존재하지 않는 일정입니다.");
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body(detailDto);
     }
 
     @Override
