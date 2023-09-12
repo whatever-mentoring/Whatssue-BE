@@ -69,10 +69,10 @@ jobs:
           port: ${{ secrets.NCP_DEV_SERVER_SSH_PORT }}
           script: |
             echo "${{ secrets.SONG_TOKEN }}" | sudo docker login ghcr.io -u ${{ github.actor }} --password-stdin
-            if [ "$(docker ps -aq)" ]; then
+            if [ "$(docker ps -aq -f name=whatssue-be)" ]; then
             sudo docker rm -f $(docker ps -aq)
             fi
             sudo docker pull ghcr.io/whatever-mentoring/whatssue-be/whatssue:1.0
-            sudo docker run -d -p 8090:8090 --name whatssue ghcr.io/whatever-mentoring/whatssue-be/whatssue:1.0
+            sudo docker run -d -p 8090:8090 --name whatssue-be ghcr.io/whatever-mentoring/whatssue-be/whatssue:1.0
             sudo docker image prune -f
 
