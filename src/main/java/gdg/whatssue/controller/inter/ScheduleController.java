@@ -1,14 +1,9 @@
 package gdg.whatssue.controller.inter;
 
+import gdg.whatssue.service.dto.ScheduleDetailDto;
 import jdk.jshell.spi.ExecutionControl.NotImplementedException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
 @RequestMapping("/api/schedule")
@@ -51,7 +46,7 @@ public interface ScheduleController {
 
     //일정 추가
     @PostMapping("/")
-    public ResponseEntity createSchedule() throws NotImplementedException;
+    public ResponseEntity createSchedule(@RequestBody ScheduleDetailDto dto) throws NotImplementedException;
 
     //일정 삭제
     @DeleteMapping("/{scheduleId}")

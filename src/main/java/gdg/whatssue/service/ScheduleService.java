@@ -7,6 +7,9 @@ import gdg.whatssue.repository.ScheduleRepository;
 import gdg.whatssue.service.dto.ScheduleByDateDto;
 import gdg.whatssue.service.dto.ScheduleByMonthDto;
 import gdg.whatssue.service.dto.ScheduleDetailDto;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
@@ -79,5 +82,14 @@ public class ScheduleService {
             .collect(Collectors.toList());
 
         return scheduleListByMonth;
+    }
+    public void createSchedule(ScheduleDetailDto dto){
+        Schedule schedule = Schedule.builder()
+            .scheduleTitle(dto.getScheduleTitle())
+            .scheduleContent(dto.getScheduleContent())
+            .scheduleDate(dto.getScheduleDate())
+            .scheduleTime(dto.getScheduleTime())
+            .build();
+        scheduleRepository.save(schedule);
     }
 }
