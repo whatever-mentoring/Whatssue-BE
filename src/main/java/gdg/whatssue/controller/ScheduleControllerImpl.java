@@ -4,6 +4,7 @@ import gdg.whatssue.controller.inter.ScheduleController;
 import gdg.whatssue.mockdata.Schedule;
 import gdg.whatssue.mockdata.ScheduleByMonth;
 import gdg.whatssue.service.ScheduleService;
+import gdg.whatssue.service.dto.ScheduleByDateDto;
 import gdg.whatssue.service.dto.ScheduleByMonthDto;
 import gdg.whatssue.service.dto.ScheduleDetailDto;
 import java.util.ArrayList;
@@ -30,11 +31,18 @@ public class ScheduleControllerImpl implements ScheduleController {
     }
 
     @Override
+    public ResponseEntity getScheduleByDate(String yearMonthDate) {
+        List<ScheduleByDateDto> scheduleListByDate = scheduleService.getScheduleByDate(yearMonthDate);
+
+        return ResponseEntity.status(HttpStatus.OK).body(scheduleListByDate);
+    }
+
+    @Override
     public ResponseEntity getSchedule(Long scheduleId) {
         ScheduleDetailDto detailDto = scheduleService.getSchedule(scheduleId);
 
         if (detailDto == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("존재하지 않는 일정입니다.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("존재하지 않는 일정입니다.");
         }
 
         return ResponseEntity.status(HttpStatus.OK).body(detailDto);

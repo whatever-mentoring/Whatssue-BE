@@ -5,9 +5,10 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class ScheduleByMonthDto {
+public class ScheduleByDateDto {
 
     private Long scheduleId;
     private String scheduleTitle;
     private String scheduleDate;
+    private boolean isChecked;
 }

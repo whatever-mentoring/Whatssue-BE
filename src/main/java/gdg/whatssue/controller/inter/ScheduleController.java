@@ -30,7 +30,11 @@ public interface ScheduleController {
     //월별일정 조회 api 추가
     @GetMapping("/list/month:{yearMonth}")
     public ResponseEntity getScheduleByMonth(@PathVariable String yearMonth) throws NotImplementedException;
-    
+
+    //일자별 일정 조회 api
+    @GetMapping("/list/date:{yearMonthDate}")
+    public ResponseEntity getScheduleByDate(@PathVariable String yearMonthDate) throws NotImplementedException;
+
     //세부 일정 조회
     @GetMapping("/{scheduleId}")
     public ResponseEntity getSchedule(@PathVariable Long scheduleId) throws NotImplementedException;
