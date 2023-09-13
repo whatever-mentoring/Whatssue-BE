@@ -10,4 +10,5 @@ public class ScheduleByMonthDto {
     private Long scheduleId;
     private String scheduleTitle;
     private String scheduleDate;
+    private String scheduleTime;
 }

@@ -21,6 +21,7 @@ public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final MemberRepository memberRepository;
 
+    //일정 상세 조회
     public ScheduleDetailDto getSchedule(Long scheduleId) {
         Schedule schedule = scheduleRepository.findById(scheduleId).orElse(null);
 
@@ -37,6 +38,7 @@ public class ScheduleService {
         return null;
     }
 
+    //월별 일정 조회
     public List<ScheduleByMonthDto> getScheduleByMonth(String yearMonth) {
 
 
@@ -51,12 +53,14 @@ public class ScheduleService {
                 .scheduleId(s.getScheduleId())
                 .scheduleTitle(s.getScheduleTitle())
                 .scheduleDate(s.getScheduleDate().toString())
+                .scheduleTime(s.getScheduleTime().toString())
                 .build())
             .collect(Collectors.toList());
 
         return scheduleListByMonth;
     }
 
+    //일자별 일정 조회
     public List<ScheduleByDateDto> getScheduleByDate(String yearMonthDate) {
 
         //어떤 클럽의 schedule을 찾을 것인지 모르니 일단 임시로 1번 user가 속한 클럽의 스케줄을 조회
@@ -70,6 +74,7 @@ public class ScheduleService {
                 .scheduleId(s.getScheduleId())
                 .scheduleTitle(s.getScheduleTitle())
                 .scheduleDate(s.getScheduleDate().toString())
+                .scheduleTime(s.getScheduleTime().toString())
                 .isChecked(s.getIsChecked()).build())
             .collect(Collectors.toList());
 
