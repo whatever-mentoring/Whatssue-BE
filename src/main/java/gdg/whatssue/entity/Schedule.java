@@ -30,10 +30,7 @@ public class Schedule {
 
     @OneToOne(mappedBy = "schedule")
     private ApplyOfficialAbsent applyOfficialAbsent;
-
-    @OneToOne(mappedBy = "schedule")
-    private Link link;
-
+    
     @OneToMany(mappedBy = "schedule")
     private List<AttendanceByUserBySchedule> attendanceByUserByScheduleList;
 
