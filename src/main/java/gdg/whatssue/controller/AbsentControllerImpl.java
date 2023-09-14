@@ -1,6 +1,7 @@
 package gdg.whatssue.controller;
 
 import gdg.whatssue.controller.inter.AbsentController;
+import gdg.whatssue.entity.ApplyOfficialAbsent;
 import gdg.whatssue.service.AbsentService;
 import jdk.jshell.spi.ExecutionControl.NotImplementedException;
 import lombok.RequiredArgsConstructor;
@@ -14,9 +15,8 @@ public class AbsentControllerImpl implements AbsentController {
     private final AbsentService absentService;
 
     @Override
-    public ResponseEntity requestAbsent(Long scheduleId) throws NotImplementedException {
-        //"TODO: This api should be implemented"
-        throw new NotImplementedException("hi");
+    public ResponseEntity requestAbsent(Long scheduleId, ApplyOfficialAbsent applyOfficialAbsent) throws NotImplementedException {
+        return absentService.requestAbsent(scheduleId,applyOfficialAbsent);
     }
 
     @Override

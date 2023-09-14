@@ -1,7 +1,6 @@
 package gdg.whatssue.service;
 
 import gdg.whatssue.entity.ApplyOfficialAbsent;
-import gdg.whatssue.entity.Club;
 import gdg.whatssue.entity.Schedule;
 import gdg.whatssue.repository.ApplyOfficialAbsentRepository;
 import gdg.whatssue.repository.MemberRepository;
@@ -63,5 +62,16 @@ public class AbsentService {
         }
         applyOfficialAbsent.setIsAccepted(false);
         return ResponseEntity.ok().build();
+    }
+
+    public ResponseEntity requestAbsent(Long scheduleId, ApplyOfficialAbsent applyOfficialAbsent) {
+        //공결 테이블에 추가하여 신청
+        Schedule schedule = scheduleRepository.findById(scheduleId).orElse(null);
+        if(schedule == null){
+            return ResponseEntity.badRequest().build();
+        }
+        schedule.setApplyOfficialAbsent(applyOfficialAbsent);
+        return ResponseEntity.ok().build();
+
     }
 }
