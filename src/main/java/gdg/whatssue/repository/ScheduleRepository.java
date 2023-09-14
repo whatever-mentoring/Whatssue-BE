@@ -8,4 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 public interface ScheduleRepository extends JpaRepository<Schedule, Long> {
 
     List<Schedule> findAllByClub(Club club);
+
+    List<Schedule> findBySchedule_ClubId(Long clubId);
 }
