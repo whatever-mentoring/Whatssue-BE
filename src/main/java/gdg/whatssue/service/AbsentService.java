@@ -71,7 +71,14 @@ public class AbsentService {
             return ResponseEntity.badRequest().build();
         }
         schedule.setApplyOfficialAbsent(applyOfficialAbsent);
-        return ResponseEntity.ok().build();
+
+        try{
+            applyOfficialAbsentRepository.save(applyOfficialAbsent);
+            return ResponseEntity.ok().build();
+        }catch (Exception e){
+            e.printStackTrace();
+            return ResponseEntity.badRequest().build();
+        }
 
     }
 }
