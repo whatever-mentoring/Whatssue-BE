@@ -1,5 +1,6 @@
 package gdg.whatssue.controller.inter;
 
+import gdg.whatssue.service.dto.ScheduleDetailDto;
 import jdk.jshell.spi.ExecutionControl.NotImplementedException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
