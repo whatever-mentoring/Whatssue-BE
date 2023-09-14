@@ -6,14 +6,20 @@ import gdg.whatssue.repository.MemberRepository;
 import gdg.whatssue.repository.ScheduleRepository;
 import gdg.whatssue.service.dto.ScheduleByMonthDto;
 import gdg.whatssue.service.dto.ScheduleDetailDto;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 @Slf4j
 public class ScheduleService {
 
@@ -54,5 +60,30 @@ public class ScheduleService {
             .collect(Collectors.toList());
 
         return scheduleListByMonth;
+    }
+
+    public ResponseEntity deleteSchedule(Long scheduleId) {
+        Schedule schedule = scheduleRepository.findById(scheduleId).orElse(null);
+        if (schedule == null) {
+            return ResponseEntity.badRequest().body("존재하지 않는 일정입니다.");
+        }
+        scheduleRepository.delete(schedule);
+        return ResponseEntity.ok().body("일정이 삭제되었습니다.");
+
+    }
+
+    public ResponseEntity updateSchedule(Long scheduleId, ScheduleDetailDto scheduleDetailDto) {
+        Schedule schedule = scheduleRepository.findById(scheduleId).orElse(null);
+        if (schedule == null) {
+            return ResponseEntity.badRequest().body("존재하지 않는 일정입니다.");
+        }
+        schedule.setScheduleTitle(scheduleDetailDto.getScheduleTitle());
+        schedule.setScheduleContent(scheduleDetailDto.getScheduleContent());
+        schedule.setScheduleDate(LocalDate.parse(scheduleDetailDto.getScheduleDate()));
+        schedule.setScheduleTime(LocalTime.parse(scheduleDetailDto.getScheduleTime()));
+
+        return ResponseEntity.ok().body("일정이 수정되었습니다.");
+
+
     }
 }
