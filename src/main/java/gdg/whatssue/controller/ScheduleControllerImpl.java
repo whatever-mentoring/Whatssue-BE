@@ -14,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -49,9 +50,11 @@ public class ScheduleControllerImpl implements ScheduleController {
     }
 
     @Override
-    public ResponseEntity updateSchedule(Long scheduleId) throws NotImplementedException {
-        //"TODO: This api should be implemented"
-        throw new NotImplementedException("hi");
+    @Transactional
+    public ResponseEntity updateSchedule(Long scheduleId,ScheduleDetailDto scheduleDetailDto) throws NotImplementedException {
+        // "TODO: 권한 확인 추후 추가"
+
+        return scheduleService.updateSchedule(scheduleId, scheduleDetailDto);
     }
 
     @Override
@@ -62,7 +65,7 @@ public class ScheduleControllerImpl implements ScheduleController {
 
     @Override
     public ResponseEntity deleteSchedule(Long scheduleId) throws NotImplementedException {
-        //"TODO: This api should be implemented"
-        throw new NotImplementedException("hi");
+        // "TODO: 권한 확인 추후 추가"
+        return scheduleService.deleteSchedule(scheduleId);
     }
 }

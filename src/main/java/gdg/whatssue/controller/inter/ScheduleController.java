@@ -2,6 +2,7 @@ package gdg.whatssue.controller.inter;
 
 import jdk.jshell.spi.ExecutionControl.NotImplementedException;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -47,7 +48,7 @@ public interface ScheduleController {
 
     //일정 수정
     @PatchMapping("/{scheduleId}")
-    public ResponseEntity updateSchedule(@PathVariable Long scheduleId) throws NotImplementedException;
+    public ResponseEntity updateSchedule(@PathVariable Long scheduleId, @RequestBody ScheduleDetailDto scheduleDetailDto) throws NotImplementedException;
 
     //일정 추가
     @PostMapping("/")
