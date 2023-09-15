@@ -19,7 +19,7 @@ public class Club {
     private String clubInfo;
     private String clubCategory;
 
-    @OneToMany(mappedBy = "club", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "club", cascade = CascadeType.ALL, orphanRemoval = true) //리스트에서 지우면 테이블상에서도 지워지니 주의
     private List <Admin> adminList;
 
     @OneToMany(mappedBy = "club", cascade = CascadeType.PERSIST,orphanRemoval = true)
