@@ -1,5 +1,6 @@
 package gdg.whatssue.entity;
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
@@ -25,4 +26,11 @@ public class Admin {
 
     @OneToMany(mappedBy = "admin")
     private List<Withdraw> withdrawList;
+
+    @Builder
+    public Admin(String role, Club club, Member member) {
+        this.role = role;
+        this.club = club;
+        this.member = member;
+    }
 }
