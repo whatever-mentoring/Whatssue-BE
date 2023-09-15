@@ -2,6 +2,7 @@ package gdg.whatssue.controller;
 
 import gdg.whatssue.controller.inter.AttendanceController;
 import gdg.whatssue.service.AttendanceService;
+import gdg.whatssue.service.dto.CheckNumDto;
 import jdk.jshell.spi.ExecutionControl.NotImplementedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -41,7 +42,6 @@ public class AttendanceControllerImpl implements AttendanceController {
         //"TODO: This api should be implemented"
         throw new NotImplementedException("hi");
     }
-
     //출석 열기(출석 시도)
     @Override
     @GetMapping("/{scheduleId}/attendance/check")
@@ -50,11 +50,11 @@ public class AttendanceControllerImpl implements AttendanceController {
         throw new NotImplementedException("hi");
     }
 
+    //출석하기(member)
     @Override
     @PostMapping("/{scheduleId}/attendance/check")
-    public ResponseEntity doAttendance(Long scheduleId) throws NotImplementedException {
-        //"TODO: This api should be implemented"
-        throw new NotImplementedException("hi");
+    public ResponseEntity doAttendance(@PathVariable Long scheduleId, @RequestBody CheckNumDto dto) throws Exception {
+        return attendanceService.doAttendance(scheduleId, dto.getNumber());
     }
 
 }

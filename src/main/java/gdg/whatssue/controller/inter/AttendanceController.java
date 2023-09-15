@@ -1,15 +1,10 @@
 package gdg.whatssue.controller.inter;
 
+import gdg.whatssue.service.dto.CheckNumDto;
 import io.swagger.v3.oas.annotations.Operation;
 import jdk.jshell.spi.ExecutionControl.NotImplementedException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
 @RequestMapping("/api/schedule/{scheduleId}/attendance")
@@ -43,5 +38,5 @@ public interface AttendanceController {
     ResponseEntity openAttendance(@PathVariable Long scheduleId) throws NotImplementedException;
 
     //출석하기
-    ResponseEntity doAttendance(@PathVariable Long scheduleId) throws NotImplementedException;
+    ResponseEntity doAttendance(@PathVariable Long scheduleId, @RequestBody CheckNumDto dto) throws Exception;
 }
