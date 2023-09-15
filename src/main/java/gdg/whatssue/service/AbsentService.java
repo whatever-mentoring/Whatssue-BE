@@ -6,6 +6,7 @@ import gdg.whatssue.mapper.AbsentRequestMapper;
 import gdg.whatssue.repository.ApplyOfficialAbsentRepository;
 import gdg.whatssue.repository.MemberRepository;
 import gdg.whatssue.repository.ScheduleRepository;
+import gdg.whatssue.service.dto.AbsentListDto;
 import gdg.whatssue.service.dto.AbsentRequestDto;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
@@ -25,29 +26,37 @@ public class AbsentService {
     private final MemberRepository memberRepository;
     private final ScheduleRepository scheduleRepository;
 
+    //공결 테이블 전체 조회
     public ResponseEntity getAbsentRequest() {
         //어떤 클럽의 공결 list를 찾을 것인지 모르니 일단 임시로 1번 user가 속한 클럽의 스케줄을 조회
         Long clubId = 1L;
         //clubID 로 schedule 조회
         List<Schedule> scheduleList = scheduleRepository.findAllByClubId(clubId);
-        //schedule List가 존재하지 않을 경우
-        if(scheduleList == null){
-            return ResponseEntity.badRequest().build();
-        }
 
-        //scheduleList 에서 공결 applyOfficalAbsentList조회
         List<ApplyOfficialAbsent> applyOfficialAbsentList = scheduleList.stream()
                 .map(s -> s.getApplyOfficialAbsent())
                 .collect(Collectors.toList());
-        //만약 존재하지 않을 경우
-        if(applyOfficialAbsentList == null){
+
+        if (applyOfficialAbsentList == null) {
             return ResponseEntity.badRequest().build();
         }
 
-        return ResponseEntity.ok(applyOfficialAbsentList);
+        //applyOfficalAbsentList 를 AbsentListDto 로 변환
+        List<AbsentListDto> absentListDtoList = applyOfficialAbsentList.stream()
+                .filter(a -> a != null) // null인 객체 건너뛰기
+                .map(a -> AbsentListDto.builder()
+                        .applyOfficialAbsentId(String.valueOf(a.getApplyOfficialAbsentId()))
+                        .absentReason(a.getAbsentReason())
+                        .absentIsAccepted(String.valueOf(a.getAbsentIsAccepted()))
+                        .absentDate(a.getAbsentDate().toString())
+                        .build())
+                .collect(Collectors.toList());
 
 
+        return ResponseEntity.ok(absentListDtoList);
     }
+
+
 
     public ResponseEntity acceptAbsentRequest(Long absentId) {
         //공결 승인
