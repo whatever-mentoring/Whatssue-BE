@@ -19,7 +19,7 @@ public class ApplyOfficialAbsent {
     private Long applyOfficialAbsentId;
     private String absentReason;
     private LocalDate absentDate;
-    private Boolean absentIsAccepted;
+    private String absentIsAccepted;
 
     @OneToOne
     @JoinColumn(name = "schedule_id")
@@ -28,7 +28,7 @@ public class ApplyOfficialAbsent {
         this.schedule = schedule;
     }
 
-    public void AcceptAbsent(boolean absentIsAccepted) {
+    public void AcceptAbsent(String absentIsAccepted) {
         this.absentIsAccepted = absentIsAccepted;
     }
 }

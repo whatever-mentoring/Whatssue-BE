@@ -64,7 +64,7 @@ public class AbsentService {
         if(applyOfficialAbsent == null){
             return ResponseEntity.badRequest().build();
         }
-        boolean absentIsAccepted = true;
+        String absentIsAccepted = "Approved";
         applyOfficialAbsent.AcceptAbsent(absentIsAccepted);
         return ResponseEntity.ok().build();
     }
@@ -75,7 +75,7 @@ public class AbsentService {
         if(applyOfficialAbsent == null){
             return ResponseEntity.badRequest().build();
         }
-        boolean absentIsAccepted = false;
+        String absentIsAccepted = "denied";
         applyOfficialAbsent.AcceptAbsent(absentIsAccepted);
         return ResponseEntity.ok().build();
     }
