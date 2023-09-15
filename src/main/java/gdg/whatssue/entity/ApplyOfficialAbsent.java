@@ -27,4 +27,8 @@ public class ApplyOfficialAbsent {
     public void saveSchedule(Schedule schedule) {
         this.schedule = schedule;
     }
+
+    public void AcceptAbsent(boolean absentIsAccepted) {
+        this.absentIsAccepted = absentIsAccepted;
+    }
 }

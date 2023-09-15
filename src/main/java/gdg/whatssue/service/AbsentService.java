@@ -7,15 +7,18 @@ import gdg.whatssue.repository.ApplyOfficialAbsentRepository;
 import gdg.whatssue.repository.MemberRepository;
 import gdg.whatssue.repository.ScheduleRepository;
 import gdg.whatssue.service.dto.AbsentRequestDto;
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class AbsentService {
 
     private final ApplyOfficialAbsentRepository applyOfficialAbsentRepository;
@@ -52,7 +55,8 @@ public class AbsentService {
         if(applyOfficialAbsent == null){
             return ResponseEntity.badRequest().build();
         }
-        applyOfficialAbsent.setAbsentIsAccepted(true);
+        boolean absentIsAccepted = true;
+        applyOfficialAbsent.AcceptAbsent(absentIsAccepted);
         return ResponseEntity.ok().build();
     }
 
@@ -62,7 +66,8 @@ public class AbsentService {
         if(applyOfficialAbsent == null){
             return ResponseEntity.badRequest().build();
         }
-        applyOfficialAbsent.setAbsentIsAccepted(false);
+        boolean absentIsAccepted = false;
+        applyOfficialAbsent.AcceptAbsent(absentIsAccepted);
         return ResponseEntity.ok().build();
     }
 
