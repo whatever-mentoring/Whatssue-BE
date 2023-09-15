@@ -2,9 +2,12 @@ package gdg.whatssue.controller;
 
 import gdg.whatssue.controller.inter.AbsentController;
 import gdg.whatssue.service.AbsentService;
+import gdg.whatssue.service.dto.AbsentRequestDto;
 import jdk.jshell.spi.ExecutionControl.NotImplementedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -14,7 +17,7 @@ public class AbsentControllerImpl implements AbsentController {
     private final AbsentService absentService;
 
     @Override
-    public ResponseEntity requestAbsent(Long scheduleId) throws NotImplementedException {
+    public ResponseEntity requestAbsent(@PathVariable Long scheduleId,@RequestBody AbsentRequestDto absentRequestDto) throws NotImplementedException {
         //"TODO: This api should be implemented"
         throw new NotImplementedException("hi");
     }

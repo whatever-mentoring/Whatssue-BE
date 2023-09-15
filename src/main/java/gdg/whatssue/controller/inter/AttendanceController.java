@@ -20,7 +20,7 @@ public interface AttendanceController {
     **/
     //출석 시작
 
-    public ResponseEntity startAttendance(@PathVariable Long scheduleId) throws NotImplementedException;
+    ResponseEntity startAttendance(@PathVariable Long scheduleId) throws NotImplementedException;
 
     //출석 종료
 
