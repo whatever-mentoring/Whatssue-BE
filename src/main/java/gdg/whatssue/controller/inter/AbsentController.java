@@ -16,7 +16,6 @@ public interface AbsentController {
     @Operation(tags = { "공결 관리" },
         summary = "공결 신청",
         description = "api 경로로 일정ID를 전달받아 해당 일정에 대한 공결 요청")
-    public ResponseEntity requestAbsent(@PathVariable Long scheduleId) throws NotImplementedException;
     public ResponseEntity requestAbsent(@PathVariable Long scheduleId, @RequestBody AbsentRequestDto absentRequestDto) throws NotImplementedException;
 
     /**
