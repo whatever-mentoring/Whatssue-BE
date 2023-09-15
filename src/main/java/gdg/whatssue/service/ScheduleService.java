@@ -112,8 +112,6 @@ public class ScheduleService {
         schedule.updateSchedule(scheduleDetailDto.getScheduleTitle(), scheduleDetailDto.getScheduleContent(),
             LocalDate.parse(scheduleDetailDto.getScheduleDate()), LocalTime.parse(scheduleDetailDto.getScheduleTime()));
         return ResponseEntity.ok().body("일정이 수정되었습니다.");
-
-
     }
     // 상세 일정 등록
     public void createSchedule(ScheduleDetailDto dto)  {
@@ -132,3 +130,4 @@ public class ScheduleService {
 
 
 }
+

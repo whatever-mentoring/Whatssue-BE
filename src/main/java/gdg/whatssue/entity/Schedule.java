@@ -44,4 +44,10 @@ public class Schedule {
         this.scheduleDate = LocalDate.parse(scheduleDate);
         this.scheduleTime = LocalTime.parse(scheduleTime);
     }
+    public void updateSchedule(String scheduleTitle, String scheduleContent, LocalDate scheduleDate, LocalTime scheduleTime) {
+        this.scheduleTitle = scheduleTitle;
+        this.scheduleContent = scheduleContent;
+        this.scheduleDate = scheduleDate;
+        this.scheduleTime = scheduleTime;
+    }
 }

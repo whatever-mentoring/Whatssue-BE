@@ -10,10 +10,9 @@ import java.time.LocalDate;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@RequiredArgsConstructor
 public class ApplyOfficialAbsent {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long applyOfficialAbsentId;
     private String absentReason;
     private LocalDate absentDate;
@@ -22,6 +21,7 @@ public class ApplyOfficialAbsent {
     @OneToOne
     @JoinColumn(name = "schedule_id")
     private Schedule schedule;
+
     public void saveSchedule(Schedule schedule) {
         this.schedule = schedule;
     }

@@ -66,6 +66,9 @@ public interface ScheduleController {
     public ResponseEntity createSchedule() throws NotImplementedException;
 
 
+    @PostMapping("")
+    ResponseEntity createSchedule(@RequestBody ScheduleDetailDto dto);
+
     //일정 삭제
     @DeleteMapping("/{scheduleId}")
     @Operation(tags = { "일정 관리 및 조회" },

@@ -1,18 +1,15 @@
 package gdg.whatssue.controller;
 
 import gdg.whatssue.controller.inter.ScheduleController;
-import gdg.whatssue.mockdata.Schedule;
-import gdg.whatssue.mockdata.ScheduleByMonth;
 import gdg.whatssue.service.ScheduleService;
 import gdg.whatssue.service.dto.ScheduleByDateDto;
 import gdg.whatssue.service.dto.ScheduleByMonthDto;
 import gdg.whatssue.service.dto.ScheduleDetailDto;
-import java.util.ArrayList;
+
 import java.util.List;
 import jdk.jshell.spi.ExecutionControl.NotImplementedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.transaction.annotation.Transactional;
