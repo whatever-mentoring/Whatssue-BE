@@ -46,8 +46,7 @@ public class AttendanceControllerImpl implements AttendanceController {
     @Override
     @GetMapping("/{scheduleId}/attendance/check")
     public ResponseEntity openAttendance(@PathVariable(name = "scheduleId") Long scheduleId) throws NotImplementedException {
-
-        throw new NotImplementedException("hi");
+        return attendanceService.openAttendance(scheduleId);
     }
 
     @Override
