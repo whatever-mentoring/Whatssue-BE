@@ -83,13 +83,20 @@ public class ScheduleService {
 
         return scheduleListByMonth;
     }
-    public void createSchedule(ScheduleDetailDto dto){
+    // 상세 일정 등록
+    public void createSchedule(ScheduleDetailDto dto)  {
         Schedule schedule = Schedule.builder()
             .scheduleTitle(dto.getScheduleTitle())
             .scheduleContent(dto.getScheduleContent())
             .scheduleDate(dto.getScheduleDate())
             .scheduleTime(dto.getScheduleTime())
             .build();
-        scheduleRepository.save(schedule);
+        try{scheduleRepository.save(schedule);
+        }catch ( Exception e){
+            throw new RuntimeException("일정 등록에 실패하였습니다.");
+        }
+
     }
+
+
 }

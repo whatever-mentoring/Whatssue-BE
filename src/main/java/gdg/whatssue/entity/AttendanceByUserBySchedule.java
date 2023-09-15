@@ -1,10 +1,13 @@
 package gdg.whatssue.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Entity
 @Getter
+@RequiredArgsConstructor
 public class AttendanceByUserBySchedule {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -21,5 +24,10 @@ public class AttendanceByUserBySchedule {
     private Schedule schedule;
 
 
-
+    @Builder
+    public AttendanceByUserBySchedule(String attendanceType, Member member, Schedule schedule){
+        this.member = member;
+        this.schedule = schedule;
+        this.attendanceType= attendanceType;
+    }
 }
