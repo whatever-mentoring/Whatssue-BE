@@ -24,15 +24,15 @@ public interface AttendanceController {
 
     //출석 종료
 
-    public ResponseEntity finishAttendance(@PathVariable Long scheduleId) throws NotImplementedException;
+    ResponseEntity finishAttendance(@PathVariable Long scheduleId) throws NotImplementedException;
 
     //출석 재시작
 
-    public ResponseEntity restartAttendance(@PathVariable Long scheduleId) throws NotImplementedException;
+    ResponseEntity restartAttendance(@PathVariable Long scheduleId) throws NotImplementedException;
 
     //출석 결과 조회
 
-    public ResponseEntity getAttendanceResult(@PathVariable Long scheduleId) throws NotImplementedException;
+    ResponseEntity getAttendanceResult(@PathVariable Long scheduleId) throws NotImplementedException;
 
     /**
      * Member api
@@ -40,8 +40,8 @@ public interface AttendanceController {
 
     //출석 열기
 
-    public ResponseEntity openAttendance(@PathVariable Long scheduleId) throws NotImplementedException;
+    ResponseEntity openAttendance(@PathVariable Long scheduleId) throws NotImplementedException;
 
     //출석하기
-    public ResponseEntity doAttendance(@PathVariable Long scheduleId) throws NotImplementedException;
+    ResponseEntity doAttendance(@PathVariable Long scheduleId) throws NotImplementedException;
 }

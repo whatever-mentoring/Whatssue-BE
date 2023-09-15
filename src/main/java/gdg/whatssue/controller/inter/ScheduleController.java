@@ -23,7 +23,7 @@ public interface ScheduleController {
     //이 api는 배제, 월별 일정 조회 api 사용
     /*
     @GetMapping("/list/{date}")
-    public ResponseEntity getScheduleListOnDate() throws NotImplementedException;
+    ResponseEntity getScheduleListOnDate() throws NotImplementedException;
 */
 
 
@@ -31,7 +31,7 @@ public interface ScheduleController {
     //이 api는 배제, 월별 일정 조회 api 사용
     /*
     @GetMapping("/list")
-    public ResponseEntity getScheduleList() throws NotImplementedException;
+    ResponseEntity getScheduleList() throws NotImplementedException;
 */
 
     //월별일정 조회 api 추가
