@@ -19,16 +19,16 @@ public class Club {
     private String clubInfo;
     private String clubCategory;
 
-    @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "club", cascade = CascadeType.ALL, orphanRemoval = true)
     private List <Admin> adminList;
 
-    @OneToMany(mappedBy = "club", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "club", cascade = CascadeType.PERSIST,orphanRemoval = true)
     private List <Member> memberList;
 
-    @OneToMany(mappedBy = "club", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "club", cascade = CascadeType.ALL,orphanRemoval = true)
     private List <Schedule> scheduleList ;
 
-    @OneToOne(mappedBy = "club", cascade = CascadeType.ALL)
+    @OneToOne(mappedBy = "club", cascade = CascadeType.ALL,orphanRemoval = true)
     private Link link;
 
     @Builder
