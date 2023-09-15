@@ -15,8 +15,7 @@ public class Link {
     private String linkUrl;
 
     @OneToOne
-    @JoinColumn(name = "schedule_id")
-    private Schedule schedule;
-
+    @JoinColumn(name = "club_id")
+    private Club club;
 
 }

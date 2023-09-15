@@ -2,7 +2,7 @@ package gdg.whatssue.entity;
 
 import jakarta.persistence.*;
 import lombok.Getter;
-
+import lombok.Setter;
 
 
 import java.time.LocalDate;
@@ -12,6 +12,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@Setter
 public class Schedule {
 
     @Id
@@ -30,10 +31,7 @@ public class Schedule {
 
     @OneToOne(mappedBy = "schedule")
     private ApplyOfficialAbsent applyOfficialAbsent;
-
-    @OneToOne(mappedBy = "schedule")
-    private Link link;
-
+    
     @OneToMany(mappedBy = "schedule")
     private List<AttendanceByUserBySchedule> attendanceByUserByScheduleList;
 

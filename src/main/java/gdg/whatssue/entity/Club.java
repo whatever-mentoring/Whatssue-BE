@@ -28,4 +28,6 @@ public class Club {
     @OneToMany(mappedBy = "club")
     private List <Schedule> scheduleList ;
 
+    @OneToOne(mappedBy = "club")
+    private Link link;
 }
