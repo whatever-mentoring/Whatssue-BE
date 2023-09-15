@@ -52,9 +52,8 @@ public class AttendanceControllerImpl implements AttendanceController {
     //출석 열기(출석 시도)
     @Override
     @GetMapping("/{scheduleId}/attendance/check")
-    public ResponseEntity<?> openAttendance(@PathVariable(name = "scheduleId") Long scheduleId) throws NotImplementedException {
-
-        throw new NotImplementedException("hi");
+    public ResponseEntity openAttendance(@PathVariable(name = "scheduleId") Long scheduleId) throws NotImplementedException {
+        return attendanceService.openAttendance(scheduleId);
     }
 
     //출석하기(member)
