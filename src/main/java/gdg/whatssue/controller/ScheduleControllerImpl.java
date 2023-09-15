@@ -15,6 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
@@ -33,7 +35,6 @@ public class ScheduleControllerImpl implements ScheduleController {
     }
 
     @Override
-    @GetMapping("/list/date:{year-month-date}")
     public ResponseEntity getScheduleByDate(String yearMonthDate) {
         List<ScheduleByDateDto> scheduleListByDate = scheduleService.getScheduleByDate(yearMonthDate);
 
@@ -41,7 +42,6 @@ public class ScheduleControllerImpl implements ScheduleController {
     }
 
     @Override
-    @GetMapping("/{scheduleId}")
     public ResponseEntity getSchedule(Long scheduleId) {
         ScheduleDetailDto detailDto = scheduleService.getSchedule(scheduleId);
 
@@ -54,9 +54,16 @@ public class ScheduleControllerImpl implements ScheduleController {
 
     @Override
     @PatchMapping("/{scheduleId}")
-    public ResponseEntity updateSchedule(Long scheduleId) throws NotImplementedException {
-        //"TODO: This api should be implemented"
-        throw new NotImplementedException("hi");
+    @Transactional
+    public ResponseEntity updateSchedule(Long scheduleId,ScheduleDetailDto scheduleDetailDto) throws NotImplementedException {
+        // "TODO: 권한 확인 추후 추가"
+
+        return scheduleService.updateSchedule(scheduleId, scheduleDetailDto);
+    }
+
+    @Override
+    public ResponseEntity createSchedule() throws NotImplementedException {
+        return null;
     }
 
     @Override
@@ -67,9 +74,8 @@ public class ScheduleControllerImpl implements ScheduleController {
     }
 
     @Override
-    @DeleteMapping("/{scheduleId}")
     public ResponseEntity deleteSchedule(Long scheduleId) throws NotImplementedException {
-        //"TODO: This api should be implemented"
-        throw new NotImplementedException("hi");
+        // "TODO: 권한 확인 추후 추가"
+        return scheduleService.deleteSchedule(scheduleId);
     }
 }

@@ -1,12 +1,15 @@
 package gdg.whatssue.controller;
 
 import gdg.whatssue.controller.inter.AbsentController;
+import gdg.whatssue.service.AbsentService;
 import jdk.jshell.spi.ExecutionControl.NotImplementedException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class AbsentControllerImpl implements AbsentController {
+
+    private final AbsentService absentService;
 
     @Override
     public ResponseEntity requestAbsent(Long scheduleId) throws NotImplementedException {
