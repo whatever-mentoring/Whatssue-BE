@@ -1,8 +1,7 @@
 package gdg.whatssue.entity;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.hibernate.annotations.DynamicUpdate;
 
 
@@ -13,6 +12,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicUpdate //변경한 필드만 대응
 public class Schedule {
 
@@ -36,10 +36,18 @@ public class Schedule {
     @OneToMany(mappedBy = "schedule")
     private List<AttendanceByUserBySchedule> attendanceByUserByScheduleList;
 
+
+    @Builder // 생성자에 builder를 붙이면 필요없는 속성의 노출을 막을 수 있음.
+    public Schedule(String scheduleTitle, String scheduleContent, String scheduleDate, String scheduleTime) {
+        this.scheduleTitle = scheduleTitle;
+        this.scheduleContent = scheduleContent;
+        this.scheduleDate = LocalDate.parse(scheduleDate);
+        this.scheduleTime = LocalTime.parse(scheduleTime);
+    }
     public void updateSchedule(String scheduleTitle, String scheduleContent, LocalDate scheduleDate, LocalTime scheduleTime) {
-         this.scheduleTitle = scheduleTitle;
-         this.scheduleContent = scheduleContent;
-         this.scheduleDate = scheduleDate;
-         this.scheduleTime = scheduleTime;
+        this.scheduleTitle = scheduleTitle;
+        this.scheduleContent = scheduleContent;
+        this.scheduleDate = scheduleDate;
+        this.scheduleTime = scheduleTime;
     }
 }

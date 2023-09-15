@@ -1,10 +1,7 @@
 package gdg.whatssue.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDate;
 
@@ -15,7 +12,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class ApplyOfficialAbsent {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long applyOfficialAbsentId;
     private String absentReason;
     private LocalDate absentDate;
@@ -24,6 +21,7 @@ public class ApplyOfficialAbsent {
     @OneToOne
     @JoinColumn(name = "schedule_id")
     private Schedule schedule;
+
     public void saveSchedule(Schedule schedule) {
         this.schedule = schedule;
     }

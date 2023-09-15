@@ -1,4 +1,9 @@
 package gdg.whatssue.repository;
 
-public interface AttendanceByUserByScheduleRepository {
+import gdg.whatssue.entity.AttendanceByUserBySchedule;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface AttendanceByUserByScheduleRepository extends JpaRepository<AttendanceByUserBySchedule, Long> {
 }
