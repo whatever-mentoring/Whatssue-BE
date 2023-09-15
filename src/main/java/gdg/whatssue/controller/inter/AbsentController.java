@@ -1,6 +1,7 @@
 package gdg.whatssue.controller.inter;
 
 import gdg.whatssue.entity.ApplyOfficialAbsent;
+import gdg.whatssue.service.dto.AbsentRequestDto;
 import jdk.jshell.spi.ExecutionControl.NotImplementedException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,7 +12,7 @@ public interface AbsentController {
 
     //공결신청
     @PostMapping("/{scheduleId}/absent-request")
-    public ResponseEntity requestAbsent(@PathVariable Long scheduleId, @RequestBody ApplyOfficialAbsent applyOfficialAbsent) throws NotImplementedException;
+    public ResponseEntity requestAbsent(@PathVariable Long scheduleId, @RequestBody AbsentRequestDto absentRequestDto) throws NotImplementedException;
 
     /**
      * Admin api

@@ -3,6 +3,7 @@ package gdg.whatssue.controller;
 import gdg.whatssue.controller.inter.AbsentController;
 import gdg.whatssue.entity.ApplyOfficialAbsent;
 import gdg.whatssue.service.AbsentService;
+import gdg.whatssue.service.dto.AbsentRequestDto;
 import jdk.jshell.spi.ExecutionControl.NotImplementedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,8 +16,8 @@ public class AbsentControllerImpl implements AbsentController {
     private final AbsentService absentService;
 
     @Override
-    public ResponseEntity requestAbsent(Long scheduleId, ApplyOfficialAbsent applyOfficialAbsent) throws NotImplementedException {
-        return absentService.requestAbsent(scheduleId,applyOfficialAbsent);
+    public ResponseEntity requestAbsent(Long scheduleId, AbsentRequestDto absentRequestDto) throws NotImplementedException {
+        return absentService.requestAbsent(scheduleId,absentRequestDto);
     }
 
     @Override

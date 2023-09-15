@@ -2,9 +2,11 @@ package gdg.whatssue.service;
 
 import gdg.whatssue.entity.ApplyOfficialAbsent;
 import gdg.whatssue.entity.Schedule;
+import gdg.whatssue.mapper.AbsentRequestMapper;
 import gdg.whatssue.repository.ApplyOfficialAbsentRepository;
 import gdg.whatssue.repository.MemberRepository;
 import gdg.whatssue.repository.ScheduleRepository;
+import gdg.whatssue.service.dto.AbsentRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -24,7 +26,7 @@ public class AbsentService {
         //어떤 클럽의 공결 list를 찾을 것인지 모르니 일단 임시로 1번 user가 속한 클럽의 스케줄을 조회
         Long clubId = 1L;
         //clubID 로 schedule 조회
-        List<Schedule> scheduleList = scheduleRepository.findBySchedule_ClubId(clubId);
+        List<Schedule> scheduleList = scheduleRepository.findAllByClubId(clubId);
         //schedule List가 존재하지 않을 경우
         if(scheduleList == null){
             return ResponseEntity.badRequest().build();
@@ -50,7 +52,7 @@ public class AbsentService {
         if(applyOfficialAbsent == null){
             return ResponseEntity.badRequest().build();
         }
-        applyOfficialAbsent.setIsAccepted(true);
+        applyOfficialAbsent.setAbsentIsAccepted(true);
         return ResponseEntity.ok().build();
     }
 
@@ -60,20 +62,25 @@ public class AbsentService {
         if(applyOfficialAbsent == null){
             return ResponseEntity.badRequest().build();
         }
-        applyOfficialAbsent.setIsAccepted(false);
+        applyOfficialAbsent.setAbsentIsAccepted(false);
         return ResponseEntity.ok().build();
     }
 
-    public ResponseEntity requestAbsent(Long scheduleId, ApplyOfficialAbsent applyOfficialAbsent) {
+    public ResponseEntity requestAbsent(Long scheduleId, AbsentRequestDto absentRequestDto) {
         //공결 테이블에 추가하여 신청
         Schedule schedule = scheduleRepository.findById(scheduleId).orElse(null);
         if(schedule == null){
             return ResponseEntity.badRequest().build();
         }
-        schedule.setApplyOfficialAbsent(applyOfficialAbsent);
+        //
+        //Dto -> Entity 위해 AbsentRequestMapper 사용
+        ApplyOfficialAbsent applyOfficialAbsent = AbsentRequestMapper.INSTANCE.toEntity(absentRequestDto);
 
         try{
+            //ApplyOfficalAbsent 에 Schedule 객체 전달
+            applyOfficialAbsent.saveSchedule(schedule);
             applyOfficialAbsentRepository.save(applyOfficialAbsent);
+
             return ResponseEntity.ok().build();
         }catch (Exception e){
             e.printStackTrace();

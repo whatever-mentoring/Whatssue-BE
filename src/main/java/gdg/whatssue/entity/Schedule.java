@@ -3,6 +3,7 @@ package gdg.whatssue.entity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicUpdate;
 
 
 import java.time.LocalDate;
@@ -12,7 +13,7 @@ import java.util.List;
 
 @Entity
 @Getter
-@Setter
+@DynamicUpdate //변경한 필드만 대응
 public class Schedule {
 
     @Id
@@ -35,4 +36,10 @@ public class Schedule {
     @OneToMany(mappedBy = "schedule")
     private List<AttendanceByUserBySchedule> attendanceByUserByScheduleList;
 
+    public void updateSchedule(String scheduleTitle, String scheduleContent, LocalDate scheduleDate, LocalTime scheduleTime) {
+         this.scheduleTitle = scheduleTitle;
+         this.scheduleContent = scheduleContent;
+         this.scheduleDate = scheduleDate;
+         this.scheduleTime = scheduleTime;
+    }
 }
