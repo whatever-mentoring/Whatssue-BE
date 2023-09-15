@@ -1,13 +1,11 @@
 package gdg.whatssue.controller.inter;
 
+import gdg.whatssue.entity.ApplyOfficialAbsent;
+import gdg.whatssue.service.dto.AbsentRequestDto;
 import io.swagger.v3.oas.annotations.Operation;
 import jdk.jshell.spi.ExecutionControl.NotImplementedException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
 @RequestMapping("/api/schedule")
@@ -19,6 +17,7 @@ public interface AbsentController {
         summary = "공결 신청",
         description = "api 경로로 일정ID를 전달받아 해당 일정에 대한 공결 요청")
     public ResponseEntity requestAbsent(@PathVariable Long scheduleId) throws NotImplementedException;
+    public ResponseEntity requestAbsent(@PathVariable Long scheduleId, @RequestBody AbsentRequestDto absentRequestDto) throws NotImplementedException;
 
     /**
      * Admin api

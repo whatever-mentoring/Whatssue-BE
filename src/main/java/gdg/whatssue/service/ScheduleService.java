@@ -2,6 +2,7 @@ package gdg.whatssue.service;
 
 import gdg.whatssue.entity.Club;
 import gdg.whatssue.entity.Schedule;
+import gdg.whatssue.mapper.ScheduleDetailMapper;
 import gdg.whatssue.repository.MemberRepository;
 import gdg.whatssue.repository.ScheduleRepository;
 import gdg.whatssue.service.dto.ScheduleByDateDto;
@@ -88,7 +89,10 @@ public class ScheduleService {
     }
 
     public ResponseEntity deleteSchedule(Long scheduleId) {
-        Schedule schedule = scheduleRepository.findById(scheduleId).orElse(null);
+        Long clubId = 1L;
+        //clubId와 scheduleId 둘 다에 해당하는 schedule 가져오기
+        Schedule schedule = scheduleRepository.findByClubIdAndScheduleId(clubId, scheduleId);
+        //Schedule schedule = scheduleRepository.findById(scheduleId).orElse(null);
         if (schedule == null) {
             return ResponseEntity.badRequest().body("존재하지 않는 일정입니다.");
         }
@@ -98,15 +102,15 @@ public class ScheduleService {
     }
 
     public ResponseEntity updateSchedule(Long scheduleId, ScheduleDetailDto scheduleDetailDto) {
-        Schedule schedule = scheduleRepository.findById(scheduleId).orElse(null);
+        Long clubId = 1L;
+        //clubId와 scheduleId 둘 다에 해당하는 schedule 가져오기
+        Schedule schedule = scheduleRepository.findByClubIdAndScheduleId(clubId, scheduleId);
         if (schedule == null) {
             return ResponseEntity.badRequest().body("존재하지 않는 일정입니다.");
         }
-        schedule.setScheduleTitle(scheduleDetailDto.getScheduleTitle());
-        schedule.setScheduleContent(scheduleDetailDto.getScheduleContent());
-        schedule.setScheduleDate(LocalDate.parse(scheduleDetailDto.getScheduleDate()));
-        schedule.setScheduleTime(LocalTime.parse(scheduleDetailDto.getScheduleTime()));
 
+        schedule.updateSchedule(scheduleDetailDto.getScheduleTitle(), scheduleDetailDto.getScheduleContent(),
+            LocalDate.parse(scheduleDetailDto.getScheduleDate()), LocalTime.parse(scheduleDetailDto.getScheduleTime()));
         return ResponseEntity.ok().body("일정이 수정되었습니다.");
 
 
