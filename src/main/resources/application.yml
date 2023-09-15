@@ -3,14 +3,28 @@ spring:
     username: ${SPRING_DATASOURCE_USERNAME}
     url: ${SPRING_DATASOURCE_URL}
     password: ${SPRING_DATASOURCE_PASSWORD}
-  profiles:
-    include: mysql
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+#  profiles:
+#  include: mysql
+
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
+
+    generate-ddl: true
+    defer-datasource-initialization: true
+
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
+  sql:
+    init:
+      encoding: UTF-8
+
+
 server:
-  port: '8090'
+  port: 8090
+
+
 

@@ -17,17 +17,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/schedule")
 public class ScheduleControllerImpl implements ScheduleController {
 
     private final ScheduleService scheduleService;
 
     @Override
-    @GetMapping("/list/month:{year-month}")
     public ResponseEntity getScheduleByMonth(String yearMonth) {
 
         List<ScheduleByMonthDto> scheduleListByMonth = scheduleService.getScheduleByMonth(yearMonth);
-
         return ResponseEntity.status(HttpStatus.OK).body(scheduleListByMonth);
     }
 
@@ -50,7 +47,6 @@ public class ScheduleControllerImpl implements ScheduleController {
     }
 
     @Override
-    @PatchMapping("/{scheduleId}")
     @Transactional
     public ResponseEntity updateSchedule(Long scheduleId,ScheduleDetailDto scheduleDetailDto) throws NotImplementedException {
         // "TODO: 권한 확인 추후 추가"
@@ -58,16 +54,12 @@ public class ScheduleControllerImpl implements ScheduleController {
         return scheduleService.updateSchedule(scheduleId, scheduleDetailDto);
     }
 
-    @Override
-    public ResponseEntity createSchedule() throws NotImplementedException {
-        return null;
-    }
+
 
     @Override
     @PostMapping("")
-    public ResponseEntity createSchedule(@RequestBody ScheduleDetailDto dto) {
-        scheduleService.createSchedule(dto);
-        return ResponseEntity.status(HttpStatus.OK).body("일정이 등록되었습니다.");
+    public ResponseEntity createSchedule(@RequestBody ScheduleDetailDto dto) throws NotImplementedException{
+        return scheduleService.createSchedule(dto);
     }
 
     @Override

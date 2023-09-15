@@ -22,7 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @RequiredArgsConstructor
 @Transactional
-@Slf4j
+@Slf4j(topic = "ScheduleService")
 public class ScheduleService {
 
     private final ScheduleRepository scheduleRepository;
@@ -34,10 +34,10 @@ public class ScheduleService {
 
         if (schedule != null) {
             ScheduleDetailDto scheduleDetailDto = ScheduleDetailDto.builder()
-                .scheduleTitle(schedule.getScheduleTitle())
-                .scheduleContent(schedule.getScheduleContent())
-                .scheduleDate(schedule.getScheduleDate().toString())
-                .scheduleTime(schedule.getScheduleTime().toString()).build();
+                    .scheduleTitle(schedule.getScheduleTitle())
+                    .scheduleContent(schedule.getScheduleContent())
+                    .scheduleDate(schedule.getScheduleDate().toString())
+                    .scheduleTime(schedule.getScheduleTime().toString()).build();
 
             return scheduleDetailDto;
         }
@@ -55,14 +55,14 @@ public class ScheduleService {
         List<Schedule> scheduleList = club.getScheduleList();
 
         List<ScheduleByMonthDto> scheduleListByMonth = scheduleList.stream()
-            .filter(s -> s.getScheduleDate().toString().substring(0, 7).equals(yearMonth))
-            .map(s-> ScheduleByMonthDto.builder()
-                .scheduleId(s.getScheduleId())
-                .scheduleTitle(s.getScheduleTitle())
-                .scheduleDate(s.getScheduleDate().toString())
-                .scheduleTime(s.getScheduleTime().toString())
-                .build())
-            .collect(Collectors.toList());
+                .filter(s -> s.getScheduleDate().toString().substring(0, 7).equals(yearMonth))
+                .map(s-> ScheduleByMonthDto.builder()
+                        .scheduleId(s.getScheduleId())
+                        .scheduleTitle(s.getScheduleTitle())
+                        .scheduleDate(s.getScheduleDate().toString())
+                        .scheduleTime(s.getScheduleTime().toString())
+                        .build())
+                .collect(Collectors.toList());
 
         return scheduleListByMonth;
     }
@@ -76,14 +76,14 @@ public class ScheduleService {
         List<Schedule> scheduleList = club.getScheduleList();
 
         List<ScheduleByDateDto> scheduleListByMonth = scheduleList.stream()
-            .filter(s -> s.getScheduleDate().toString().equals(yearMonthDate))
-            .map(s-> ScheduleByDateDto.builder()
-                .scheduleId(s.getScheduleId())
-                .scheduleTitle(s.getScheduleTitle())
-                .scheduleDate(s.getScheduleDate().toString())
-                .scheduleTime(s.getScheduleTime().toString())
-                .isChecked(s.getIsChecked()).build())
-            .collect(Collectors.toList());
+                .filter(s -> s.getScheduleDate().toString().equals(yearMonthDate))
+                .map(s-> ScheduleByDateDto.builder()
+                        .scheduleId(s.getScheduleId())
+                        .scheduleTitle(s.getScheduleTitle())
+                        .scheduleDate(s.getScheduleDate().toString())
+                        .scheduleTime(s.getScheduleTime().toString())
+                        .isChecked(s.getIsChecked()).build())
+                .collect(Collectors.toList());
 
         return scheduleListByMonth;
     }
@@ -110,24 +110,29 @@ public class ScheduleService {
         }
 
         schedule.updateSchedule(scheduleDetailDto.getScheduleTitle(), scheduleDetailDto.getScheduleContent(),
-            LocalDate.parse(scheduleDetailDto.getScheduleDate()), LocalTime.parse(scheduleDetailDto.getScheduleTime()));
+                LocalDate.parse(scheduleDetailDto.getScheduleDate()), LocalTime.parse(scheduleDetailDto.getScheduleTime()));
         return ResponseEntity.ok().body("일정이 수정되었습니다.");
     }
     // 상세 일정 등록
-    public void createSchedule(ScheduleDetailDto dto)  {
+    public ResponseEntity createSchedule(ScheduleDetailDto dto)  {
+
+        log.info(dto.getScheduleContent());
+        log.info(dto.getScheduleDate());
+        log.info(dto.getScheduleTime());
+        log.info(dto.getScheduleTitle());
+
         Schedule schedule = Schedule.builder()
-            .scheduleTitle(dto.getScheduleTitle())
-            .scheduleContent(dto.getScheduleContent())
-            .scheduleDate(dto.getScheduleDate())
-            .scheduleTime(dto.getScheduleTime())
-            .build();
+                .scheduleTitle(dto.getScheduleTitle())
+                .scheduleContent(dto.getScheduleContent())
+                .scheduleDate(dto.getScheduleDate())
+                .scheduleTime(dto.getScheduleTime())
+                .build();
         try{scheduleRepository.save(schedule);
         }catch ( Exception e){
             throw new RuntimeException("일정 등록에 실패하였습니다.");
         }
-
+        return ResponseEntity.ok().body("일정이 등록되었습니다.");
     }
 
 
 }
-
