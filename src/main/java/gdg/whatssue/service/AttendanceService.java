@@ -7,6 +7,7 @@ import gdg.whatssue.repository.MemberRepository;
 import gdg.whatssue.repository.ScheduleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
@@ -41,5 +42,18 @@ public class AttendanceService {
                     .schedule(scheduleRepository.findById(scheduleId).get())
                     .build();
         }else throw new Exception("출석번호가 일치하지 않습니다.");
+    }
+    // 출석 열기 (출석 시도)
+    public ResponseEntity openAttendance(Long scheduleId){
+    if(checkNumMap.get(scheduleId) == null){
+            return ResponseEntity.ok("출석이 시작되지 않았습니다.");
+        }else return ResponseEntity.ok("출석이 시작되었습니다."); // 요기 리다이렉트로(?) 수정
+    }
+
+    public ResponseEntity finishAttendance(Long scheduleId){
+        checkNumMap.remove(scheduleId);
+        if(checkNumMap.get(scheduleId) == null){
+            return ResponseEntity.ok("출석이 종료되었습니다.");
+        }else return ResponseEntity.ok("출석이 종료되지 않았습니다.");
     }
 }

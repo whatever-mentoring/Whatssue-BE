@@ -24,8 +24,7 @@ public class AttendanceControllerImpl implements AttendanceController {
     @Override
     @DeleteMapping("/{scheduleId}/attendance")
     public ResponseEntity finishAttendance(Long scheduleId) throws NotImplementedException {
-        //"TODO: This api should be implemented"
-        throw new NotImplementedException("hi");
+    return attendanceService.finishAttendance(scheduleId);
     }
     // 출석 재시작
     @Override
@@ -43,11 +42,11 @@ public class AttendanceControllerImpl implements AttendanceController {
         throw new NotImplementedException("hi");
     }
 
-    //출석 열기 (출석 시도)
+    //출석 열기(출석 시도)
     @Override
     @GetMapping("/{scheduleId}/attendance/check")
-    public ResponseEntity openAttendance(Long scheduleId) throws NotImplementedException {
-        //"TODO: This api should be implemented"
+    public ResponseEntity openAttendance(@PathVariable(name = "scheduleId") Long scheduleId) throws NotImplementedException {
+
         throw new NotImplementedException("hi");
     }
 
