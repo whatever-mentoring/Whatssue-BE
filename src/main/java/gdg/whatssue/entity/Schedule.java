@@ -45,6 +45,7 @@ public class Schedule {
         this.scheduleContent = scheduleContent;
         this.scheduleDate = LocalDate.parse(scheduleDate);
         this.scheduleTime = LocalTime.parse(scheduleTime);
+        this.isChecked = false;
         this.club = club;
     }
     public void updateSchedule(String scheduleTitle, String scheduleContent, LocalDate scheduleDate, LocalTime scheduleTime) {

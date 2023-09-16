@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 @CrossOrigin
 @RequestMapping("/api/user")
-@Tag(name = "User", description = "회원가입, 로그인, 아이디 중복 체크")
 public interface UserController {
     
     //회원가입
