@@ -11,10 +11,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 
-@Tag(name = "Attendance", description = "출석 관리")
+
 @RestController
 @RequestMapping("/api/schedule")
 @RequiredArgsConstructor
+@Tag(name = "Attendance", description = "출석 관리")
 public class AttendanceControllerImpl implements AttendanceController {
 
     private final AttendanceService attendanceService;

@@ -1,6 +1,7 @@
 package gdg.whatssue.controller;
 
 import gdg.whatssue.controller.inter.UserController;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jdk.jshell.spi.ExecutionControl.NotImplementedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/user/sign-up")
+@Tag(name = "User", description = "회원가입, 로그인, 아이디 중복 체크")
 public class UserControllerImpl implements UserController {
 
     @Override

@@ -139,66 +139,66 @@ public class ScheduleService {
     }
 
 
-    @PostConstruct
-    public void init(){
-
-        List<Member> memberList = new ArrayList<>();
-        for (long id = 0L; id < 10L; id++) {
-            memberList.add(Member.builder()
-                    .memberNickName("닉네임" + id)
-                    .memberName("이름" + id)
-                    .memberEmail("멤버" + id + "@gmail.com")
-                    .memberPw("1234")
-                    .memberPhone("010-1234-5678")
-                    .build());
-        }
-
-        List<Club> clubList = new ArrayList<>();
-        for (long id = 0L; id < 10L; id++) {
-            clubList.add(Club.builder()
-                    .clubName("클럽" + id)
-                    .clubInfo("클럽" + id + "입니다.")
-                    .clubCategory("카테고리" + id)
-                    .build());
-            memberList.get((int) id).setClub(clubList.get((int) id));
-        }
-
-        List<Schedule> scheduleList = new ArrayList<>();
-        for (long id = 0L; id < 10L; id++) {
-            scheduleList.add(Schedule.builder()
-                    .scheduleTitle("스터디" + id)
-                    .scheduleContent("스터디 모임" + id)
-                    .scheduleDate("2021-08-28")
-                    .scheduleTime("10:00:0" + id)
-                    .club(clubList.get((int) id))
-                    .build());
-        }
-
-        List<Link> linkList = new ArrayList<>();
-        for (long id = 0L; id < 10L; id++) {
-            linkList.add(Link.builder()
-                    .linkName("링크" + id)
-                    .linkUrl("링크" + id + ".com")
-                    .club(clubList.get((int) id))
-                    .build());
-            clubList.get((int) id).setLink(linkList.get((int) id));
-        }
-
-        List<Admin> adminList = new ArrayList<>();
-        for (long id = 0L; id < 10L; id++) {
-            adminList.add(Admin.builder()
-                    .role("admin")
-                    .club(clubList.get((int) id))
-                    .member(memberList.get((int) id))
-                    .build());
-        }
-
-        for (Club club : clubList) {
-            club.setAdminList(adminList);
-            club.setMemberList(memberList);
-            club.setScheduleList(scheduleList);
-        }
-        clubRepository.saveAll(clubList);
-    }
+//    @PostConstruct
+//    public void init(){
+//
+//        List<Member> memberList = new ArrayList<>();
+//        for (long id = 0L; id < 10L; id++) {
+//            memberList.add(Member.builder()
+//                    .memberNickName("닉네임" + id)
+//                    .memberName("이름" + id)
+//                    .memberEmail("멤버" + id + "@gmail.com")
+//                    .memberPw("1234")
+//                    .memberPhone("010-1234-5678")
+//                    .build());
+//        }
+//
+//        List<Club> clubList = new ArrayList<>();
+//        for (long id = 0L; id < 10L; id++) {
+//            clubList.add(Club.builder()
+//                    .clubName("클럽" + id)
+//                    .clubInfo("클럽" + id + "입니다.")
+//                    .clubCategory("카테고리" + id)
+//                    .build());
+//            memberList.get((int) id).setClub(clubList.get((int) id));
+//        }
+//
+//        List<Schedule> scheduleList = new ArrayList<>();
+//        for (long id = 0L; id < 10L; id++) {
+//            scheduleList.add(Schedule.builder()
+//                    .scheduleTitle("스터디" + id)
+//                    .scheduleContent("스터디 모임" + id)
+//                    .scheduleDate("2021-08-28")
+//                    .scheduleTime("10:00:0" + id)
+//                    .club(clubList.get((int) id))
+//                    .build());
+//        }
+//
+//        List<Link> linkList = new ArrayList<>();
+//        for (long id = 0L; id < 10L; id++) {
+//            linkList.add(Link.builder()
+//                    .linkName("링크" + id)
+//                    .linkUrl("링크" + id + ".com")
+//                    .club(clubList.get((int) id))
+//                    .build());
+//            clubList.get((int) id).setLink(linkList.get((int) id));
+//        }
+//
+//        List<Admin> adminList = new ArrayList<>();
+//        for (long id = 0L; id < 10L; id++) {
+//            adminList.add(Admin.builder()
+//                    .role("admin")
+//                    .club(clubList.get((int) id))
+//                    .member(memberList.get((int) id))
+//                    .build());
+//        }
+//
+//        for (Club club : clubList) {
+//            club.setAdminList(adminList);
+//            club.setMemberList(memberList);
+//            club.setScheduleList(scheduleList);
+//        }
+//        clubRepository.saveAll(clubList);
+//    }
 
 }
