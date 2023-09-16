@@ -1,10 +1,13 @@
 package gdg.whatssue.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class Link {
     private String linkName;
 
@@ -17,5 +20,12 @@ public class Link {
     @OneToOne
     @JoinColumn(name = "club_id")
     private Club club;
+
+    @Builder
+    public Link(String linkName, String linkUrl, Club club) {
+        this.linkName = linkName;
+        this.linkUrl = linkUrl;
+        this.club = club;
+    }
 
 }
