@@ -138,6 +138,7 @@ public class ScheduleService {
                 .scheduleTime(dto.getScheduleTime())
                 .club(clubRepository.findById(1L).get()) // default clubId = 1
                 .build();
+
         try{scheduleRepository.save(schedule);
         }catch ( Exception e){
             throw new RuntimeException("일정 등록에 실패하였습니다.");
@@ -206,7 +207,4 @@ public class ScheduleService {
 //        }
 //        clubRepository.saveAll(clubList);
 //    }
-
-
-
 }

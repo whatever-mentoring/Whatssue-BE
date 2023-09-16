@@ -25,6 +25,11 @@ public class Schedule {
     private String scheduleContent;
     private LocalDate scheduleDate;
     private LocalTime scheduleTime;
+
+    public void setIsChecked(Boolean checked) {
+        isChecked = checked;
+    }
+
     @Column(columnDefinition = "boolean default false")
     private Boolean isChecked; // 출석 체크 여부
 
@@ -37,8 +42,6 @@ public class Schedule {
 
     @OneToMany(mappedBy = "schedule")
     private List<AttendanceByUserBySchedule> attendanceByUserByScheduleList;
-
-
     @Builder // 생성자에 builder를 붙이면 필요없는 속성의 노출을 막을 수 있음.
     public Schedule(String scheduleTitle, String scheduleContent, String scheduleDate, String scheduleTime, Club club) {
         this.scheduleTitle = scheduleTitle;
@@ -48,8 +51,6 @@ public class Schedule {
         this.isChecked = false;
         this.club = club;
     }
-
-
     public void updateSchedule(String scheduleTitle, String scheduleContent, LocalDate scheduleDate, LocalTime scheduleTime) {
         this.scheduleTitle = scheduleTitle;
         this.scheduleContent = scheduleContent;
@@ -58,6 +59,4 @@ public class Schedule {
         this.isChecked = false;
     }
 
-    public void setIsChecked(boolean b) {
-    }
 }
