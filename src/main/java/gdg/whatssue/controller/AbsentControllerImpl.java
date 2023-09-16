@@ -19,24 +19,24 @@ public class AbsentControllerImpl implements AbsentController {
     @Override
     public ResponseEntity requestAbsent(@PathVariable Long scheduleId,@RequestBody AbsentRequestDto absentRequestDto) throws NotImplementedException {
         //"TODO: This api should be implemented"
-        throw new NotImplementedException("hi");
+        return absentService.requestAbsent(scheduleId,absentRequestDto);
     }
 
     @Override
     public ResponseEntity getAbsentRequest() throws NotImplementedException {
         //"TODO: This api should be implemented"
-        throw new NotImplementedException("hi");
+        return absentService.getAbsentRequest();
     }
 
     @Override
     public ResponseEntity acceptAbsentRequest(Long absentId) throws NotImplementedException {
         //"TODO: This api should be implemented"
-        throw new NotImplementedException("hi");
+        return absentService.acceptAbsentRequest(absentId);
     }
 
     @Override
     public ResponseEntity refuseAbsentRequest(Long absentId) throws NotImplementedException {
         //"TODO: This api should be implemented"
-        throw new NotImplementedException("hi");
+        return absentService.refuseAbsentRequest(absentId);
     }
 }
