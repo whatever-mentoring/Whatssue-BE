@@ -48,10 +48,16 @@ public class Schedule {
         this.isChecked = false;
         this.club = club;
     }
+
+
     public void updateSchedule(String scheduleTitle, String scheduleContent, LocalDate scheduleDate, LocalTime scheduleTime) {
         this.scheduleTitle = scheduleTitle;
         this.scheduleContent = scheduleContent;
         this.scheduleDate = scheduleDate;
         this.scheduleTime = scheduleTime;
+        this.isChecked = false;
+    }
+
+    public void setIsChecked(boolean b) {
     }
 }
