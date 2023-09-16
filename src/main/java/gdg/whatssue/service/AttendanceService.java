@@ -19,6 +19,7 @@ import java.util.*;
 @RequiredArgsConstructor // final, notnal이 붙은 필드를 자동으로 생성자에 넣어줌
 @Slf4j
 public class AttendanceService {
+
     private final ApplyOfficialAbsentRepository applyOfficialAbsentRepository;
     private final ScheduleRepository scheduleRepository;
     private final MemberRepository  memberRepository;
@@ -61,6 +62,7 @@ public class AttendanceService {
             return ResponseEntity.ok("출석이 종료되었습니다.");
         }else return new ResponseEntity("출석이 종료되지 않았습니다.", null, 404);
     }
+
 }
 
 

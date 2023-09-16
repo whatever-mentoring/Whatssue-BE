@@ -113,8 +113,10 @@ public class ScheduleService {
             return ResponseEntity.badRequest().body("존재하지 않는 일정입니다.");
         }
 
-        schedule.updateSchedule(scheduleDetailDto.getScheduleTitle(), scheduleDetailDto.getScheduleContent(),
-                LocalDate.parse(scheduleDetailDto.getScheduleDate()), LocalTime.parse(scheduleDetailDto.getScheduleTime()));
+        schedule.updateSchedule(scheduleDetailDto.getScheduleTitle(),
+                scheduleDetailDto.getScheduleContent(),
+                LocalDate.parse(scheduleDetailDto.getScheduleDate()),
+                LocalTime.parse(scheduleDetailDto.getScheduleTime()));
         return ResponseEntity.ok().body("일정이 수정되었습니다.");
     }
     // 상세 일정 등록
@@ -130,6 +132,7 @@ public class ScheduleService {
                 .scheduleContent(dto.getScheduleContent())
                 .scheduleDate(dto.getScheduleDate())
                 .scheduleTime(dto.getScheduleTime())
+                .club(clubRepository.findById(1L).get()) // default clubId = 1
                 .build();
         try{scheduleRepository.save(schedule);
         }catch ( Exception e){
