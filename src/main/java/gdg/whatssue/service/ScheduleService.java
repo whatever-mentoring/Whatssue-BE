@@ -138,7 +138,6 @@ public class ScheduleService {
         return ResponseEntity.ok().body("일정이 등록되었습니다.");
     }
 
-
 //    @PostConstruct
 //    public void init(){
 //
@@ -200,5 +199,7 @@ public class ScheduleService {
 //        }
 //        clubRepository.saveAll(clubList);
 //    }
+
+
 
 }
