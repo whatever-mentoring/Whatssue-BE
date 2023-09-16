@@ -93,7 +93,9 @@ public class ScheduleService {
     }
 
     public ResponseEntity deleteSchedule(Long scheduleId) {
-        Long clubId = 1L;
+        Long userId = 1L;
+        Club club = memberRepository.findById(userId).get().getClub();
+        Long clubId = club.getClubId();
         //clubId와 scheduleId 둘 다에 해당하는 schedule 가져오기
         Schedule schedule = scheduleRepository.findByClubIdAndScheduleId(clubId, scheduleId);
         //Schedule schedule = scheduleRepository.findById(scheduleId).orElse(null);
@@ -106,7 +108,9 @@ public class ScheduleService {
     }
 
     public ResponseEntity updateSchedule(Long scheduleId, ScheduleDetailDto scheduleDetailDto) {
-        Long clubId = 1L;
+        Long userId = 1L;
+        Club club = memberRepository.findById(userId).get().getClub();
+        Long clubId = club.getClubId();
         //clubId와 scheduleId 둘 다에 해당하는 schedule 가져오기
         Schedule schedule = scheduleRepository.findByClubIdAndScheduleId(clubId, scheduleId);
         if (schedule == null) {

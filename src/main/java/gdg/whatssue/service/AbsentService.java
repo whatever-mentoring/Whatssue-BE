@@ -1,6 +1,7 @@
 package gdg.whatssue.service;
 
 import gdg.whatssue.entity.ApplyOfficialAbsent;
+import gdg.whatssue.entity.Member;
 import gdg.whatssue.entity.Schedule;
 import gdg.whatssue.mapper.AbsentRequestMapper;
 import gdg.whatssue.repository.ApplyOfficialAbsentRepository;
@@ -81,6 +82,10 @@ public class AbsentService {
     }
 
     public ResponseEntity requestAbsent(Long scheduleId, AbsentRequestDto absentRequestDto) {
+        //memberId 선언
+        Long memberId = 1L;
+        Member member = memberRepository.findById(memberId).orElse(null);
+
         //공결 테이블에 추가하여 신청
         Schedule schedule = scheduleRepository.findById(scheduleId).orElse(null);
         if(schedule == null){
@@ -93,8 +98,10 @@ public class AbsentService {
         try{
             //ApplyOfficalAbsent 에 Schedule 객체 전달
             applyOfficialAbsent.saveSchedule(schedule);
+            applyOfficialAbsent.saveMember(member);
+            String absentIsAccepted = "WAIT";
+            applyOfficialAbsent.saveIsAccepted(absentIsAccepted);
             applyOfficialAbsentRepository.save(applyOfficialAbsent);
-
             return ResponseEntity.ok().build();
         }catch (Exception e){
             e.printStackTrace();
