@@ -136,7 +136,7 @@ public class ScheduleService {
                 .scheduleContent(dto.getScheduleContent())
                 .scheduleDate(dto.getScheduleDate())
                 .scheduleTime(dto.getScheduleTime())
-                //.club(clubRepository.findById(1L).get()) // default clubId = 1
+                .club(clubRepository.findById(1L).get()) // default clubId = 1
                 .build();
         try{scheduleRepository.save(schedule);
         }catch ( Exception e){
