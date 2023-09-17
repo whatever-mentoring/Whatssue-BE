@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -31,30 +32,38 @@ public class AbsentService {
     public ResponseEntity getAbsentRequest() {
         //어떤 클럽의 공결 list를 찾을 것인지 모르니 일단 임시로 1번 user가 속한 클럽의 스케줄을 조회
         Long clubId = 1L;
-        //clubID 로 schedule 조회
+        //clubId로 스케줄 조회
         List<Schedule> scheduleList = scheduleRepository.findAllByClubId(clubId);
+        //스케줄 id 에 해당하는 공결 조회
 
-        List<ApplyOfficialAbsent> applyOfficialAbsentList = scheduleList.stream()
-                .map(s -> s.getApplyOfficialAbsent())
-                .collect(Collectors.toList());
 
-        if (applyOfficialAbsentList == null) {
-            return ResponseEntity.badRequest().build();
-        }
-
-        //applyOfficalAbsentList 를 AbsentListDto 로 변환
-        List<AbsentListDto> absentListDtoList = applyOfficialAbsentList.stream()
-                .filter(a -> a != null) // null인 객체 건너뛰기
-                .map(a -> AbsentListDto.builder()
-                        .applyOfficialAbsentId(String.valueOf(a.getApplyOfficialAbsentId()))
-                        .absentReason(a.getAbsentReason())
-                        .absentIsAccepted(String.valueOf(a.getAbsentIsAccepted()))
-                        .absentDate(a.getAbsentDate().toString())
-                        .build())
+        // applyOfficialAbsentList에서 AbsentListDto로 변환
+        List<AbsentListDto> absentListDtoList =  scheduleList.stream()
+                .map(s -> {
+                    ApplyOfficialAbsent a = s.getApplyOfficialAbsent();
+                    if (a != null && a.getMember() != null) {
+                        return AbsentListDto.builder()
+                                .applyOfficialAbsentId(String.valueOf(a.getApplyOfficialAbsentId()))
+                                .scheduleId(String.valueOf(s.getScheduleId()))
+                                .scheduleTitle(s.getScheduleTitle())
+                                .absentReason(a.getAbsentReason())
+                                .absentDate(String.valueOf(a.getAbsentDate()))
+                                .absentIsAccepted(a.getAbsentIsAccepted())
+                                .memberId(String.valueOf(a.getMember().getMemberId()))
+                                .memberName(a.getMember().getMemberName())
+                                .memberNickName(a.getMember().getMemberNickName())
+                                .memberEmail(a.getMember().getMemberEmail())
+                                .memberPhone(a.getMember().getMemberPhone())
+                                .build();
+                    }
+                    return null; // null인 객체는 건너뛰기
+                })
+                .filter(Objects::nonNull) // null인 객체 필터링
                 .collect(Collectors.toList());
 
 
         return ResponseEntity.ok(absentListDtoList);
+
     }
 
 
