@@ -15,13 +15,13 @@ spring:
     generate-ddl: true
     defer-datasource-initialization: true
 
+
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
   sql:
     init:
       encoding: UTF-8
-
 
 server:
   port: 8090

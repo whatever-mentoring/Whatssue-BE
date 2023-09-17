@@ -93,7 +93,9 @@ public class ScheduleService {
     }
 
     public ResponseEntity deleteSchedule(Long scheduleId) {
-        Long clubId = 1L;
+        Long userId = 1L;
+        Club club = memberRepository.findById(userId).get().getClub();
+        Long clubId = club.getClubId();
         //clubId와 scheduleId 둘 다에 해당하는 schedule 가져오기
         Schedule schedule = scheduleRepository.findByClubIdAndScheduleId(clubId, scheduleId);
         //Schedule schedule = scheduleRepository.findById(scheduleId).orElse(null);
@@ -106,15 +108,19 @@ public class ScheduleService {
     }
 
     public ResponseEntity updateSchedule(Long scheduleId, ScheduleDetailDto scheduleDetailDto) {
-        Long clubId = 1L;
+        Long userId = 1L;
+        Club club = memberRepository.findById(userId).get().getClub();
+        Long clubId = club.getClubId();
         //clubId와 scheduleId 둘 다에 해당하는 schedule 가져오기
         Schedule schedule = scheduleRepository.findByClubIdAndScheduleId(clubId, scheduleId);
         if (schedule == null) {
             return ResponseEntity.badRequest().body("존재하지 않는 일정입니다.");
         }
 
-        schedule.updateSchedule(scheduleDetailDto.getScheduleTitle(), scheduleDetailDto.getScheduleContent(),
-                LocalDate.parse(scheduleDetailDto.getScheduleDate()), LocalTime.parse(scheduleDetailDto.getScheduleTime()));
+        schedule.updateSchedule(scheduleDetailDto.getScheduleTitle(),
+                scheduleDetailDto.getScheduleContent(),
+                LocalDate.parse(scheduleDetailDto.getScheduleDate()),
+                LocalTime.parse(scheduleDetailDto.getScheduleTime()));
         return ResponseEntity.ok().body("일정이 수정되었습니다.");
     }
     // 상세 일정 등록
@@ -130,7 +136,9 @@ public class ScheduleService {
                 .scheduleContent(dto.getScheduleContent())
                 .scheduleDate(dto.getScheduleDate())
                 .scheduleTime(dto.getScheduleTime())
+                .club(clubRepository.findById(1L).get()) // default clubId = 1
                 .build();
+
         try{scheduleRepository.save(schedule);
         }catch ( Exception e){
             throw new RuntimeException("일정 등록에 실패하였습니다.");
@@ -199,7 +207,4 @@ public class ScheduleService {
 //        }
 //        clubRepository.saveAll(clubList);
 //    }
-
-
-
 }
