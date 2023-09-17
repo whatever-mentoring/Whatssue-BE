@@ -41,4 +41,10 @@ public class Club {
         this.scheduleList = scheduleList;
         this.link = link;
     }
+
+    public void updateClub(String clubName, String clubInfo, String clubCategory) {
+        this.clubName = clubName;
+        this.clubInfo = clubInfo;
+        this.clubCategory = clubCategory;
+    }
 }
