@@ -3,6 +3,7 @@ package gdg.whatssue.controller;
 import gdg.whatssue.controller.inter.MemberController;
 import gdg.whatssue.service.MemberService;
 import gdg.whatssue.service.dto.ClubJoinRequestListDto;
+import gdg.whatssue.service.dto.ClubMemberListDto;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,8 +19,13 @@ public class MemberControllerImpl implements MemberController {
     //멤버 탈퇴 처리
     @Override
     public ResponseEntity deleteMember(Long memberId) {
-        memberService.deleteMember(memberId);
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+        boolean result = memberService.deleteMember(memberId);
+        
+        if(!result){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("모임에 가입되어 있지 않은 회원입니다");
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body("탈퇴 처리 완료");
     }
 
     @Override
@@ -31,7 +37,7 @@ public class MemberControllerImpl implements MemberController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("존재하지 않는 가입 요청입니다");
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body("가입요청ㄴ 승인 완료");
+        return ResponseEntity.status(HttpStatus.OK).body("가입요청 승인 완료");
     }
 
     @Override
@@ -54,6 +60,8 @@ public class MemberControllerImpl implements MemberController {
 
     @Override
     public ResponseEntity getAllMemberList() {
-        return null;
+        List<ClubMemberListDto> allMemberList = memberService.getAllMemberList();
+
+        return ResponseEntity.status(HttpStatus.OK).body(allMemberList);
     }
 }
