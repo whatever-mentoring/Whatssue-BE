@@ -49,6 +49,11 @@ public class Member {
     @OneToMany(mappedBy = "member")
     private List<Deposit> depositList;
 
+    @OneToMany(mappedBy = "member")
+    private List<ClubMemberMapping> clubList;
+
+
+
     @Builder
     public Member(String memberNickName, String memberPw, String memberName, String memberEmail, String memberPhone) {
         this.memberNickName = memberNickName;

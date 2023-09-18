@@ -31,6 +31,10 @@ public class Club {
     @OneToOne(mappedBy = "club", cascade = CascadeType.ALL,orphanRemoval = true)
     private Link link;
 
+    //clubMemberMapping 상의 멤버리스트. 추후 memberList에서 V2로 전체 리팩토링?
+    @OneToMany(mappedBy = "club")
+    private List<ClubMemberMapping> memberListV2;
+
     @Builder
     public Club(String clubName, String clubInfo, String clubCategory, List<Admin> adminList, List<Member> memberList, List<Schedule> scheduleList, Link link) {
         this.clubName = clubName;
