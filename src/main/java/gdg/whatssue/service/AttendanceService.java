@@ -12,8 +12,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.*;
+
+import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @Service
 @RequiredArgsConstructor // final, notnal이 붙은 필드를 자동으로 생성자에 넣어줌
@@ -46,7 +49,9 @@ public class AttendanceService {
         //어떤 클럽의 schedule을 찾을 것인지 모르니 일단 임시로 1번 user가 속한 클럽의 스케줄을 조회
         Long memberId = 1L;
         // 이미 해당 스케줄에 대하여 해당 멤버가 출석을 했는지 확인-> 만약 출석을 한 적이 있다면 예외 처리
-        if(attendanceByUserByScheduleRepository.findByScheduleIdAndMemberId(scheduleId, memberId) != null) throw new Exception("이미 출석하셨습니다.");
+        if(attendanceByUserByScheduleRepository.findBySchedule_ScheduleIdAndMember_MemberId(scheduleId, memberId) != null) {
+            throw new ResponseStatusException(BAD_REQUEST, "이미 출석을 하셨습니다."); //404
+        }
 
         if (checkNumMap.get(scheduleId).equals(num)) {
             AttendanceByUserBySchedule attendance =  AttendanceByUserBySchedule.builder()
@@ -55,7 +60,7 @@ public class AttendanceService {
                     .schedule(scheduleRepository.findById(scheduleId).get())
                     .build();
             attendanceByUserByScheduleRepository.save(attendance);
-        }else throw new Exception("출석번호가 일치하지 않습니다.");
+        }else return new ResponseEntity("출석 번호가 일치하지 않습니다.", null, 404);
         return ResponseEntity.ok("출석 완료.");
 
     }

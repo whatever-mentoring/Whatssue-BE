@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AttendanceByUserByScheduleRepository extends JpaRepository<AttendanceByUserBySchedule, Long> {
-    AttendanceByUserBySchedule findByScheduleIdAndMemberId(Long scheduleId,Long MemberId);
+    AttendanceByUserBySchedule findBySchedule_ScheduleIdAndMember_MemberId(Long scheduleId,Long MemberId);
 }
