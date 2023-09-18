@@ -24,13 +24,26 @@ public class MemberControllerImpl implements MemberController {
 
     @Override
     public ResponseEntity acceptJoinRequest(Long joinId) {
-        memberService.acceptJoinRequest(joinId);
-        return null;
+        
+        boolean result = memberService.acceptJoinRequest(joinId);
+
+        if(!result) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("존재하지 않는 가입 요청입니다");
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body("가입요청ㄴ 승인 완료");
     }
 
     @Override
-    public ResponseEntity refuseJoinRequest(Long memberId) {
-        return null;
+    public ResponseEntity refuseJoinRequest(Long joinId) {
+
+        boolean result = memberService.refuseJoinRequest(joinId);
+
+        if(!result) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("존재하지 않는 가입 요청입니다");
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body("가입요청 거절 완료");
     }
 
     @Override
