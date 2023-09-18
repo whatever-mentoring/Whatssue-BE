@@ -10,10 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-
-
-
-
 @RestController
 @RequestMapping("/api/schedule")
 @RequiredArgsConstructor
@@ -46,11 +42,9 @@ public class AttendanceControllerImpl implements AttendanceController {
             summary = "출석 재시작 api",
             description = "관리자가 출석을 재시작")
     @PatchMapping("/{scheduleId}/attendance/start")
-    public ResponseEntity<?> restartAttendance(Long scheduleId) throws NotImplementedException {
-        //"TODO: This api should be implemented"
-        throw new NotImplementedException("hi");
+    public ResponseEntity<?> restartAttendance(@PathVariable(name="scheduleId") Long scheduleId) throws Exception {
+        return ResponseEntity.ok(attendanceService.restartAttendance(scheduleId));
     }
-
     // 멤버 출석 리스트 조회
     @Override
     @Operation(tags = { "멤버 출석 조회" },
@@ -70,7 +64,6 @@ public class AttendanceControllerImpl implements AttendanceController {
     public ResponseEntity openAttendance(@PathVariable(name = "scheduleId") Long scheduleId) throws NotImplementedException {
         return attendanceService.openAttendance(scheduleId);
     }
-
     //출석하기(member)
     @Override
     @Operation(tags = { "멤버 출석하기" },

@@ -26,15 +26,28 @@ public class AttendanceService {
     private final AttendanceByUserByScheduleRepository attendanceByUserByScheduleRepository;
     private final Map<Long, Integer> checkNumMap = new HashMap<>();
     //출석 시작
-    public Integer startAttendance(Long scheduleId) {
+    public Integer startAttendance(Long scheduleId){
         Integer RandomNum = new Random().nextInt(100, 999);
         checkNumMap.put(scheduleId, RandomNum);
         return RandomNum;
+    }
+    // 출석 다시하기
+    public Integer restartAttendance(Long scheduleId) throws Exception {
+        Schedule schedule = scheduleRepository.findById(scheduleId).get();
+        if(scheduleRepository.findById(scheduleId).get().getIsChecked() == true) {
+            Integer RandomNum = new Random().nextInt(100, 999);
+            checkNumMap.put(scheduleId, RandomNum);
+            schedule.setIsChecked(false);
+        }else throw new Exception("출석이 시행 된 적이 없는 Schedule입니다. 출석하기 버튼을 이용해 주세요");
+        return checkNumMap.get(scheduleId);
     }
     // 출석 하기
     public ResponseEntity doAttendance(Long scheduleId, Integer num) throws Exception {
         //어떤 클럽의 schedule을 찾을 것인지 모르니 일단 임시로 1번 user가 속한 클럽의 스케줄을 조회
         Long memberId = 1L;
+        // 이미 해당 스케줄에 대하여 해당 멤버가 출석을 했는지 확인-> 만약 출석을 한 적이 있다면 예외 처리
+        if(attendanceByUserByScheduleRepository.findByScheduleIdAndMemberId(scheduleId, memberId) != null) throw new Exception("이미 출석하셨습니다.");
+
         if (checkNumMap.get(scheduleId).equals(num)) {
             AttendanceByUserBySchedule attendance =  AttendanceByUserBySchedule.builder()
                     .attendanceType("출석")
