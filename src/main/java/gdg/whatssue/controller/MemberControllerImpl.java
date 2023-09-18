@@ -3,6 +3,7 @@ package gdg.whatssue.controller;
 import gdg.whatssue.controller.inter.MemberController;
 import gdg.whatssue.service.MemberService;
 import gdg.whatssue.service.dto.ClubJoinRequestListDto;
+import gdg.whatssue.service.dto.ClubMemberListDto;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -31,7 +32,7 @@ public class MemberControllerImpl implements MemberController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("존재하지 않는 가입 요청입니다");
         }
 
-        return ResponseEntity.status(HttpStatus.OK).body("가입요청ㄴ 승인 완료");
+        return ResponseEntity.status(HttpStatus.OK).body("가입요청 승인 완료");
     }
 
     @Override
@@ -54,6 +55,8 @@ public class MemberControllerImpl implements MemberController {
 
     @Override
     public ResponseEntity getAllMemberList() {
-        return null;
+        List<ClubMemberListDto> allMemberList = memberService.getAllMemberList();
+
+        return ResponseEntity.status(HttpStatus.OK).body(allMemberList);
     }
 }
