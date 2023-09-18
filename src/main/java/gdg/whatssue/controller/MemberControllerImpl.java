@@ -55,7 +55,6 @@ public class MemberControllerImpl implements MemberController {
 
     @Override
     public ResponseEntity getAllMemberList() {
-        System.out.println("hi");
         List<ClubMemberListDto> allMemberList = memberService.getAllMemberList();
 
         return ResponseEntity.status(HttpStatus.OK).body(allMemberList);
