@@ -9,6 +9,7 @@ import gdg.whatssue.repository.ClubMemberMappingRepository;
 import gdg.whatssue.repository.ClubRepository;
 import gdg.whatssue.repository.MemberRepository;
 import gdg.whatssue.service.dto.ClubJoinRequestListDto;
+import gdg.whatssue.service.dto.ClubMemberListDto;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -22,6 +23,9 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional(readOnly = true)
 public class MemberService {
 
+    //클럽아이디 1이라고 가정
+    static final Long CLUB_ID = 1L;
+
     private final ClubRepository clubRepository;
     private final MemberRepository memberRepository;
     private final ClubJoinRequestRepository joinRequestRepository;
@@ -29,8 +33,8 @@ public class MemberService {
 
     @Transactional
     public boolean deleteMember(Long memberId){
-        //클럽아이디 1L이라고 가정
-        Club club = clubRepository.findById(1L).get();
+        
+        Club club = clubRepository.findById(CLUB_ID).get();
 
         //삭제 후 결과 반환. 삭제 성공 시 true, 삭제 값 없을 시 false
         boolean result = club.getMemberList().remove(memberRepository.findById(memberId));
@@ -70,11 +74,10 @@ public class MemberService {
     }
 
     public List<ClubJoinRequestListDto> getJoinRequestList(){
-        Long clubId = 1L;
         List<ClubJoinRequest> requestList = joinRequestRepository.findAll();
 
         List<ClubJoinRequestListDto> clubJoinRequestList = requestList.stream()
-            .filter(r -> r.getClub().getClubId().equals(clubId))
+            .filter(r -> r.getClub().getClubId().equals(CLUB_ID))
             .map(r -> ClubJoinRequestListDto.builder()
                 .clubJoinRequestId(r.getClubJoinRequestId())
                 .userName(r.getMember().getMemberName())
@@ -84,8 +87,21 @@ public class MemberService {
         return clubJoinRequestList;
     }
 
-    public void getAllMemberList(){
+    public List<ClubMemberListDto> getAllMemberList(){
 
+        List<ClubMemberMapping> memberListV2 = clubRepository.findById(CLUB_ID).get().getMemberListV2();
+
+        List<ClubMemberListDto> allMemberList = memberListV2.stream()
+            .map(m -> ClubMemberListDto.builder()
+                .memberId(m.getMember().getMemberId())
+                .memberName(m.getMember().getMemberName())
+                .checkedCount(m.getMember().getCheckedListByUser().getCheckedCount())
+                .absentCount(m.getMember().getCheckedListByUser().getAbsentCount())
+                .officialAbsentCount(m.getMember().getCheckedListByUser().getOfficialAbsentCount())
+                .build())
+            .collect(Collectors.toList());
+
+        return allMemberList;
     }
 
 }

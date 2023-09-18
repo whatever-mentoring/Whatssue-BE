@@ -16,6 +16,7 @@ public class CheckedListByUser {
     private Integer absentCount;
     private Integer officialAbsentCount;
 
-    @OneToOne(mappedBy = "checkedListByUser")
+    @OneToOne
+    @JoinColumn(name = "member_id")
     private Member member;
 }
