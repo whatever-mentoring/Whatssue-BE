@@ -19,8 +19,13 @@ public class MemberControllerImpl implements MemberController {
     //멤버 탈퇴 처리
     @Override
     public ResponseEntity deleteMember(Long memberId) {
-        memberService.deleteMember(memberId);
-        return ResponseEntity.status(HttpStatus.OK).body(null);
+        boolean result = memberService.deleteMember(memberId);
+        
+        if(!result){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("모임에 가입되어 있지 않은 회원입니다");
+        }
+
+        return ResponseEntity.status(HttpStatus.OK).body("탈퇴 처리 완료");
     }
 
     @Override
