@@ -37,11 +37,17 @@ public class MemberService {
         Club club = clubRepository.findById(CLUB_ID).get();
 
         //삭제 후 결과 반환. 삭제 성공 시 true, 삭제 값 없을 시 false
-        boolean result = club.getMemberList().remove(memberRepository.findById(memberId));
+        List<ClubMemberMapping> memberList = club.getMemberListV2();
+        ClubMemberMapping memberMapping = memberList.stream()
+            .filter(m -> m.getMember().getMemberId().equals(memberId))
+            .findFirst().orElse(null);
 
-        clubRepository.save(club);
+        if(memberMapping == null){
+            return false;
+        }
 
-        return result;
+        clubMemberMappingRepository.delete(memberMapping);
+        return true;
     }
 
     @Transactional
