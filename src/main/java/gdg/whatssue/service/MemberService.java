@@ -1,13 +1,7 @@
 package gdg.whatssue.service;
 
-import gdg.whatssue.entity.Club;
-import gdg.whatssue.entity.ClubJoinRequest;
-import gdg.whatssue.entity.ClubMemberMapping;
-import gdg.whatssue.entity.Member;
-import gdg.whatssue.repository.ClubJoinRequestRepository;
-import gdg.whatssue.repository.ClubMemberMappingRepository;
-import gdg.whatssue.repository.ClubRepository;
-import gdg.whatssue.repository.MemberRepository;
+import gdg.whatssue.entity.*;
+import gdg.whatssue.repository.*;
 import gdg.whatssue.service.dto.ClubJoinRequestListDto;
 import gdg.whatssue.service.dto.ClubMemberListDto;
 import java.util.List;
@@ -15,6 +9,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +25,8 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final ClubJoinRequestRepository joinRequestRepository;
     private final ClubMemberMappingRepository clubMemberMappingRepository;
+    private final LinkRepository linkRepository;
+
 
     @Transactional
     public boolean deleteMember(Long memberId){
@@ -109,5 +106,29 @@ public class MemberService {
 
         return allMemberList;
     }
+    //가입 요청
+    public ResponseEntity requestJoin(Long userId, String teamId) {
+        //Link 테이블의 LinkUrl로 club 찾기
+        Link link = linkRepository.findByLinkUrl(teamId).orElse(null);
+        if(link == null){
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+        else{
+            Club club = link.getClub();
+            Member member = memberRepository.findById(userId).orElse(null);
+            if(member == null){
+                //존재하지 않는 회원입니다.문구 를 리턴
+                return ResponseEntity.badRequest().body("회원이 존재하지 않습니다.");
+            }
+            else{
+                ClubJoinRequest clubJoinRequest = ClubJoinRequest.builder()
+                    .club(club)
+                    .member(member)
+                    .build();
+                joinRequestRepository.save(clubJoinRequest);
+                return ResponseEntity.ok().body("가입 요청이 완료되었습니다.");
+            }
+        }
 
+    }
 }

@@ -5,6 +5,8 @@ import gdg.whatssue.service.MemberService;
 import gdg.whatssue.service.dto.ClubJoinRequestListDto;
 import gdg.whatssue.service.dto.ClubMemberListDto;
 import java.util.List;
+
+import jdk.jshell.spi.ExecutionControl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -63,5 +65,11 @@ public class MemberControllerImpl implements MemberController {
         List<ClubMemberListDto> allMemberList = memberService.getAllMemberList();
 
         return ResponseEntity.status(HttpStatus.OK).body(allMemberList);
+    }
+
+    @Override
+    public ResponseEntity requestJoin(String teamId) throws ExecutionControl.NotImplementedException {
+        Long userId = 1L;
+        return memberService.requestJoin(userId, teamId);
     }
 }

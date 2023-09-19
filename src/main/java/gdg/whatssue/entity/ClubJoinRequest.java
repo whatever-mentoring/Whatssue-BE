@@ -11,6 +11,8 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+
+import lombok.Builder;
 import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -36,4 +38,10 @@ public class ClubJoinRequest {
     @CreatedDate
     @Column(name = "createdAt")
     private LocalDateTime createdAt;
+
+    @Builder
+    public ClubJoinRequest(Club club, Member member) {
+        this.club = club;
+        this.member = member;
+    }
 }
