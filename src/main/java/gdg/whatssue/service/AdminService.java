@@ -9,13 +9,16 @@ import gdg.whatssue.repository.ClubRepository;
 import gdg.whatssue.repository.LinkRepository;
 import gdg.whatssue.repository.MemberRepository;
 import gdg.whatssue.service.dto.ClubDetailDto;
+import gdg.whatssue.service.dto.LinkDetailDto;
 import gdg.whatssue.service.dto.LinkInfoDto;
 import gdg.whatssue.service.dto.LinkResultDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.w3c.dom.stylesheets.LinkStyle;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 
@@ -123,6 +126,31 @@ public class AdminService {
         else{
             linkRepository.deleteById(linkId);
             return ResponseEntity.ok().body("초대 링크가 삭제되었습니다.");
+        }
+    }
+
+    public ResponseEntity getInviteLink(Long userId) {
+        //초대 링크 조회
+        Club club = memberRepository.findById(userId).get().getClub();
+        //클럽이 존재하지 않는경우 예외처리
+        if (club == null) {
+            return ResponseEntity.badRequest().body("클럽이 존재하지 않습니다.");
+        }
+        else{
+            //링크테이블 리스트로 조회
+            List<Link> linkList = linkRepository.findAllByClub(club);
+            //linkList 를 LinkDetailDto 로 stream 사용하여 변환
+            List<LinkDetailDto> linkDetailDtoList = linkList.stream().map(link -> LinkDetailDto.builder()
+                    .linkName(link.getLinkName())
+                    .linkUrl(link.getLinkUrl())
+                    .clubId(link.getClub().getClubId().toString())
+                    .clubName(link.getClub().getClubName())
+                    .clubInfo(link.getClub().getClubInfo())
+                    .clubCategory(link.getClub().getClubCategory())
+                    .build()).toList();
+
+            return ResponseEntity.ok().body(linkDetailDtoList);
+
         }
     }
 }
