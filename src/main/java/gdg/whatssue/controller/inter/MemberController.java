@@ -32,5 +32,8 @@ public interface MemberController {
     @PostMapping("/join/request")
     ResponseEntity requestJoin(@RequestParam("teamId") String teamId) throws NotImplementedException;
 
+    //멤버 가입 신청 창
+    @GetMapping("/join/request")
+    ResponseEntity requestJoinInfo(@RequestParam("teamId") String teamId) throws NotImplementedException;
 
 }

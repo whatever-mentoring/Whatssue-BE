@@ -72,4 +72,11 @@ public class MemberControllerImpl implements MemberController {
         Long userId = 1L;
         return memberService.requestJoin(userId, teamId);
     }
+
+    @Override
+    public ResponseEntity requestJoinInfo(String teamId) {
+        Long userId = 1L;
+        return memberService.requestJoinInfo(teamId, userId);
+    }
+
 }

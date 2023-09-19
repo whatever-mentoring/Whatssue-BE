@@ -1,11 +1,12 @@
 package gdg.whatssue.service;
 
 import gdg.whatssue.entity.*;
+import gdg.whatssue.mapper.ClubDetailMapper;
 import gdg.whatssue.repository.*;
+import gdg.whatssue.service.dto.ClubDetailDto;
 import gdg.whatssue.service.dto.ClubJoinRequestListDto;
 import gdg.whatssue.service.dto.ClubMemberListDto;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -128,6 +129,22 @@ public class MemberService {
                 joinRequestRepository.save(clubJoinRequest);
                 return ResponseEntity.ok().body("가입 요청이 완료되었습니다.");
             }
+        }
+
+    }
+
+    public ResponseEntity requestJoinInfo(String teamId, Long userId) {
+        //Link 테이블의 LinkUrl로 club 찾기
+        Link link = linkRepository.findByLinkUrl(teamId).orElse(null);
+        if(link == null){
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+        else{
+            //clubDto 리턴
+            Club club = link.getClub();
+            //ClubDetailMapper 로 Dto 로 변환
+            ClubDetailDto clubDetailDto = ClubDetailMapper.INSTANCE.toDTO(club);
+            return ResponseEntity.ok().body(clubDetailDto);
         }
 
     }
