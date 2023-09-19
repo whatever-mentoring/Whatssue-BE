@@ -13,6 +13,7 @@ import gdg.whatssue.service.dto.LinkDetailDto;
 import gdg.whatssue.service.dto.LinkInfoDto;
 import gdg.whatssue.service.dto.LinkResultDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -122,11 +123,24 @@ public class AdminService {
         //클럽이 존재하지 않는경우 예외처리
         if (club == null) {
             return ResponseEntity.badRequest().body("클럽이 존재하지 않습니다.");
+        }else {
+            try{
+                Link link = linkRepository.findByLinkId(linkId);
+                if(link!=null){
+                    //club 의 link null 로 변경
+                    club.changeLink(null);
+                    //link 테이블에서 삭제
+                    linkRepository.delete(link);
+                    return ResponseEntity.ok().body("초대 링크가 삭제되었습니다.");
+                }else{
+                    return ResponseEntity.badRequest().body("존재하지 않는 링크입니다.");
+                }
+
+            }catch (EmptyResultDataAccessException e){
+                return ResponseEntity.badRequest().body("존재하지 않는 링크입니다.");
+            }
         }
-        else{
-            linkRepository.deleteById(linkId);
-            return ResponseEntity.ok().body("초대 링크가 삭제되었습니다.");
-        }
+
     }
 
     public ResponseEntity getInviteLink(Long userId) {

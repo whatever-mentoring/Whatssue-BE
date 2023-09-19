@@ -11,6 +11,7 @@ import java.util.Optional;
 @Repository
 public interface LinkRepository extends JpaRepository<Link, Long> {
     Optional<Link> findByLinkUrl(String teamId);
-
     List<Link> findAllByClub(Club club);
+
+    Link findByLinkId(Long linkId);
 }

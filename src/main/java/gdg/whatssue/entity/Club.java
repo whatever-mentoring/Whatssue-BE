@@ -51,4 +51,8 @@ public class Club {
         this.clubInfo = clubInfo;
         this.clubCategory = clubCategory;
     }
+
+    public void changeLink(Object o) {
+        this.link = (Link) o;
+    }
 }
