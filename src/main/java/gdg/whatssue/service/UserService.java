@@ -14,4 +14,8 @@ public class UserService {
     public void userSignUp(UserSignUpDto userSignUpDto){
         memberRepository.save(userSignUpDto.toEntity());
     }
+
+    public boolean checkIdDuplicate(String checkId) {
+        return memberRepository.findAll().stream().anyMatch(m -> m.getMemberNickName().equals(checkId));
+    }
 }
