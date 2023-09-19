@@ -5,12 +5,16 @@ import gdg.whatssue.service.MemberService;
 import gdg.whatssue.service.dto.ClubJoinRequestListDto;
 import gdg.whatssue.service.dto.ClubMemberListDto;
 import java.util.List;
+
+import jdk.jshell.spi.ExecutionControl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@Transactional
 @RequiredArgsConstructor
 public class MemberControllerImpl implements MemberController {
 
@@ -64,4 +68,17 @@ public class MemberControllerImpl implements MemberController {
 
         return ResponseEntity.status(HttpStatus.OK).body(allMemberList);
     }
+
+    @Override
+    public ResponseEntity requestJoin(String teamId) {
+        Long userId = 1L;
+        return memberService.requestJoin(userId, teamId);
+    }
+
+    @Override
+    public ResponseEntity requestJoinInfo(String teamId) {
+        Long userId = 1L;
+        return memberService.requestJoinInfo(teamId, userId);
+    }
+
 }
