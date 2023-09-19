@@ -57,9 +57,8 @@ public class AttendanceControllerImpl implements AttendanceController {
             summary = "일정에 대한 멤버들의 출석을 조회하는 api",
             description = "일정 조회")
     @GetMapping("/{scheduleId}/attendance/result")
-    public ResponseEntity<?> getAttendanceResult(Long scheduleId) throws NotImplementedException {
-        //"TODO: This api should be implemented"
-        throw new NotImplementedException("hi");
+    public ResponseEntity<?> getAttendanceResult(Long scheduleId) throws Exception{
+        return attendanceService.getAttendanceResult(scheduleId);
     }
     //출석 열기(출석 시도)
     @Override
