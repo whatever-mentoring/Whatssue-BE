@@ -23,11 +23,18 @@ public class AttendanceByUserBySchedule {
     @JoinColumn(name="schedule_id")
     private Schedule schedule;
 
+    @ManyToOne
+    @JoinColumn(name="club_id")
+    private Club club;
 
     @Builder
     public AttendanceByUserBySchedule(String attendanceType, Member member, Schedule schedule){
         this.member = member;
         this.schedule = schedule;
         this.attendanceType= attendanceType;
+    }
+
+    public void setAttendanceType(String attendanceType) {
+        this.attendanceType = attendanceType;
     }
 }

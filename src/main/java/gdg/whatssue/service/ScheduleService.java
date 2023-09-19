@@ -2,9 +2,11 @@ package gdg.whatssue.service;
 
 import gdg.whatssue.entity.*;
 import gdg.whatssue.mapper.ScheduleDetailMapper;
+import gdg.whatssue.repository.AttendanceByUserByScheduleRepository;
 import gdg.whatssue.repository.ClubRepository;
 import gdg.whatssue.repository.MemberRepository;
 import gdg.whatssue.repository.ScheduleRepository;
+import gdg.whatssue.service.dto.AttendanceStateBySheduleDto;
 import gdg.whatssue.service.dto.ScheduleByDateDto;
 import gdg.whatssue.service.dto.ScheduleByMonthDto;
 import gdg.whatssue.service.dto.ScheduleDetailDto;
@@ -31,6 +33,7 @@ public class ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final MemberRepository memberRepository;
     private final ClubRepository clubRepository;
+    private final AttendanceByUserByScheduleRepository attendanceByUserByScheduleRepository;
 
     //일정 상세 조회
     public ScheduleDetailDto getSchedule(Long scheduleId) {
@@ -139,9 +142,20 @@ public class ScheduleService {
                 .club(clubRepository.findById(1L).get()) // default clubId = 1
                 .build();
 
-        try{scheduleRepository.save(schedule);
+        try{
+            scheduleRepository.save(schedule);
         }catch ( Exception e){
             throw new RuntimeException("일정 등록에 실패하였습니다.");
+        }
+        Club club = scheduleRepository.findById(schedule.getScheduleId()).get().getClub();
+        List<Member> memberList = club.getMemberList();
+        for(int i=0; i<memberList.size(); i++){
+        AttendanceByUserBySchedule attendanceByUserBySchedule = AttendanceByUserBySchedule.builder()
+                    .attendanceType("결석")
+                    .member(memberList.get(i))
+                    .schedule(schedule)
+                    .build();
+            attendanceByUserByScheduleRepository.save(attendanceByUserBySchedule);
         }
         return ResponseEntity.ok().body("일정이 등록되었습니다.");
     }

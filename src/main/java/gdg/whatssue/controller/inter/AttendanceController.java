@@ -23,11 +23,11 @@ public interface AttendanceController {
 
     //출석 재시작
 
-    ResponseEntity restartAttendance(@PathVariable Long scheduleId) throws NotImplementedException;
+    ResponseEntity restartAttendance(@PathVariable Long scheduleId) throws Exception;
 
     //출석 결과 조회
 
-    ResponseEntity getAttendanceResult(@PathVariable Long scheduleId) throws NotImplementedException;
+    ResponseEntity getAttendanceResult(@PathVariable Long scheduleId) throws Exception;
 
     /**
      * Member api
