@@ -34,4 +34,12 @@ public interface AdminController {
             summary = "관리자 - 초대 링크 생성 api",
             description = "링크 이름을 입력받고, 모임 id를 토큰 헤더를 통해 입력 받아 해당 모임의 초대 링크를 생성")
     ResponseEntity createInviteLink(LinkInfoDto linkInfoDto) throws NotImplementedException;
+
+    //초대 링크 삭제
+    @DeleteMapping("/link/{linkId}")
+    @Operation(tags = { "초대 링크 삭제" },
+            summary = "관리자 - 초대 링크 삭제 api",
+            description = "링크 id를 통해 해당 링크를 삭제")
+    ResponseEntity deleteInviteLink(@PathVariable Long linkId) throws NotImplementedException;
+
 }

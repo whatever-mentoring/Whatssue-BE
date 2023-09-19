@@ -112,4 +112,17 @@ public class AdminService {
                 .toString();
         return generatedString;
     }
+
+    public ResponseEntity deleteInviteLink(Long userId, Long linkId) {
+        //초대 링크 삭제
+        Club club = memberRepository.findById(userId).get().getClub();
+        //클럽이 존재하지 않는경우 예외처리
+        if (club == null) {
+            return ResponseEntity.badRequest().body("클럽이 존재하지 않습니다.");
+        }
+        else{
+            linkRepository.deleteById(linkId);
+            return ResponseEntity.ok().body("초대 링크가 삭제되었습니다.");
+        }
+    }
 }

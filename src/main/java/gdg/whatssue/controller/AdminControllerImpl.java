@@ -35,5 +35,11 @@ public class AdminControllerImpl implements AdminController {
 
     }
 
+    @Override
+    public ResponseEntity deleteInviteLink(Long linkId) throws NotImplementedException {
+        Long userId = 1L;
+        return adminService.deleteInviteLink(userId,linkId);
+    }
+
 
 }
