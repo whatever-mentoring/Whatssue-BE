@@ -37,4 +37,9 @@ public class AttendanceByUserBySchedule {
     public void setAttendanceType(String attendanceType) {
         this.attendanceType = attendanceType;
     }
+
+    public void changeAttendance(String absentReason) {
+        this.attendanceType = absentReason;
+    }
+
 }
