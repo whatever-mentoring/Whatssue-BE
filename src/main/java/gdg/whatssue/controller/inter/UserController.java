@@ -1,5 +1,6 @@
 package gdg.whatssue.controller.inter;
 
+import gdg.whatssue.service.dto.CheckIdDuplicateDto;
 import gdg.whatssue.service.dto.UserSignUpDto;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
@@ -19,8 +20,8 @@ public interface UserController {
     ResponseEntity userSignUp(UserSignUpDto userSignUpDto, BindingResult bindingResult) throws NotImplementedException;
 
     //아이디 중복 체크
-    @PostMapping("/sign-up/checkId")
-    ResponseEntity checkIdDuplicate() throws NotImplementedException;
+    @PostMapping("/sign-up/check-id")
+    ResponseEntity checkIdDuplicate(CheckIdDuplicateDto idDuplicateDto, BindingResult bindingResult) throws NotImplementedException;
 
     // 로그인
     @PostMapping("/login")
