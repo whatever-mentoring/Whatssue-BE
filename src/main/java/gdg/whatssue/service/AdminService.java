@@ -2,17 +2,22 @@ package gdg.whatssue.service;
 
 import gdg.whatssue.entity.Admin;
 import gdg.whatssue.entity.Club;
+import gdg.whatssue.entity.Link;
 import gdg.whatssue.entity.Member;
 import gdg.whatssue.repository.AdminRepository;
 import gdg.whatssue.repository.ClubRepository;
+import gdg.whatssue.repository.LinkRepository;
 import gdg.whatssue.repository.MemberRepository;
 import gdg.whatssue.service.dto.ClubDetailDto;
+import gdg.whatssue.service.dto.LinkInfoDto;
+import gdg.whatssue.service.dto.LinkResultDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 @Transactional
@@ -22,6 +27,7 @@ public class AdminService {
     private final MemberRepository memberRepository;
     private final ClubRepository clubRepository;
     private final AdminRepository adminRepository;
+    private final LinkRepository linkRepository;
 
     public ResponseEntity createClub(ClubDetailDto clubDetailDto) {
         Long userId = 2L;
@@ -64,5 +70,46 @@ public class AdminService {
         //정상 작동시 200반환
         return ResponseEntity.ok().body("모임 정보가 수정되었습니다.");
 
+    }
+
+    public ResponseEntity createInviteLink(Long userId, LinkInfoDto linkInfoDto){
+        Club club = memberRepository.findById(userId).get().getClub();
+        //클럽이 존재하지 않는경우 예외처리
+        if (club == null) {
+            return ResponseEntity.badRequest().body("클럽이 존재하지 않습니다.");
+        }
+        else{
+            //랜덤한 string 값 생성 함수 호출
+            String str = createLink();
+            String link = "member/join/request?teamId="+str;
+            //Link Entity 에 Builder 이용 저장
+            linkRepository.save(Link.builder()
+                    .linkName(linkInfoDto.getLinkName())
+                    .linkUrl(link)
+                    .club(club)
+                    .build());
+
+            //결과
+            LinkResultDto linkResultDto = LinkResultDto.builder()
+                    .LinkUrl(link)
+                    .LinkName(linkInfoDto.getLinkName())
+                    .build();
+
+            return ResponseEntity.ok().body(linkResultDto);
+        }
+
+    }
+    public static String createLink(){
+        //랜덤한 string 값 생성
+        int leftLimit = 48; // numeral '0'
+        int rightLimit = 122; // letter 'z'
+        int targetStringLength = 10;
+        Random random = new Random();
+        String generatedString = random.ints(leftLimit, rightLimit + 1)
+                .filter(i -> (i <= 57 || i >= 65) && (i <= 90 || i >= 97))
+                .limit(targetStringLength)
+                .collect(StringBuilder::new, StringBuilder::appendCodePoint, StringBuilder::append)
+                .toString();
+        return generatedString;
     }
 }
