@@ -1,10 +1,12 @@
 package gdg.whatssue.service;
 
 import gdg.whatssue.entity.ApplyOfficialAbsent;
+import gdg.whatssue.entity.AttendanceByUserBySchedule;
 import gdg.whatssue.entity.Member;
 import gdg.whatssue.entity.Schedule;
 import gdg.whatssue.mapper.AbsentRequestMapper;
 import gdg.whatssue.repository.ApplyOfficialAbsentRepository;
+import gdg.whatssue.repository.AttendanceByUserByScheduleRepository;
 import gdg.whatssue.repository.MemberRepository;
 import gdg.whatssue.repository.ScheduleRepository;
 import gdg.whatssue.service.dto.AbsentListDto;
@@ -27,6 +29,8 @@ public class AbsentService {
     private final ApplyOfficialAbsentRepository applyOfficialAbsentRepository;
     private final MemberRepository memberRepository;
     private final ScheduleRepository scheduleRepository;
+    private final AttendanceByUserByScheduleRepository attendanceByUserByScheduleRepository;
+
 
     //공결 테이블 전체 조회
     public ResponseEntity getAbsentRequest() {
@@ -76,6 +80,20 @@ public class AbsentService {
         }
         String absentIsAccepted = "Approved";
         applyOfficialAbsent.AcceptAbsent(absentIsAccepted);
+
+        //Member와 Schedule 을 applyOfficialAbsent에서 가져옴
+        Member member = applyOfficialAbsent.getMember();
+        Schedule schedule = applyOfficialAbsent.getSchedule();
+        //공결 승인시 출석 테이블의 출석 여부를 공결로 변경
+        AttendanceByUserBySchedule attendanceByUserBySchedule = attendanceByUserByScheduleRepository.findByMemberAndSchedule(member, schedule);
+        //예외처리
+        if(attendanceByUserBySchedule == null){
+            return ResponseEntity.ok().build();
+        }
+        else{
+            attendanceByUserBySchedule.changeAttendance("공결");
+        }
+
         return ResponseEntity.ok().build();
     }
 

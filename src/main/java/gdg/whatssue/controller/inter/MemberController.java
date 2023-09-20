@@ -1,18 +1,13 @@
 package gdg.whatssue.controller.inter;
 
+import io.swagger.v3.oas.annotations.Operation;
 import jdk.jshell.spi.ExecutionControl.NotImplementedException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
 @RequestMapping("/api/member")
 public interface MemberController {
-
     //멤버 탈퇴처리
     @DeleteMapping("/delete/{memberId}")
     ResponseEntity deleteMember(@PathVariable Long memberId) throws NotImplementedException;
@@ -32,4 +27,13 @@ public interface MemberController {
     //멤버 목록 조회
     @GetMapping("/manage")
     ResponseEntity getAllMemberList() throws NotImplementedException;
+
+    //멤버 가입 신청
+    @PostMapping("/join/request")
+    ResponseEntity requestJoin(@RequestParam("teamId") String teamId) throws NotImplementedException;
+
+    //멤버 가입 신청 창
+    @GetMapping("/join/request")
+    ResponseEntity requestJoinInfo(@RequestParam("teamId") String teamId) throws NotImplementedException;
+
 }
