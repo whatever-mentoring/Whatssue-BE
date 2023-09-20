@@ -24,9 +24,6 @@ public class Admin {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToMany(mappedBy = "admin")
-    private List<Withdraw> withdrawList;
-
     @Builder
     public Admin(String role, Club club, Member member) {
         this.role = role;
