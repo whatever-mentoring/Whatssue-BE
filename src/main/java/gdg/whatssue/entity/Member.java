@@ -46,9 +46,6 @@ public class Member {
     private Admin admin;
 
     @OneToMany(mappedBy = "member")
-    private List<Deposit> depositList;
-
-    @OneToMany(mappedBy = "member")
     private List<ClubMemberMapping> clubList;
 
     @Builder
