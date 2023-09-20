@@ -14,7 +14,6 @@ public interface AttendanceController {
      * Admin api
     **/
     //출석 시작
-
     ResponseEntity startAttendance(@PathVariable Long scheduleId) throws NotImplementedException;
 
     //출석 종료

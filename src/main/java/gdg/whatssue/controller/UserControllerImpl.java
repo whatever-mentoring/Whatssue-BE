@@ -4,17 +4,21 @@ import gdg.whatssue.controller.inter.UserController;
 import gdg.whatssue.service.UserService;
 import gdg.whatssue.service.dto.CheckIdDuplicateDto;
 import gdg.whatssue.service.dto.UserSignUpDto;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jdk.jshell.spi.ExecutionControl.NotImplementedException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PostMapping;
 
 @RestController
 @RequiredArgsConstructor
@@ -25,6 +29,9 @@ public class UserControllerImpl implements UserController {
     private final UserService userService;
 
     @Override
+    @Operation(
+            summary = "회원가입 api",
+            description = "회원가입")
     public ResponseEntity userSignUp(@Valid @RequestBody UserSignUpDto userSignUpDto, BindingResult bindingResult) {
 
         if(bindingResult.hasErrors()) {
@@ -36,6 +43,9 @@ public class UserControllerImpl implements UserController {
     }
 
     @Override
+    @Operation(
+            summary = "아이디 중복 체크 api",
+            description = "아이디 중복 체크")
     public ResponseEntity checkIdDuplicate(@Valid @RequestBody CheckIdDuplicateDto idDuplicateDto, BindingResult bindingResult) {
         if(bindingResult.hasErrors()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("잘못된 입력 값입니다");
@@ -51,6 +61,9 @@ public class UserControllerImpl implements UserController {
     }
 
     @Override
+    @Operation(
+            summary = "로그인 api",
+            description = "로그인")
     public ResponseEntity userLogin() throws NotImplementedException {
         //"TODO: This api should be implemented"
         throw new NotImplementedException("hi");

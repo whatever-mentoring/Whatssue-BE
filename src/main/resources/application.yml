@@ -10,7 +10,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: update
 
     generate-ddl: true
     defer-datasource-initialization: true

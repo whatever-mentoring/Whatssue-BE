@@ -14,39 +14,24 @@ public interface AdminController {
 
     //모임 생성
     @PostMapping("/settings/club")
-    @Operation(tags = { "모임 생성" },
-            summary = "멤버 - 모임 생성 api",
-            description = "Request Body로 모임 정보를 json 형태로 입력 받아 모임을 생성")
     ResponseEntity createClub(@RequestBody ClubDetailDto clubDetailDto) throws NotImplementedException;
 
 
     //모임 수정
     @PatchMapping("/settings/club")
-    @Operation(tags = { "모임 수정" },
-            summary = "관리자 - 모임 수정 api",
-            description = "Request Body로 모임 정보를 json 형태로 입력 받아 모임 정보를 수정")
     ResponseEntity updateClub(@RequestBody ClubDetailDto clubDetailDto) throws NotImplementedException;
 
 
     //초대 링크 생성
     @PostMapping("/link")
-    @Operation(tags = { "초대 링크 생성" },
-            summary = "관리자 - 초대 링크 생성 api",
-            description = "링크 이름을 입력받고, 모임 id를 토큰 헤더를 통해 입력 받아 해당 모임의 초대 링크를 생성")
     ResponseEntity createInviteLink(LinkInfoDto linkInfoDto) throws NotImplementedException;
 
     //초대 링크 삭제
     @DeleteMapping("/link/{linkId}")
-    @Operation(tags = { "초대 링크 삭제" },
-            summary = "관리자 - 초대 링크 삭제 api",
-            description = "링크 id를 통해 해당 링크를 삭제")
     ResponseEntity deleteInviteLink(@PathVariable Long linkId) throws NotImplementedException;
 
     //초대 링크 조회
     @GetMapping("/link")
-    @Operation(tags = { "초대 링크 조회" },
-            summary = "관리자 - 초대 링크 조회 api",
-            description = "모임 id를 토큰 헤더를 통해 입력 받아 해당 모임의 초대 링크를 조회")
     ResponseEntity getInviteLink() throws NotImplementedException;
 
 }
