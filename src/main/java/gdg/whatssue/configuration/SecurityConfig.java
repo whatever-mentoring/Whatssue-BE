@@ -30,8 +30,7 @@ public class SecurityConfig {
             .cors(Customizer.withDefaults())
             .sessionManagement(configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authorize ->
-                authorize.requestMatchers("/actuator/**", "/swagger-ui/**", "/sign/**",
-                    "/api-docs/swagger-config", "/sign-in", "/sign-up").permitAll())
+                authorize.requestMatchers("/api/**").permitAll())
             .addFilterBefore(new JwtTokenFilter(userService, secretKey), UsernamePasswordAuthenticationFilter.class)
             .build();
     }
