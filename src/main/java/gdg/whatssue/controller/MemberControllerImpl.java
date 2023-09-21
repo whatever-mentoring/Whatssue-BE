@@ -6,6 +6,9 @@ import gdg.whatssue.service.dto.ClubJoinRequestListDto;
 import gdg.whatssue.service.dto.ClubMemberListDto;
 import java.util.List;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
+
 import jdk.jshell.spi.ExecutionControl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -16,12 +19,16 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @Transactional
 @RequiredArgsConstructor
+@Tag(name = "Member", description = "멤버 탈퇴, 가입요청 승인/거절, 가입요청 조회")
 public class MemberControllerImpl implements MemberController {
 
     private final MemberService memberService;
 
     //멤버 탈퇴 처리
     @Override
+    @Operation(
+            summary = "멤버 탈퇴 api",
+            description = "멤버 탈퇴 처리")
     public ResponseEntity deleteMember(Long memberId) {
         boolean result = memberService.deleteMember(memberId);
         
@@ -33,6 +40,9 @@ public class MemberControllerImpl implements MemberController {
     }
 
     @Override
+    @Operation(
+            summary = "멤버 클럽 가입 승인 api",
+            description = "멤버 클럽 가입 승인 처리")
     public ResponseEntity acceptJoinRequest(Long joinId) {
         
         boolean result = memberService.acceptJoinRequest(joinId);
@@ -45,6 +55,9 @@ public class MemberControllerImpl implements MemberController {
     }
 
     @Override
+    @Operation(
+            summary = "멤버 클럽 조인 거절 api",
+            description = "멤버 클럽 조인 거절 처리")
     public ResponseEntity refuseJoinRequest(Long joinId) {
 
         boolean result = memberService.refuseJoinRequest(joinId);
@@ -57,12 +70,18 @@ public class MemberControllerImpl implements MemberController {
     }
 
     @Override
+    @Operation(
+            summary = "멤버 클럽 가입 요청 조회 api",
+            description = "멤버 클럽 가입 요청 조회")
     public ResponseEntity getJoinRequestList() {
         List<ClubJoinRequestListDto> joinRequestList = memberService.getJoinRequestList();
         return ResponseEntity.status(HttpStatus.OK).body(joinRequestList);
     }
 
     @Override
+    @Operation(
+            summary = "멤버 리스트 조회 api",
+            description = "멤버 리스트 조회")
     public ResponseEntity getAllMemberList() {
         List<ClubMemberListDto> allMemberList = memberService.getAllMemberList();
 

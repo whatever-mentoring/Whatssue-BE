@@ -19,4 +19,8 @@ public class UserService {
     public Member getLoginUserByMemberId(Long memberId){
         return memberRepository.findById(memberId).orElse(null);
     }
+
+    public boolean checkIdDuplicate(String checkId) {
+        return memberRepository.findAll().stream().anyMatch(m -> m.getMemberNickName().equals(checkId));
+    }
 }

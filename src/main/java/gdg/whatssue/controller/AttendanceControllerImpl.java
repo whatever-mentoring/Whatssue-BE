@@ -20,7 +20,7 @@ public class AttendanceControllerImpl implements AttendanceController {
 
     //출석 시작
     @Override
-    @Operation(tags = { "출석 관리" },
+    @Operation(
             summary = "출석 시작 api",
             description = "api 경로로 일정ID를 입력 받아 출석을 시작")
     @PostMapping("/{scheduleId}/attendance/start")
@@ -29,7 +29,7 @@ public class AttendanceControllerImpl implements AttendanceController {
     }
     // 출석 종료
     @Override
-    @Operation(tags = { "출석 종료" },
+    @Operation(
             summary = "출석 종료 api",
             description = "관리자가 출석을 종료")
     @DeleteMapping("/{scheduleId}/attendance")
@@ -38,7 +38,7 @@ public class AttendanceControllerImpl implements AttendanceController {
     }
     // 출석 재시작
     @Override
-    @Operation(tags = { "출석 재시작" },
+    @Operation(
             summary = "출석 재시작 api",
             description = "관리자가 출석을 재시작")
     @PatchMapping("/{scheduleId}/attendance/start")
@@ -47,7 +47,7 @@ public class AttendanceControllerImpl implements AttendanceController {
     }
     // 멤버 출석 리스트 조회
     @Override
-    @Operation(tags = { "멤버 출석 조회" },
+    @Operation(
             summary = "일정에 대한 멤버들의 출석을 조회하는 api",
             description = "일정 조회")
     @GetMapping("/{scheduleId}/attendance/result")
@@ -56,7 +56,7 @@ public class AttendanceControllerImpl implements AttendanceController {
     }
     //출석 열기(출석 시도)
     @Override
-    @Operation(tags = { "멤버의 출석하기 시도" },
+    @Operation(
             summary = "멤버가 출석을 시도하는 api",
             description = "멤버가 출석을 시도하여 출석 중이면 출석 창으로 이동, 출석 중이 아니면 400 status")
     @GetMapping("/{scheduleId}/attendance/check")
@@ -65,7 +65,7 @@ public class AttendanceControllerImpl implements AttendanceController {
     }
     //출석하기(member)
     @Override
-    @Operation(tags = { "멤버 출석하기" },
+    @Operation(
             summary = "멤버가 출석 인증 번호로 출석하는 api",
             description = "멤버가 출석 번호를 입력하여 출석 진행")
     @PostMapping("/{scheduleId}/attendance/check")
