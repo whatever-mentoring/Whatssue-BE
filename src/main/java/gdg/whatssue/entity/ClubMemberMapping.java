@@ -16,7 +16,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class ClubMemberMapping {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long clubMemberMappingId;
@@ -30,6 +29,5 @@ public class ClubMemberMapping {
     private Member member;
 
     public ClubMemberMapping() {
-
     }
 }
