@@ -1,6 +1,7 @@
 package gdg.whatssue.service;
 
 import gdg.whatssue.entity.*;
+import gdg.whatssue.entity.CheckedListByUser;
 import gdg.whatssue.mapper.ClubDetailMapper;
 import gdg.whatssue.repository.*;
 import gdg.whatssue.service.dto.ClubDetailDto;
@@ -28,6 +29,7 @@ public class MemberService {
     private final ClubMemberMappingRepository clubMemberMappingRepository;
     private final LinkRepository linkRepository;
 
+    private final CheckedListByUserRepository checkedListByUserRepository;
 
     @Transactional
     public boolean deleteMember(Long memberId){
@@ -60,6 +62,13 @@ public class MemberService {
             ClubMemberMapping.builder()
             .member(clubJoinRequest.getMember())
             .club(clubJoinRequest.getClub()).build());
+
+        checkedListByUserRepository.save(
+            CheckedListByUser.builder()
+                .member(clubJoinRequest.getMember())
+                .checkedCount(0)
+                .absentCount(0)
+                .officialAbsentCount(0).build());
 
         joinRequestRepository.delete(clubJoinRequest);
         return true;

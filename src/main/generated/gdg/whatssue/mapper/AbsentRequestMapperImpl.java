@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-09-16T13:25:25+0900",
+    date = "2023-09-21T11:50:58+0900",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.8 (Oracle Corporation)"
 )
 @Component
@@ -39,14 +39,14 @@ public class AbsentRequestMapperImpl implements AbsentRequestMapper {
             return null;
         }
 
-        ApplyOfficialAbsent applyOfficialAbsent = new ApplyOfficialAbsent();
+        ApplyOfficialAbsent.ApplyOfficialAbsentBuilder applyOfficialAbsent = ApplyOfficialAbsent.builder();
 
-        applyOfficialAbsent.setAbsentReason( dto.getAbsentReason() );
+        applyOfficialAbsent.absentReason( dto.getAbsentReason() );
         if ( dto.getAbsentDate() != null ) {
-            applyOfficialAbsent.setAbsentDate( LocalDate.parse( dto.getAbsentDate() ) );
+            applyOfficialAbsent.absentDate( LocalDate.parse( dto.getAbsentDate() ) );
         }
 
-        return applyOfficialAbsent;
+        return applyOfficialAbsent.build();
     }
 
     @Override
