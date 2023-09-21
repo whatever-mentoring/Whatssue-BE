@@ -12,6 +12,8 @@ import java.math.BigDecimal;
 @RequiredArgsConstructor
 public class ClaimResult {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Long ClaimResultId;
 
     @ManyToOne

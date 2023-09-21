@@ -35,6 +35,7 @@ public class Club {
     @OneToMany(mappedBy = "club")
     private List<ClubMemberMapping> memberListV2;
 
+
     @OneToMany(mappedBy = "club", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Claim> claimList = new ArrayList<>();
 

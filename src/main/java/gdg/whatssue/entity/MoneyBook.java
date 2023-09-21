@@ -1,5 +1,7 @@
 package gdg.whatssue.entity;
 
+
+import jakarta.persistence.*;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
@@ -17,6 +19,7 @@ import java.time.LocalDateTime;
 public class MoneyBook {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long moneyBookId;
 
     @OneToOne
