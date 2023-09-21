@@ -117,29 +117,22 @@ public class MemberService {
         return allMemberList;
     }
     //가입 요청
-    public ResponseEntity requestJoin(Long userId, String teamId) {
-        //Link 테이블의 LinkUrl로 club 찾기
-        Link link = linkRepository.findByLinkUrl(teamId).orElse(null);
-        if(link == null){
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        }
-        else{
-            Club club = link.getClub();
-            Member member = memberRepository.findById(userId).orElse(null);
-            if(member == null){
+    public ResponseEntity requestJoin(Long userId, Long clubId) {
+        //clubId 로 Club 정보 가져오기
+        Club club = clubRepository.findById(clubId).get();
+        Member member = memberRepository.findById(userId).orElse(null);
+        if(member == null){
                 //존재하지 않는 회원입니다.문구 를 리턴
                 return ResponseEntity.badRequest().body("회원이 존재하지 않습니다.");
-            }
-            else{
+        }
+        else{
                 ClubJoinRequest clubJoinRequest = ClubJoinRequest.builder()
                     .club(club)
                     .member(member)
                     .build();
                 joinRequestRepository.save(clubJoinRequest);
                 return ResponseEntity.ok().body("가입 요청이 완료되었습니다.");
-            }
         }
-
     }
 
     public ResponseEntity requestJoinInfo(String teamId, Long userId) {
