@@ -1,5 +1,6 @@
 package gdg.whatssue.service;
 
+import gdg.whatssue.entity.Member;
 import gdg.whatssue.repository.MemberRepository;
 import gdg.whatssue.service.dto.UserSignUpDto;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,10 @@ public class UserService {
 
     public void userSignUp(UserSignUpDto userSignUpDto){
         memberRepository.save(userSignUpDto.toEntity());
+    }
+
+    public Member getLoginUserByMemberId(Long memberId){
+        return memberRepository.findById(memberId).orElse(null);
     }
 
     public boolean checkIdDuplicate(String checkId) {

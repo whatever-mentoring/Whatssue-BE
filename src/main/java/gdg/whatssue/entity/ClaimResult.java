@@ -13,6 +13,7 @@ import java.math.BigDecimal;
 public class ClaimResult {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+
     private Long ClaimResultId;
 
     @ManyToOne

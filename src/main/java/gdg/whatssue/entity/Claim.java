@@ -1,5 +1,6 @@
 package gdg.whatssue.entity;
 
+
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Null;
@@ -14,13 +15,11 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
-
+@Getter
 @Entity
 @Table(name = "claim")
-@Getter
-@Setter
-@Slf4j
 @RequiredArgsConstructor
+@Slf4j
 public class Claim {
 
     @Id
@@ -35,13 +34,19 @@ public class Claim {
     @OneToMany(mappedBy = "claim")
     private List<ClaimResult> claimResultList;
 
+
 //    @OneToOne
 //    @JoinColumn(name = "schedule_id", nullable = true)
 //    private Schedule schedule;
 
+    @OneToOne
+    @JoinColumn(name = "schedule_id", nullable = true)
+    private Schedule schedule;
+
     @ManyToOne
     @JoinColumn(name = "club_id")
     private Club club;
+
     @Builder
     public Claim(String claimName, Boolean isClosed, BigDecimal claimAmount, Club club, String claimDate) throws Exception {
         this.claimName = claimName;
@@ -55,4 +60,8 @@ public class Claim {
             throw new Exception("날짜 형식이 잘못되었습니다.");
         }
     }
+
+
+
+
 }
