@@ -39,8 +39,6 @@ public class Member {
     @JoinColumn(name = "club_id")
     private Club club;
 
-    @OneToOne(mappedBy = "member")
-    private CheckedListByUser checkedListByUser;
 
     @OneToOne(mappedBy = "member")
     private Admin admin;

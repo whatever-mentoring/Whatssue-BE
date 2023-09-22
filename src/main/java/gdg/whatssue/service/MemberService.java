@@ -8,6 +8,7 @@ import gdg.whatssue.service.dto.ClubDetailDto;
 import gdg.whatssue.service.dto.ClubJoinRequestListDto;
 import gdg.whatssue.service.dto.ClubMemberListDto;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -58,14 +59,15 @@ public class MemberService {
             return false;
         }
 
-        clubMemberMappingRepository.save(
-            ClubMemberMapping.builder()
+        ClubMemberMapping clubMemberMapping = ClubMemberMapping.builder()
             .member(clubJoinRequest.getMember())
-            .club(clubJoinRequest.getClub()).build());
+            .club(clubJoinRequest.getClub()).build();
+
+        clubMemberMappingRepository.save(clubMemberMapping);
 
         checkedListByUserRepository.save(
             CheckedListByUser.builder()
-                .member(clubJoinRequest.getMember())
+                .club_member_mapping(clubMemberMapping)
                 .checkedCount(0)
                 .absentCount(0)
                 .officialAbsentCount(0).build());
@@ -108,9 +110,9 @@ public class MemberService {
             .map(m -> ClubMemberListDto.builder()
                 .memberId(m.getMember().getMemberId())
                 .memberName(m.getMember().getMemberName())
-                .checkedCount(m.getMember().getCheckedListByUser().getCheckedCount())
-                .absentCount(m.getMember().getCheckedListByUser().getAbsentCount())
-                .officialAbsentCount(m.getMember().getCheckedListByUser().getOfficialAbsentCount())
+                .checkedCount(m.getCheckedListByUser().getCheckedCount())
+                .absentCount(m.getCheckedListByUser().getAbsentCount())
+                .officialAbsentCount(m.getCheckedListByUser().getOfficialAbsentCount())
                 .build())
             .collect(Collectors.toList());
 
