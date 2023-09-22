@@ -5,16 +5,8 @@ spring:
     password: ${SPRING_DATASOURCE_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
-  profiles:
-    include: mysql
-
-  jpa:
-    hibernate:
-      ddl-auto: none
-
-    generate-ddl: true
-    defer-datasource-initialization: true
-
+#  profiles:
+#    include: mysql
 
   mvc:
     pathmatch:
