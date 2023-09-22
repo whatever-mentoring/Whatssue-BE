@@ -156,6 +156,7 @@ public class AccountService {
         }
     }
 
+    /*
     @Transactional
     public ResponseEntity deleteBook(Long bookId) {
         Long clubId = 1L;
@@ -174,4 +175,5 @@ public class AccountService {
             return ResponseEntity.badRequest().body("존재하지 않는 데이터 입니다.");
         }
     }
+    */
 }
