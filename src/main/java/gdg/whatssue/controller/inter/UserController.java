@@ -1,6 +1,7 @@
 package gdg.whatssue.controller.inter;
 
 import gdg.whatssue.service.dto.CheckIdDuplicateDto;
+import gdg.whatssue.service.dto.UserLoginDto;
 import gdg.whatssue.service.dto.UserSignUpDto;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.Operation;
@@ -25,5 +26,5 @@ public interface UserController {
 
     // 로그인
     @PostMapping("/login")
-    ResponseEntity userLogin() throws NotImplementedException;
+    ResponseEntity userLogin(UserLoginDto userLoginDto, BindingResult bindingResult) throws NotImplementedException;
 }
