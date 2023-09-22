@@ -2,6 +2,7 @@ package gdg.whatssue.mapper;
 
 import gdg.whatssue.entity.ApplyOfficialAbsent;
 import gdg.whatssue.service.dto.AbsentRequestDto;
+import gdg.whatssue.service.dto.AccountBookListDto;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-09-22T00:08:24+0900",
+    date = "2023-09-23T01:21:32+0900",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.8 (Oracle Corporation)"
 )
 @Component
@@ -50,17 +51,17 @@ public class AbsentRequestMapperImpl implements AbsentRequestMapper {
     }
 
     @Override
-    public ArrayList<AbsentRequestDto> toDtoList(List<ApplyOfficialAbsent> list) {
+    public List<AccountBookListDto> toDtoList(List<ApplyOfficialAbsent> list) {
         if ( list == null ) {
             return null;
         }
 
-        ArrayList<AbsentRequestDto> arrayList = new ArrayList<AbsentRequestDto>();
+        List<AccountBookListDto> list1 = new ArrayList<AccountBookListDto>( list.size() );
         for ( ApplyOfficialAbsent applyOfficialAbsent : list ) {
-            arrayList.add( toDTO( applyOfficialAbsent ) );
+            list1.add( applyOfficialAbsentToAccountBookListDto( applyOfficialAbsent ) );
         }
 
-        return arrayList;
+        return list1;
     }
 
     @Override
@@ -89,5 +90,15 @@ public class AbsentRequestMapperImpl implements AbsentRequestMapper {
         if ( dto.getAbsentDate() != null ) {
             entity.setAbsentDate( LocalDate.parse( dto.getAbsentDate() ) );
         }
+    }
+
+    protected AccountBookListDto applyOfficialAbsentToAccountBookListDto(ApplyOfficialAbsent applyOfficialAbsent) {
+        if ( applyOfficialAbsent == null ) {
+            return null;
+        }
+
+        AccountBookListDto.AccountBookListDtoBuilder accountBookListDto = AccountBookListDto.builder();
+
+        return accountBookListDto.build();
     }
 }
