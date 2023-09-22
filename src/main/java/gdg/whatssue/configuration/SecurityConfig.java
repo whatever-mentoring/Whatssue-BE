@@ -30,7 +30,10 @@ public class SecurityConfig {
             .cors(Customizer.withDefaults())
             .sessionManagement(configurer -> configurer.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(authorize ->
-                authorize.requestMatchers("/api/user/**").permitAll()
+                authorize.requestMatchers(
+                    "/api/user/**",
+                        "/v3/api-docs/**",
+                        "/swagger-ui/**").permitAll()
                         .requestMatchers("/api/**").authenticated()) //전부 권한 필요
             .addFilterBefore(new JwtTokenFilter(userService, secretKey), UsernamePasswordAuthenticationFilter.class)
             .build();
