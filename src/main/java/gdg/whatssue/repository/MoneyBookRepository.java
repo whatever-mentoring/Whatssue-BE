@@ -14,8 +14,12 @@ import java.util.Optional;
 @Repository
 public interface MoneyBookRepository extends JpaRepository<MoneyBook,Long> {
     Optional<MoneyBook> findByMoneyBookId(Long bookId);
+
     @Query("select m from MoneyBook m where m.club.ClubId = :clubId and m.moneyBookId = :moneyBookId")
     Optional<MoneyBook> findByClub_ClubIdAndMoneyBookId(@Param("clubId") Long clubId, @Param("moneyBookId") Long moneyBookId);
 
     List<MoneyBook> findAllByClub(Club club);
+
+    @Query("delete from MoneyBook m where m.moneyBookId = :bookId")
+    void deleteByMoneyBookId(@Param("moneyBookId")Long bookId);
 }

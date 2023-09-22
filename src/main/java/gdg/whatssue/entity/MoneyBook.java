@@ -16,11 +16,11 @@ import java.time.LocalDateTime;
 @Builder
 @RequiredArgsConstructor
 @AllArgsConstructor
+
 public class MoneyBook {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-
     private Long moneyBookId;
 
     @OneToOne
@@ -53,5 +53,7 @@ public class MoneyBook {
         this.bookTitle = updateMoneyBook.bookTitle;
         this.bookAmount = updateMoneyBook.bookAmount;
     }
+
+
 }
 
