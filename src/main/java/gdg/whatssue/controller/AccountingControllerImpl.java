@@ -24,7 +24,6 @@ public class AccountingControllerImpl implements AccountingController {
     @Operation(
             summary = "정산 청구 api",
             description = "클럽에 소속된 모든 user에게 청구 신청")
-    @PostMapping("/claim")
     public ResponseEntity<?> claim(@RequestBody AccountClaimDto dto) throws Exception {
         log.info("정산 청구 api 호출");
         log.info(dto.getClaimDate());
@@ -37,7 +36,6 @@ public class AccountingControllerImpl implements AccountingController {
     @Operation(
             summary = "입출금 내역 입력 api",
             description = "입출금 내역 입력")
-    @PostMapping("/book/create")
     public ResponseEntity createBook(AccountBookCreateDto accountBookCreateDto) throws Exception {
         return accountService.createBook(accountBookCreateDto);
     }
@@ -46,7 +44,6 @@ public class AccountingControllerImpl implements AccountingController {
     @Operation(
             summary = "입출금 내역 전체 조회 api",
             description = "입출금 내역 전체 조회")
-    @GetMapping("/book/list")
     public ResponseEntity getBookList() throws Exception {
         return accountService.getBookList();
     }
@@ -55,7 +52,6 @@ public class AccountingControllerImpl implements AccountingController {
     @Operation(
             summary = "입출금 내역 상세 조회 api",
             description = "입출금 내역 상세 조회")
-    @GetMapping("/book/list/{bookId}")
     public ResponseEntity getBookDetail(Long bookId) throws Exception {
         return accountService.getBookDetail(bookId);
     }
@@ -65,7 +61,6 @@ public class AccountingControllerImpl implements AccountingController {
     @Operation(
             summary = "입출금 내역 수정 api",
             description = "입출금 내역 수정")
-    @PatchMapping("/book/{bookId}")
     public ResponseEntity updateBook(Long bookId, @RequestBody AccountBookCreateDto accountBookCreateDto) throws Exception {
         return accountService.updateBook(bookId, accountBookCreateDto);
     }
@@ -74,7 +69,6 @@ public class AccountingControllerImpl implements AccountingController {
     @Operation(
             summary = "입출금 내역 삭제 api",
             description = "입출금 내역 삭제")
-    @DeleteMapping("/book/{bookId}")
     public ResponseEntity deleteBook(Long bookId) throws Exception {
         return accountService.deleteBook(bookId);
     }
