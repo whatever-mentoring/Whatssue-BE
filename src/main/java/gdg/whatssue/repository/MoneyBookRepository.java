@@ -20,6 +20,8 @@ public interface MoneyBookRepository extends JpaRepository<MoneyBook,Long> {
 
     List<MoneyBook> findAllByClub(Club club);
 
+    /*
     @Query("delete from MoneyBook m where m.moneyBookId = :bookId")
     void deleteByMoneyBookId(@Param("moneyBookId")Long bookId);
+    */
 }
