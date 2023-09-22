@@ -91,12 +91,18 @@ public class MemberControllerImpl implements MemberController {
     }
 
     @Override
-    public ResponseEntity requestJoin(String teamId) {
+    @Operation(
+            summary = "멤버 가입 신청 api",
+            description = "멤버 가입 신청, 가입 신청 창을 통해 받은 clubId 정보를 통해 가입 신청")
+    public ResponseEntity requestJoin(Long clubId) {
         Long userId = 1L;
-        return memberService.requestJoin(userId, teamId);
+        return memberService.requestJoin(userId, clubId);
     }
 
     @Override
+    @Operation(
+            summary = "멤버 가입 신청 창 api",
+            description = "멤버 가입 신청 창")
     public ResponseEntity requestJoinInfo(String teamId) {
         Long userId = 1L;
         return memberService.requestJoinInfo(teamId, userId);
