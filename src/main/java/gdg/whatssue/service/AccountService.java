@@ -51,18 +51,13 @@ public class AccountService {
     public ResponseEntity createBook(AccountBookCreateDto accountBookCreateDto) {
         Long clubId = 1L;
         Optional<Club> optionalClub = clubRepository.findById(clubId);
+        BigDecimal  bookAmount = new BigDecimal(accountBookCreateDto.getBookAmount());
+        BigDecimal totalAmount = new BigDecimal(0);
         //club 이 존재 할 경우
         if (optionalClub.isPresent()) {
             Club club = optionalClub.get();
             //MoneyBook moneyBook = MoneyBookCreateMapper.INSTANCE.toEntity(accountBookCreateDto);
 
-            //builder 이용
-            MoneyBook moneyBook = MoneyBook.builder()
-                    .club(club)
-                    //bookAmount 형변환
-                    .bookAmount(new BigDecimal(accountBookCreateDto.getBookAmount()))
-                    .bookTitle(accountBookCreateDto.getBookTitle())
-                    .build();
 
             try {
                 //기존에 clubId 와 일치하는 리스트 가져오기
@@ -70,33 +65,37 @@ public class AccountService {
 
                 if (moneyBookList.size() != 0) {
                     //moneyBookList 에서 totalPaidAmount를 가져온다.
-                    BigDecimal totalAmount = moneyBookRepository.findTotalAmountByClub(club);
-
+                    totalAmount = moneyBookList.get(0).getTotalPaidAmount();
                     //totalAmount 에 입력받은 bookamount 를 더해준다.
-                    totalAmount = totalAmount.add(moneyBook.getBookAmount());
+                    totalAmount = totalAmount.add(bookAmount);
                     System.out.println("totalAmount2 = " + totalAmount   );
-                    if(totalAmount.compareTo(BigDecimal.ZERO) < 0){
-                        totalAmount = BigDecimal.ZERO;
-                    }
-
-                    //입출금 내역 생성
-                    moneyBook.saveClub(club);
-                    //clubId 에 해당하는 모든 totalAmount 의 값을 forEach 로 변경해준다.
-                    for (MoneyBook book : moneyBookList) {
-                        book.saveMoneyBook(club, totalAmount);
-                    }
-
-                    moneyBookRepository.save(moneyBook);
                 }
                 else{
                     //totalAmount 에 입력받은 bookamount 를 더해준다.
-                    BigDecimal totalAmount = moneyBook.getBookAmount();
-                    System.out.println("totalAmount2 = " + totalAmount   );
-
-                    //입출금 내역 생성
-                    moneyBook.saveMoneyBook(club, totalAmount);
-                    moneyBookRepository.save(moneyBook);
+                    totalAmount = bookAmount;
+                    System.out.println("totalAmount3 = " + totalAmount   );
                 }
+
+                if(totalAmount.compareTo(BigDecimal.ZERO) < 0){
+                    totalAmount = BigDecimal.ZERO;
+                }
+                //입출금 내역 생성
+                for (MoneyBook book : moneyBookList) {
+                    book.setTotalPaidAmount(totalAmount);
+                }
+
+                //builder 이용
+                MoneyBook moneyBook = MoneyBook.builder()
+                        .club(club)
+                        //bookAmount 형변환
+                        .bookAmount(new BigDecimal(accountBookCreateDto.getBookAmount()))
+                        .bookTitle(accountBookCreateDto.getBookTitle())
+                        //totalPaidAmount 는 clubId 가 같은 모든 bookAmount 의 합
+                        .totalPaidAmount(totalAmount)
+                        .build();
+
+                moneyBookList.add(moneyBook);
+                moneyBookList.forEach(money -> moneyBookRepository.save(money));
 
                 return ResponseEntity.ok("입출금 내역 생성 완료");
 
