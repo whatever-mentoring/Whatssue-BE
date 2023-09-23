@@ -38,9 +38,6 @@ public class AdminControllerImpl implements AdminController {
     }
 
     @Override
-    @Operation(
-            summary = "관리자 - 초대 링크 생성 api",
-            description = "Request Body로 초대 링크 정보를 json 형태로 입력 받아 초대 링크를 생성")
     public ResponseEntity createInviteLink(LinkInfoDto linkInfoDto) throws NotImplementedException {
         Long userId = 1L;
         return adminService.createInviteLink(userId,linkInfoDto);
@@ -48,18 +45,12 @@ public class AdminControllerImpl implements AdminController {
     }
 
     @Override
-    @Operation(
-            summary = "관리자 - 초대 링크 삭제 api",
-            description = "Path Variable로 초대 링크 id를 입력 받아 초대 링크를 삭제")
     public ResponseEntity deleteInviteLink(Long linkId) throws NotImplementedException {
         Long userId = 1L;
         return adminService.deleteInviteLink(userId,linkId);
     }
 
     @Override
-    @Operation(
-            summary = "관리자 - 초대 링크 조회 api",
-            description = "관리자가 생성한 모든 초대 링크를 조회")
     public ResponseEntity getInviteLink() throws NotImplementedException {
         Long userId = 1L;
         return adminService.getInviteLink(userId);

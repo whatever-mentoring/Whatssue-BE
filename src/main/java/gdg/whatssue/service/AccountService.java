@@ -4,7 +4,6 @@ import gdg.whatssue.entity.Claim;
 import gdg.whatssue.entity.Club;
 import gdg.whatssue.entity.MoneyBook;
 import gdg.whatssue.mapper.MoneyBookCreateMapper;
-import gdg.whatssue.mapper.MoneyBookListMapper;
 import gdg.whatssue.repository.ClaimRepository;
 import gdg.whatssue.repository.ClubRepository;
 import gdg.whatssue.repository.MoneyBookRepository;
@@ -12,8 +11,6 @@ import gdg.whatssue.service.dto.AccountBookCreateDto;
 import gdg.whatssue.service.dto.AccountBookListDto;
 import gdg.whatssue.service.dto.AccountClaimDto;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.text.translate.NumericEntityUnescaper;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -21,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 @Service
 @Transactional
@@ -28,6 +26,8 @@ import java.math.BigDecimal;
 public class AccountService {
     private final ClaimRepository claimRepository;
     private final ClubRepository clubRepository;
+    private final MoneyBookRepository moneyBookRepository;
+
      public ResponseEntity<?> createClaim(AccountClaimDto dto) throws Exception {
          Long clubId = 1L; // 1로 가정
          Club club = clubRepository.findById(clubId).orElseThrow(() -> (
@@ -51,25 +51,6 @@ public class AccountService {
          ));
          return ResponseEntity.ok(claimRepository.findAllByClub_ClubId(club));
      }
-
-    private final MoneyBookRepository moneyBookRepository;
-
-    public ResponseEntity<?> createClaim(AccountClaimDto dto) throws Exception {
-        Long clubId = 1L; // 1로 가정
-        Club club = clubRepository.findById(clubId).orElseThrow(() -> (
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "클럽을 찾을 수 없습니다.")
-        ));
-        Claim claim = Claim.builder()
-                .club(club)
-                .isClosed(false)
-                .claimDate(dto.getClaimDate())
-                .claimAmount(new BigDecimal(dto.getClaimAmount()))
-                .claimName(dto.getClaimName())
-                .build();
-        claimRepository.save(claim);
-        return ResponseEntity.ok("정산 청구 완료");
-    }
-
 
     public ResponseEntity createBook(AccountBookCreateDto accountBookCreateDto) {
         Long clubId = 1L;

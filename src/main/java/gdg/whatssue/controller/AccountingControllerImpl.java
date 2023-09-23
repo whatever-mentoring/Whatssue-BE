@@ -1,6 +1,8 @@
 package gdg.whatssue.controller;
 
+import gdg.whatssue.controller.inter.AccountingController;
 import gdg.whatssue.service.AccountService;
+import gdg.whatssue.service.dto.AccountBookCreateDto;
 import gdg.whatssue.service.dto.AccountClaimDto;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -19,6 +21,7 @@ public class AccountingControllerImpl implements AccountingController {
 
     private final AccountService accountService;
 
+    @Override
     @Operation(
             summary = "정산 청구 api",
             description = "클럽에 소속된 모든 user에게 청구 신청")
@@ -31,6 +34,7 @@ public class AccountingControllerImpl implements AccountingController {
         return accountService.createClaim(dto);
     }
 
+
     @Override
     @Operation(
             summary = "입출금 내역 입력 api",
@@ -39,7 +43,7 @@ public class AccountingControllerImpl implements AccountingController {
         return accountService.createBook(accountBookCreateDto);
     }
 
-    @Override
+
     @Operation(
             summary = "입출금 내역 전체 조회 api",
             description = "입출금 내역 전체 조회")
@@ -47,7 +51,7 @@ public class AccountingControllerImpl implements AccountingController {
         return accountService.getBookList();
     }
 
-    @Override
+
     @Operation(
             summary = "입출금 내역 상세 조회 api",
             description = "입출금 내역 상세 조회")
@@ -55,16 +59,17 @@ public class AccountingControllerImpl implements AccountingController {
         return accountService.getBookDetail(bookId);
     }
 
-    @Override
+
     @Transactional
     @Operation(
             summary = "입출금 내역 수정 api",
             description = "입출금 내역 수정")
+    @Override
     public ResponseEntity updateBook(Long bookId, @RequestBody AccountBookCreateDto accountBookCreateDto) throws Exception {
         return accountService.updateBook(bookId, accountBookCreateDto);
     }
 
-    @Override
+
     public ResponseEntity deleteBook(Long bookId) throws Exception {
         return null;
     }

@@ -10,59 +10,59 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2023-09-23T01:21:38+0900",
+    date = "2023-09-21T11:50:58+0900",
     comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.8 (Oracle Corporation)"
 )
 @Component
 public class ClubDetailMapperImpl implements ClubDetailMapper {
 
     @Override
-    public ClubDetailDto toDTO(Club arg0) {
-        if ( arg0 == null ) {
+    public ClubDetailDto toDTO(Club entity) {
+        if ( entity == null ) {
             return null;
         }
 
         ClubDetailDto.ClubDetailDtoBuilder clubDetailDto = ClubDetailDto.builder();
 
-        clubDetailDto.clubName( arg0.getClubName() );
-        clubDetailDto.clubInfo( arg0.getClubInfo() );
-        clubDetailDto.clubCategory( arg0.getClubCategory() );
+        clubDetailDto.clubName( entity.getClubName() );
+        clubDetailDto.clubInfo( entity.getClubInfo() );
+        clubDetailDto.clubCategory( entity.getClubCategory() );
 
         return clubDetailDto.build();
     }
 
     @Override
-    public Club toEntity(ClubDetailDto arg0) {
-        if ( arg0 == null ) {
+    public Club toEntity(ClubDetailDto dto) {
+        if ( dto == null ) {
             return null;
         }
 
         Club.ClubBuilder club = Club.builder();
 
-        club.clubName( arg0.getClubName() );
-        club.clubInfo( arg0.getClubInfo() );
-        club.clubCategory( arg0.getClubCategory() );
+        club.clubName( dto.getClubName() );
+        club.clubInfo( dto.getClubInfo() );
+        club.clubCategory( dto.getClubCategory() );
 
         return club.build();
     }
 
     @Override
-    public List<AccountBookListDto> toDtoList(List<Club> arg0) {
-        if ( arg0 == null ) {
+    public ArrayList<ClubDetailDto> toDtoList(List<Club> list) {
+        if ( list == null ) {
             return null;
         }
 
-        List<AccountBookListDto> list = new ArrayList<AccountBookListDto>( arg0.size() );
-        for ( Club club : arg0 ) {
-            list.add( clubToAccountBookListDto( club ) );
+        ArrayList<ClubDetailDto> arrayList = new ArrayList<ClubDetailDto>();
+        for ( Club club : list ) {
+            arrayList.add( toDTO( club ) );
         }
 
-        return list;
+        return arrayList;
     }
 
     @Override
-    public ArrayList<Club> toEntityList(List<ClubDetailDto> arg0) {
-        if ( arg0 == null ) {
+    public ArrayList<Club> toEntityList(List<ClubDetailDto> list) {
+        if ( list == null ) {
             return null;
         }
 
@@ -75,29 +75,19 @@ public class ClubDetailMapperImpl implements ClubDetailMapper {
     }
 
     @Override
-    public void updateFromDto(ClubDetailDto arg0, Club arg1) {
-        if ( arg0 == null ) {
+    public void updateFromDto(ClubDetailDto dto, Club entity) {
+        if ( dto == null ) {
             return;
         }
 
-        if ( arg0.getClubName() != null ) {
-            arg1.setClubName( arg0.getClubName() );
+        if ( dto.getClubName() != null ) {
+            entity.setClubName( dto.getClubName() );
         }
-        if ( arg0.getClubInfo() != null ) {
-            arg1.setClubInfo( arg0.getClubInfo() );
+        if ( dto.getClubInfo() != null ) {
+            entity.setClubInfo( dto.getClubInfo() );
         }
-        if ( arg0.getClubCategory() != null ) {
-            arg1.setClubCategory( arg0.getClubCategory() );
+        if ( dto.getClubCategory() != null ) {
+            entity.setClubCategory( dto.getClubCategory() );
         }
-    }
-
-    protected AccountBookListDto clubToAccountBookListDto(Club club) {
-        if ( club == null ) {
-            return null;
-        }
-
-        AccountBookListDto.AccountBookListDtoBuilder accountBookListDto = AccountBookListDto.builder();
-
-        return accountBookListDto.build();
     }
 }

@@ -22,6 +22,6 @@ public class CheckedListByUser {
     private int officialAbsentCount;
 
     @OneToOne
-    @JoinColumn(name = "club_member_mapping_id")
-    private ClubMemberMapping club_member_mapping;
+    @JoinColumn(name = "member_id")
+    private Member member;
 }
