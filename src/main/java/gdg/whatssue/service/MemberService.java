@@ -47,6 +47,7 @@ public class MemberService {
             return false;
         }
 
+        checkedListByUserRepository.delete(memberMapping.getCheckedListByUser());
         clubMemberMappingRepository.delete(memberMapping);
         return true;
     }
