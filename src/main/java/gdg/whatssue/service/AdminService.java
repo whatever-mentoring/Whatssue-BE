@@ -82,24 +82,35 @@ public class AdminService {
         if (club == null) {
             return ResponseEntity.badRequest().body("클럽이 존재하지 않습니다.");
         }
+
         else{
-            //랜덤한 string 값 생성 함수 호출
-            String str = createLink();
-            String link = "member/join/request?teamId="+str;
-            //Link Entity 에 Builder 이용 저장
-            linkRepository.save(Link.builder()
-                    .linkName(linkInfoDto.getLinkName())
-                    .linkUrl(str)
-                    .club(club)
-                    .build());
+            //linkInfoDto 에서 linkName get 후 중복 체크
+            Optional<Link> linkOptional = linkRepository.findByLinkName(linkInfoDto.getLinkName());
+            if(linkOptional.isPresent()){
+                return ResponseEntity.badRequest().body("이미 존재하는 링크 이름입니다.");
+            }
+            else {
+                //랜덤한 string 값 생성 함수 호출
+                String str = createLink();
+                String link = "member/join/request?teamId=" + str;
+                //Link Entity 에 Builder 이용 저장
+                linkRepository.save(Link.builder()
+                        .linkName(linkInfoDto.getLinkName())
+                        .linkUrl(str)
+                        .club(club)
+                        .build());
 
-            //결과
-            LinkResultDto linkResultDto = LinkResultDto.builder()
-                    .LinkUrl(link)
-                    .LinkName(linkInfoDto.getLinkName())
-                    .build();
+                //save 후 생긴 linkId get
+                Long linkId = linkRepository.findByLinkUrl(link).get().getLinkId();
+                //결과
+                LinkResultDto linkResultDto = LinkResultDto.builder()
+                        .LinkId(linkId.toString())
+                        .LinkUrl(link)
+                        .LinkName(linkInfoDto.getLinkName())
+                        .build();
 
-            return ResponseEntity.ok().body(linkResultDto);
+                return ResponseEntity.ok().body(linkResultDto);
+            }
         }
 
     }
@@ -155,6 +166,7 @@ public class AdminService {
             List<Link> linkList = linkRepository.findAllByClub(club);
             //linkList 를 LinkDetailDto 로 stream 사용하여 변환
             List<LinkDetailDto> linkDetailDtoList = linkList.stream().map(link -> LinkDetailDto.builder()
+                    .linkId(link.getLinkId().toString())
                     .linkName(link.getLinkName())
                     .linkUrl(link.getLinkUrl())
                     .clubId(link.getClub().getClubId().toString())

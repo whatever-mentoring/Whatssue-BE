@@ -97,14 +97,17 @@ public class ScheduleService {
 
     public ResponseEntity deleteSchedule(Long scheduleId) {
         Long userId = 1L;
-        Club club = memberRepository.findById(userId).get().getClub();
-        Long clubId = club.getClubId();
+        Long clubId = 1L;
         //clubId와 scheduleId 둘 다에 해당하는 schedule 가져오기
-        Schedule schedule = scheduleRepository.findByClubIdAndScheduleId(clubId, scheduleId);
-        //Schedule schedule = scheduleRepository.findById(scheduleId).orElse(null);
+        Schedule schedule = scheduleRepository.findById(scheduleId).orElse(null);
         if (schedule == null) {
             return ResponseEntity.badRequest().body("존재하지 않는 일정입니다.");
         }
+        //attendance_by_user_by_schedule에서 해당 schedule에 대한 모든 attendance 삭제
+        List<AttendanceByUserBySchedule> attendanceByUserByScheduleList = attendanceByUserByScheduleRepository.findBySchedule(schedule);
+
+        // Attendance를 삭제합니다.
+        attendanceByUserByScheduleRepository.deleteAll(attendanceByUserByScheduleList);
         scheduleRepository.delete(schedule);
         return ResponseEntity.ok().body("일정이 삭제되었습니다.");
 

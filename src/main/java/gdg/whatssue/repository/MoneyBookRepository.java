@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -16,12 +17,10 @@ public interface MoneyBookRepository extends JpaRepository<MoneyBook,Long> {
     Optional<MoneyBook> findByMoneyBookId(Long bookId);
 
     @Query("select m from MoneyBook m where m.club.ClubId = :clubId and m.moneyBookId = :moneyBookId")
-    Optional<MoneyBook> findByClub_ClubIdAndMoneyBookId(@Param("clubId") Long clubId, @Param("moneyBookId") Long moneyBookId);
+    Optional<MoneyBook> findByClubIdAndMoneyBookId(@Param("clubId") Long clubId, @Param("moneyBookId") Long moneyBookId);
 
     List<MoneyBook> findAllByClub(Club club);
 
-    /*
-    @Query("delete from MoneyBook m where m.moneyBookId = :bookId")
-    void deleteByMoneyBookId(@Param("moneyBookId")Long bookId);
-    */
+    @Query("select m.totalPaidAmount from MoneyBook m where m.club = :club")
+    BigDecimal findTotalAmountByClub(Club club);
 }

@@ -1,14 +1,17 @@
 package gdg.whatssue.service.dto;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
-@Builder
-@Setter
+@NoArgsConstructor
 public class AbsentRequestDto {
 
     String absentReason;
     String absentDate;
+
+    @Builder
+    public AbsentRequestDto(String absentReason, String absentDate) {
+        this.absentReason = absentReason;
+        this.absentDate = absentDate;
+    }
 }

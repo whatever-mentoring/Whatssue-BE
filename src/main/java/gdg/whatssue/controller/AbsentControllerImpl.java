@@ -3,8 +3,10 @@ package gdg.whatssue.controller;
 import gdg.whatssue.controller.inter.AbsentController;
 import gdg.whatssue.service.AbsentService;
 import gdg.whatssue.service.dto.AbsentRequestDto;
+import gdg.whatssue.util.JwtTokenUtil;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import jdk.jshell.spi.ExecutionControl.NotImplementedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +25,7 @@ public class AbsentControllerImpl implements AbsentController {
     @Operation(
             summary = "공결 신청",
             description = "api 경로로 일정ID를 전달받아 해당 일정에 대한 공결 요청")
-    public ResponseEntity requestAbsent(@PathVariable Long scheduleId,@RequestBody AbsentRequestDto absentRequestDto) throws NotImplementedException {
+    public ResponseEntity requestAbsent(@PathVariable Long scheduleId, @RequestBody AbsentRequestDto absentRequestDto) throws NotImplementedException {
         //"TODO: This api should be implemented"
         return absentService.requestAbsent(scheduleId,absentRequestDto);
     }
