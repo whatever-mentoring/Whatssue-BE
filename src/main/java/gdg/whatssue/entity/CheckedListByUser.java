@@ -24,4 +24,8 @@ public class CheckedListByUser {
     @OneToOne
     @JoinColumn(name = "member_id")
     private Member member;
+
+    @OneToOne
+    @JoinColumn(name = "club_member_mapping_id")
+    private ClubMemberMapping clubMemberMapping;
 }

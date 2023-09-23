@@ -45,7 +45,7 @@ public class MemberControllerImpl implements MemberController {
             summary = "멤버 클럽 가입 승인 api",
             description = "멤버 클럽 가입 승인 처리")
     public ResponseEntity acceptJoinRequest(Long joinId) {
-        
+
         boolean result = memberService.acceptJoinRequest(joinId);
 
         if(!result) {

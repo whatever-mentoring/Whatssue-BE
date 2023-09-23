@@ -34,6 +34,14 @@ public class AccountingControllerImpl implements AccountingController {
         return accountService.createClaim(dto);
     }
 
+    @Operation(
+            summary = "정산 청구 리스트 get api",
+            description = "클럽에 소속된 모든 user에게 청구한 내역 admin이 확인")
+    @GetMapping("/claim")
+    public ResponseEntity<?> getClaimList() throws Exception {
+        log.info("정산 청구 리스트 api 호출");
+        return accountService.getClaimList();
+    }
 
     @Override
     @Operation(
@@ -85,14 +93,7 @@ public class AccountingControllerImpl implements AccountingController {
     */
 
 
-    @Operation(
-            summary = "정산 청구 리스트 get api",
-            description = "클럽에 소속된 모든 user에게 청구한 내역 admin이 확인")
-    @GetMapping("/claim")
-    public ResponseEntity<?> getClaimList() throws Exception {
-        log.info("정산 청구 리스트 api 호출");
-        return accountService.getClaimList();
-    }
+
 //    @PostMapping("/claim/{memberId}")
 //    @Operation(
 //            summary = "정산 청구 api",

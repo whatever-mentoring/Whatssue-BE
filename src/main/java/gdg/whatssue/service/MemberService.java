@@ -34,14 +34,14 @@ public class MemberService {
 
     @Transactional
     public boolean deleteMember(Long memberId){
-        
+
         Club club = clubRepository.findById(CLUB_ID).get();
 
         //삭제 후 결과 반환. 삭제 성공 시 true, 삭제 값 없을 시 false
         List<ClubMemberMapping> memberList = club.getMemberListV2();
         ClubMemberMapping memberMapping = memberList.stream()
-            .filter(m -> m.getMember().getMemberId().equals(memberId))
-            .findFirst().orElse(null);
+                .filter(m -> m.getMember().getMemberId().equals(memberId))
+                .findFirst().orElse(null);
 
         if(memberMapping == null){
             return false;
@@ -60,17 +60,17 @@ public class MemberService {
         }
 
         ClubMemberMapping clubMemberMapping = ClubMemberMapping.builder()
-            .member(clubJoinRequest.getMember())
-            .club(clubJoinRequest.getClub()).build();
+                .member(clubJoinRequest.getMember())
+                .club(clubJoinRequest.getClub()).build();
 
         clubMemberMappingRepository.save(clubMemberMapping);
 
         checkedListByUserRepository.save(
-            CheckedListByUser.builder()
-                .club_member_mapping(clubMemberMapping)
-                .checkedCount(0)
-                .absentCount(0)
-                .officialAbsentCount(0).build());
+                CheckedListByUser.builder()
+                        .clubMemberMapping(clubMemberMapping)
+                        .checkedCount(0)
+                        .absentCount(0)
+                        .officialAbsentCount(0).build());
 
         joinRequestRepository.delete(clubJoinRequest);
         return true;
@@ -92,12 +92,12 @@ public class MemberService {
         List<ClubJoinRequest> requestList = joinRequestRepository.findAll();
 
         List<ClubJoinRequestListDto> clubJoinRequestList = requestList.stream()
-            .filter(r -> r.getClub().getClubId().equals(CLUB_ID))
-            .map(r -> ClubJoinRequestListDto.builder()
-                .clubJoinRequestId(r.getClubJoinRequestId())
-                .userName(r.getMember().getMemberName())
-                .requestDate(r.getCreatedAt().toString().substring(0,10)).build())
-            .collect(Collectors.toList());
+                .filter(r -> r.getClub().getClubId().equals(CLUB_ID))
+                .map(r -> ClubJoinRequestListDto.builder()
+                        .clubJoinRequestId(r.getClubJoinRequestId())
+                        .userName(r.getMember().getMemberName())
+                        .requestDate(r.getCreatedAt().toString().substring(0,10)).build())
+                .collect(Collectors.toList());
 
         return clubJoinRequestList;
     }
@@ -107,14 +107,14 @@ public class MemberService {
         List<ClubMemberMapping> memberListV2 = clubRepository.findById(CLUB_ID).get().getMemberListV2();
 
         List<ClubMemberListDto> allMemberList = memberListV2.stream()
-            .map(m -> ClubMemberListDto.builder()
-                .memberId(m.getMember().getMemberId())
-                .memberName(m.getMember().getMemberName())
-                .checkedCount(m.getCheckedListByUser().getCheckedCount())
-                .absentCount(m.getCheckedListByUser().getAbsentCount())
-                .officialAbsentCount(m.getCheckedListByUser().getOfficialAbsentCount())
-                .build())
-            .collect(Collectors.toList());
+                .map(m -> ClubMemberListDto.builder()
+                        .memberId(m.getMember().getMemberId())
+                        .memberName(m.getMember().getMemberName())
+                        .checkedCount(m.getCheckedListByUser().getCheckedCount())
+                        .absentCount(m.getCheckedListByUser().getAbsentCount())
+                        .officialAbsentCount(m.getCheckedListByUser().getOfficialAbsentCount())
+                        .build())
+                .collect(Collectors.toList());
 
         return allMemberList;
     }
@@ -124,16 +124,16 @@ public class MemberService {
         Club club = clubRepository.findById(clubId).get();
         Member member = memberRepository.findById(userId).orElse(null);
         if(member == null){
-                //존재하지 않는 회원입니다.문구 를 리턴
-                return ResponseEntity.badRequest().body("회원이 존재하지 않습니다.");
+            //존재하지 않는 회원입니다.문구 를 리턴
+            return ResponseEntity.badRequest().body("회원이 존재하지 않습니다.");
         }
         else{
-                ClubJoinRequest clubJoinRequest = ClubJoinRequest.builder()
+            ClubJoinRequest clubJoinRequest = ClubJoinRequest.builder()
                     .club(club)
                     .member(member)
                     .build();
-                joinRequestRepository.save(clubJoinRequest);
-                return ResponseEntity.ok().body("가입 요청이 완료되었습니다.");
+            joinRequestRepository.save(clubJoinRequest);
+            return ResponseEntity.ok().body("가입 요청이 완료되었습니다.");
         }
     }
 
