@@ -6,6 +6,7 @@ import lombok.Getter;
 @Getter
 @Builder
 public class LinkDetailDto {
+    private String linkId;
     private String linkName;
     private String linkUrl;
     private String clubId;

@@ -93,8 +93,11 @@ public class AdminService {
                     .club(club)
                     .build());
 
+            //save 후 생긴 linkId get
+            Long linkId = linkRepository.findByLinkUrl(link).get().getLinkId();
             //결과
             LinkResultDto linkResultDto = LinkResultDto.builder()
+                    .LinkId(linkId.toString())
                     .LinkUrl(link)
                     .LinkName(linkInfoDto.getLinkName())
                     .build();
@@ -155,6 +158,7 @@ public class AdminService {
             List<Link> linkList = linkRepository.findAllByClub(club);
             //linkList 를 LinkDetailDto 로 stream 사용하여 변환
             List<LinkDetailDto> linkDetailDtoList = linkList.stream().map(link -> LinkDetailDto.builder()
+                    .linkId(link.getLinkId().toString())
                     .linkName(link.getLinkName())
                     .linkUrl(link.getLinkUrl())
                     .clubId(link.getClub().getClubId().toString())

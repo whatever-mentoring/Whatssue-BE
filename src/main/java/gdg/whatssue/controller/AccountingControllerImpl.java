@@ -65,12 +65,8 @@ public class AccountingControllerImpl implements AccountingController {
         return accountService.updateBook(bookId, accountBookCreateDto);
     }
 
-    @Override
-    public ResponseEntity deleteBook(Long bookId) throws Exception {
-        return null;
-    }
 
-    /*
+
     @Override
     @Operation(
             summary = "입출금 내역 삭제 api",
@@ -78,7 +74,7 @@ public class AccountingControllerImpl implements AccountingController {
     public ResponseEntity deleteBook(Long bookId) throws Exception {
         return accountService.deleteBook(bookId);
     }
-    */
+
 
 
 //    @PostMapping("/claim/{memberId}")

@@ -11,6 +11,7 @@ import gdg.whatssue.repository.MoneyBookRepository;
 import gdg.whatssue.service.dto.AccountBookCreateDto;
 import gdg.whatssue.service.dto.AccountBookListDto;
 import gdg.whatssue.service.dto.AccountClaimDto;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.text.translate.NumericEntityUnescaper;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -156,7 +157,7 @@ public class AccountService {
         }
     }
 
-    /*
+
     @Transactional
     public ResponseEntity deleteBook(Long bookId) {
         Long clubId = 1L;
@@ -168,12 +169,11 @@ public class AccountService {
 
         try {
             moneyBook.setClub(null);
-
-            moneyBookRepository.deleteByMoneyBookId(bookId);
+            moneyBookRepository.delete(moneyBookRepository.findByMoneyBookId(bookId).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 데이터 입니다.")));
             return ResponseEntity.ok("입출금 내역 삭제 완료");
         } catch (EmptyResultDataAccessException e) {
             return ResponseEntity.badRequest().body("존재하지 않는 데이터 입니다.");
         }
     }
-    */
+
 }
