@@ -13,7 +13,7 @@ import java.util.List;
 public class Club {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
-    private Long ClubId ;
+    private Long clubId;
 
     private String clubName;
     private String clubInfo;

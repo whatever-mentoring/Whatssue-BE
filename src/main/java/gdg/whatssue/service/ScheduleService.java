@@ -1,23 +1,19 @@
 package gdg.whatssue.service;
 
 import gdg.whatssue.entity.*;
-import gdg.whatssue.mapper.ScheduleDetailMapper;
 import gdg.whatssue.repository.AttendanceByUserByScheduleRepository;
 import gdg.whatssue.repository.ClubRepository;
 import gdg.whatssue.repository.MemberRepository;
 import gdg.whatssue.repository.ScheduleRepository;
-import gdg.whatssue.service.dto.AttendanceStateBySheduleDto;
 import gdg.whatssue.service.dto.ScheduleByDateDto;
 import gdg.whatssue.service.dto.ScheduleByMonthDto;
 import gdg.whatssue.service.dto.ScheduleDetailDto;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;

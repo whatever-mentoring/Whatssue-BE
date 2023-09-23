@@ -12,11 +12,11 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Schema(description = "정산 청구 DTO")
 public class AccountClaimDto {
-    @Schema(description = "청구 이름", example = "엠티 비용 정산")
+    @Schema(description = "청구 내역 이름", example = "김예진")
     private String ClaimName;
-    @Schema(description = "청구 내역", example = "18500.0")
+    @Schema(description = "청구 내역", defaultValue = "18500", example = "18500")
     private String ClaimAmount;
-    @Schema(description = "청구 날짜", example = "2023-10-21")
+    @Schema(description = "청구 날짜", defaultValue = "2023-10-31", example = "2023-10-21")
     private String ClaimDate;
 
     @Builder

@@ -7,15 +7,12 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/account/")
+@RequestMapping("/api/account")
 @Tag(name = "Accounting", description = "정산 관련 api_회비 납부,정산 등")
 public class AccountingControllerImpl {
     private final AccountService accountService;
@@ -29,6 +26,15 @@ public class AccountingControllerImpl {
         log.info(dto.getClaimAmount());
         log.info(dto.getClaimName());
         return accountService.createClaim(dto);
+    }
+
+    @Operation(
+            summary = "정산 청구 리스트 get api",
+            description = "클럽에 소속된 모든 user에게 청구한 내역 admin이 확인")
+    @GetMapping("/claim")
+    public ResponseEntity<?> getClaimList() throws Exception {
+        log.info("정산 청구 리스트 api 호출");
+        return accountService.getClaimList();
     }
 //    @PostMapping("/claim/{memberId}")
 //    @Operation(

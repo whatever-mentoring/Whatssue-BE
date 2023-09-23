@@ -35,4 +35,13 @@ public class AccountService {
          claimRepository.save(claim);
          return ResponseEntity.ok("정산 청구 완료");
      }
+
+     public ResponseEntity<?> getClaimList() throws Exception {
+         Long clubId = 1L; // 1로 가정
+         Club club = clubRepository.findById(clubId).orElseThrow(() -> (
+                 new ResponseStatusException(HttpStatus.NOT_FOUND, "클럽을 찾을 수 없습니다.")
+         ));
+         return ResponseEntity.ok(claimRepository.findAllByClub_ClubId(club));
+     }
+
 }

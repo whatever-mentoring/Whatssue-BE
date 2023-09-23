@@ -3,11 +3,13 @@ package gdg.whatssue.service.dto;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
 @Builder
 @Setter
+@NoArgsConstructor
 public class AttendanceStateBySheduleDto {
     @Schema(description = "출석 상태", example = "출석")
     private String attendanceType;
