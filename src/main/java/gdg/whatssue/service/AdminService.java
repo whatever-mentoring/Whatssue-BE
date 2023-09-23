@@ -82,6 +82,7 @@ public class AdminService {
         if (club == null) {
             return ResponseEntity.badRequest().body("클럽이 존재하지 않습니다.");
         }
+
         else{
             //랜덤한 string 값 생성 함수 호출
             String str = createLink();

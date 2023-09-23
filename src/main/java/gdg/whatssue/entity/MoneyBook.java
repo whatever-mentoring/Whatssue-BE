@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 @RequiredArgsConstructor
 @AllArgsConstructor
 
+@Table(name = "money_book")
 public class MoneyBook {
 
     @Id
@@ -30,14 +31,9 @@ public class MoneyBook {
 
     private String bookTitle; // 입출금 제목
     private BigDecimal bookAmount;
-    @Formula("(SELECT COALESCE(SUM(mb.bookAmount), 0) FROM MoneyBook mb WHERE mb.club_id = club_id)")
+    @Formula("(SELECT COALESCE(SUM(mb.book_amount), 0) FROM money_book mb WHERE mb.club_id = club_id)")
     private BigDecimal totalPaidAmount;
     //totalPaidAmount 는 club_id 에 해당하는 bookAmount 들의 총 값을 값이 변경/추가/삭제 될때 마다 트리거해서 저장한다.
-
-
-
-
-
 
 
     // 생성일시에 대한 기본값 설정
