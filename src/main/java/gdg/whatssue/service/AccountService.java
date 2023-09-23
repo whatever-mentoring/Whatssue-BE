@@ -4,7 +4,6 @@ import gdg.whatssue.entity.Claim;
 import gdg.whatssue.entity.Club;
 import gdg.whatssue.entity.MoneyBook;
 import gdg.whatssue.mapper.MoneyBookCreateMapper;
-import gdg.whatssue.mapper.MoneyBookListMapper;
 import gdg.whatssue.repository.ClaimRepository;
 import gdg.whatssue.repository.ClubRepository;
 import gdg.whatssue.repository.MoneyBookRepository;
@@ -13,7 +12,6 @@ import gdg.whatssue.service.dto.AccountBookListDto;
 import gdg.whatssue.service.dto.AccountClaimDto;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.text.translate.NumericEntityUnescaper;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -49,20 +47,57 @@ public class AccountService {
     }
 
 
+    //변경 (삭제, 입력) 이 일어날때마다 clubId에 해당하는 모든 TotalPaidAmount 가 같은 값을 가져야하는데 그게 안됨 (어려움)
     public ResponseEntity createBook(AccountBookCreateDto accountBookCreateDto) {
         Long clubId = 1L;
-        Club club = clubRepository.findById(clubId).orElseThrow(() -> (
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "클럽을 찾을 수 없습니다.")
-        ));
-
+        Optional<Club> optionalClub = clubRepository.findById(clubId);
         //club 이 존재 할 경우
-        if (club != null) {
+        if (optionalClub.isPresent()) {
+            Club club = optionalClub.get();
+            //MoneyBook moneyBook = MoneyBookCreateMapper.INSTANCE.toEntity(accountBookCreateDto);
 
-            MoneyBook moneyBook = MoneyBookCreateMapper.INSTANCE.toEntity(accountBookCreateDto);
+            //builder 이용
+            MoneyBook moneyBook = MoneyBook.builder()
+                    .club(club)
+                    //bookAmount 형변환
+                    .bookAmount(new BigDecimal(accountBookCreateDto.getBookAmount()))
+                    .bookTitle(accountBookCreateDto.getBookTitle())
+                    .build();
+
             try {
+                //기존에 clubId 와 일치하는 리스트 가져오기
+                List<MoneyBook> moneyBookList = moneyBookRepository.findAllByClub(club);
 
-                moneyBook.saveClub(club);
-                moneyBookRepository.save(moneyBook);
+                if (moneyBookList.size() != 0) {
+                    //moneyBookList 에서 totalPaidAmount를 가져온다.
+                    BigDecimal totalAmount = moneyBookRepository.findTotalAmountByClub(club);
+
+                    //totalAmount 에 입력받은 bookamount 를 더해준다.
+                    totalAmount = totalAmount.add(moneyBook.getBookAmount());
+                    System.out.println("totalAmount2 = " + totalAmount   );
+                    if(totalAmount.compareTo(BigDecimal.ZERO) < 0){
+                        totalAmount = BigDecimal.ZERO;
+                    }
+
+                    //입출금 내역 생성
+                    moneyBook.saveClub(club);
+                    //clubId 에 해당하는 모든 totalAmount 의 값을 forEach 로 변경해준다.
+                    for (MoneyBook book : moneyBookList) {
+                        book.saveMoneyBook(club, totalAmount);
+                    }
+
+                    moneyBookRepository.save(moneyBook);
+                }
+                else{
+                    //totalAmount 에 입력받은 bookamount 를 더해준다.
+                    BigDecimal totalAmount = moneyBook.getBookAmount();
+                    System.out.println("totalAmount2 = " + totalAmount   );
+
+                    //입출금 내역 생성
+                    moneyBook.saveMoneyBook(club, totalAmount);
+                    moneyBookRepository.save(moneyBook);
+                }
+
                 return ResponseEntity.ok("입출금 내역 생성 완료");
 
             } catch (Exception e) {
@@ -107,7 +142,7 @@ public class AccountService {
     public ResponseEntity getBookDetail(Long bookId) {
         Long clubId = 1L;
         //club 와 bookID가 moneybook 테이블에 존재하는지 확인
-        MoneyBook moneyBook = moneyBookRepository.findByClub_ClubIdAndMoneyBookId(clubId, bookId).orElseThrow(() -> (
+        MoneyBook moneyBook = moneyBookRepository.findByClubIdAndMoneyBookId(clubId, bookId).orElseThrow(() -> (
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "입출금 내역을 찾을 수 없습니다.")
         ));
 
@@ -137,7 +172,7 @@ public class AccountService {
     public ResponseEntity updateBook(Long bookId, AccountBookCreateDto accountBookCreateDto) {
         Long clubId = 1L;
         //club 와 bookID가 moneybook 테이블에 존재하는지 확인
-        MoneyBook moneyBook = moneyBookRepository.findByClub_ClubIdAndMoneyBookId(clubId, bookId).orElseThrow(() -> (
+        MoneyBook moneyBook = moneyBookRepository.findByClubIdAndMoneyBookId(clubId, bookId).orElseThrow(() -> (
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "입출금 내역을 찾을 수 없습니다.")
         ));
 
@@ -161,11 +196,10 @@ public class AccountService {
     @Transactional
     public ResponseEntity deleteBook(Long bookId) {
         Long clubId = 1L;
-        //club 와 bookID가 moneybook 테이블에 존재하는지 확인
-        MoneyBook moneyBook = moneyBookRepository.findByClub_ClubIdAndMoneyBookId(clubId, bookId).orElseThrow(() -> (
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "입출금 내역을 찾을 수 없습니다.")
-        ));
-
+        //bookID가 moneybook 테이블에 존재하는지 확인
+        MoneyBook moneyBook = moneyBookRepository.findByClubIdAndMoneyBookId(clubId,bookId).orElseThrow(() -> (
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "입출금 내역을 찾을 수 없습니다."
+        )));
 
         try {
             moneyBook.setClub(null);

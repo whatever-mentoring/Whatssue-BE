@@ -84,26 +84,33 @@ public class AdminService {
         }
 
         else{
-            //랜덤한 string 값 생성 함수 호출
-            String str = createLink();
-            String link = "member/join/request?teamId="+str;
-            //Link Entity 에 Builder 이용 저장
-            linkRepository.save(Link.builder()
-                    .linkName(linkInfoDto.getLinkName())
-                    .linkUrl(str)
-                    .club(club)
-                    .build());
+            //linkInfoDto 에서 linkName get 후 중복 체크
+            Optional<Link> linkOptional = linkRepository.findByLinkName(linkInfoDto.getLinkName());
+            if(linkOptional.isPresent()){
+                return ResponseEntity.badRequest().body("이미 존재하는 링크 이름입니다.");
+            }
+            else {
+                //랜덤한 string 값 생성 함수 호출
+                String str = createLink();
+                String link = "member/join/request?teamId=" + str;
+                //Link Entity 에 Builder 이용 저장
+                linkRepository.save(Link.builder()
+                        .linkName(linkInfoDto.getLinkName())
+                        .linkUrl(str)
+                        .club(club)
+                        .build());
 
-            //save 후 생긴 linkId get
-            Long linkId = linkRepository.findByLinkUrl(link).get().getLinkId();
-            //결과
-            LinkResultDto linkResultDto = LinkResultDto.builder()
-                    .LinkId(linkId.toString())
-                    .LinkUrl(link)
-                    .LinkName(linkInfoDto.getLinkName())
-                    .build();
+                //save 후 생긴 linkId get
+                Long linkId = linkRepository.findByLinkUrl(link).get().getLinkId();
+                //결과
+                LinkResultDto linkResultDto = LinkResultDto.builder()
+                        .LinkId(linkId.toString())
+                        .LinkUrl(link)
+                        .LinkName(linkInfoDto.getLinkName())
+                        .build();
 
-            return ResponseEntity.ok().body(linkResultDto);
+                return ResponseEntity.ok().body(linkResultDto);
+            }
         }
 
     }

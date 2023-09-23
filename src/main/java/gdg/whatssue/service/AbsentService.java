@@ -17,6 +17,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -118,20 +119,29 @@ public class AbsentService {
         if(schedule == null){
             return ResponseEntity.badRequest().build();
         }
-        //
+
         //Dto -> Entity 위해 AbsentRequestMapper 사용
-        ApplyOfficialAbsent applyOfficialAbsent = AbsentRequestMapper.INSTANCE.toEntity(absentRequestDto);
+        //ApplyOfficialAbsent applyOfficialAbsent = AbsentRequestMapper.INSTANCE.toEntity(absentRequestDto);
 
         try{
+
+            //Dto -> Entity builder로 변환
+            ApplyOfficialAbsent applyOfficialAbsent1 = ApplyOfficialAbsent.builder()
+                    .absentReason(absentRequestDto.getAbsentReason())
+                    .absentDate(LocalDate.parse(absentRequestDto.getAbsentDate()))
+                    .build();
             //ApplyOfficalAbsent 에 Schedule 객체 전달
-            applyOfficialAbsent.saveSchedule(schedule);
-            applyOfficialAbsent.saveMember(member);
+            applyOfficialAbsent1.saveSchedule(schedule);
+            applyOfficialAbsent1.saveMember(member);
             String absentIsAccepted = "WAIT";
-            applyOfficialAbsent.saveIsAccepted(absentIsAccepted);
-            applyOfficialAbsentRepository.save(applyOfficialAbsent);
-            return ResponseEntity.ok().build();
+            applyOfficialAbsent1.saveIsAccepted(absentIsAccepted);
+            applyOfficialAbsentRepository.save(applyOfficialAbsent1);
+
+            //ReponseEntity key:value 로 공결 id 리턴
+            return ResponseEntity.ok().body("absentId :"+applyOfficialAbsent1.getApplyOfficialAbsentId());
+
         }catch (Exception e){
-            e.printStackTrace();
+            e.printStackTrace();;
             return ResponseEntity.badRequest().build();
         }
 
