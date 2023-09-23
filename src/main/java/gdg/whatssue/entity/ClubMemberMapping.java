@@ -6,6 +6,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -16,6 +17,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class ClubMemberMapping {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long clubMemberMappingId;
@@ -28,6 +30,10 @@ public class ClubMemberMapping {
     @JoinColumn(name = "member_id")
     private Member member;
 
+    @OneToOne(mappedBy = "club_member_mapping")
+    private CheckedListByUser checkedListByUser;
+
     public ClubMemberMapping() {
+
     }
 }

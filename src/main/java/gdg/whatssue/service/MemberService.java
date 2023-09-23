@@ -8,6 +8,7 @@ import gdg.whatssue.service.dto.ClubDetailDto;
 import gdg.whatssue.service.dto.ClubJoinRequestListDto;
 import gdg.whatssue.service.dto.ClubMemberListDto;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -58,14 +59,15 @@ public class MemberService {
             return false;
         }
 
-        clubMemberMappingRepository.save(
-            ClubMemberMapping.builder()
+        ClubMemberMapping clubMemberMapping = ClubMemberMapping.builder()
             .member(clubJoinRequest.getMember())
-            .club(clubJoinRequest.getClub()).build());
+            .club(clubJoinRequest.getClub()).build();
+
+        clubMemberMappingRepository.save(clubMemberMapping);
 
         checkedListByUserRepository.save(
             CheckedListByUser.builder()
-                .member(clubJoinRequest.getMember())
+                .club_member_mapping(clubMemberMapping)
                 .checkedCount(0)
                 .absentCount(0)
                 .officialAbsentCount(0).build());
@@ -108,38 +110,31 @@ public class MemberService {
             .map(m -> ClubMemberListDto.builder()
                 .memberId(m.getMember().getMemberId())
                 .memberName(m.getMember().getMemberName())
-                .checkedCount(m.getMember().getCheckedListByUser().getCheckedCount())
-                .absentCount(m.getMember().getCheckedListByUser().getAbsentCount())
-                .officialAbsentCount(m.getMember().getCheckedListByUser().getOfficialAbsentCount())
+                .checkedCount(m.getCheckedListByUser().getCheckedCount())
+                .absentCount(m.getCheckedListByUser().getAbsentCount())
+                .officialAbsentCount(m.getCheckedListByUser().getOfficialAbsentCount())
                 .build())
             .collect(Collectors.toList());
 
         return allMemberList;
     }
     //가입 요청
-    public ResponseEntity requestJoin(Long userId, String teamId) {
-        //Link 테이블의 LinkUrl로 club 찾기
-        Link link = linkRepository.findByLinkUrl(teamId).orElse(null);
-        if(link == null){
-            return new ResponseEntity(HttpStatus.BAD_REQUEST);
-        }
-        else{
-            Club club = link.getClub();
-            Member member = memberRepository.findById(userId).orElse(null);
-            if(member == null){
+    public ResponseEntity requestJoin(Long userId, Long clubId) {
+        //clubId 로 Club 정보 가져오기
+        Club club = clubRepository.findById(clubId).get();
+        Member member = memberRepository.findById(userId).orElse(null);
+        if(member == null){
                 //존재하지 않는 회원입니다.문구 를 리턴
                 return ResponseEntity.badRequest().body("회원이 존재하지 않습니다.");
-            }
-            else{
+        }
+        else{
                 ClubJoinRequest clubJoinRequest = ClubJoinRequest.builder()
                     .club(club)
                     .member(member)
                     .build();
                 joinRequestRepository.save(clubJoinRequest);
                 return ResponseEntity.ok().body("가입 요청이 완료되었습니다.");
-            }
         }
-
     }
 
     public ResponseEntity requestJoinInfo(String teamId, Long userId) {
