@@ -68,7 +68,7 @@ public class MemberService {
 
         checkedListByUserRepository.save(
             CheckedListByUser.builder()
-                .club_member_mapping(clubMemberMapping)
+                .clubMemberMapping(clubMemberMapping)
                 .checkedCount(0)
                 .absentCount(0)
                 .officialAbsentCount(0).build());

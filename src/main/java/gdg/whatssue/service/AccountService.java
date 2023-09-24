@@ -235,7 +235,7 @@ public class AccountService {
                 //moneyBookList.removeIf(mb->mb.getMoneyBookId().equals(bookId));
                 //Club 엔티티에는 MoneyBook 객체에 대한 참조가 존재함.
                 //club.setMoneyBooks(moneyBookList); // 하...club 에서 moneybook 객체 정의해둔지 몰랐음ㅋㅋ
-               // moneyBookRepository.save(moneyBook);
+                // moneyBookRepository.save(moneyBook);
                 moneyBookRepository.delete(moneyBook);
 
                 //clubId와 일치하는 입출금내역의 totalAmount 를 update
@@ -250,7 +250,7 @@ public class AccountService {
         }else{
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("can't find club");
 
-            }
+        }
     }
 
 

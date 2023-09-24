@@ -1,11 +1,7 @@
 package gdg.whatssue.service;
 
-import gdg.whatssue.entity.AttendanceByUserBySchedule;
-import gdg.whatssue.entity.Schedule;
-import gdg.whatssue.repository.ApplyOfficialAbsentRepository;
-import gdg.whatssue.repository.AttendanceByUserByScheduleRepository;
-import gdg.whatssue.repository.MemberRepository;
-import gdg.whatssue.repository.ScheduleRepository;
+import gdg.whatssue.entity.*;
+import gdg.whatssue.repository.*;
 import gdg.whatssue.service.dto.AttendanceStateBySheduleDto;
 import gdg.whatssue.service.dto.CheckNumDto;
 import jakarta.annotation.PostConstruct;
@@ -29,6 +25,9 @@ public class AttendanceService {
     private final ScheduleRepository scheduleRepository;
     private final MemberRepository  memberRepository;
     private final AttendanceByUserByScheduleRepository attendanceByUserByScheduleRepository;
+    private final CheckedListByUserRepository checkedListByUserRepository;
+    private final ClubMemberMappingRepository clubMemberMappingRepository;
+    private final ClubRepository clubRepository;
     private final Map<Long, Integer> checkNumMap = new HashMap<>();
     //출석 시작
     public Integer startAttendance(Long scheduleId){
@@ -103,6 +102,44 @@ public class AttendanceService {
             return ResponseEntity.ok("출석이 종료되었습니다.");
         }else return new ResponseEntity("출석이 종료되지 않았습니다.", null, 404);
     }
+
+    public ResponseEntity<?> reflectAttendanceByUser(Long scheduleId){
+           List<AttendanceByUserBySchedule> AScheUserList = attendanceByUserByScheduleRepository.findBySchedule_ScheduleId(scheduleId);
+
+           for(AttendanceByUserBySchedule attendance : AScheUserList){
+               Member member = attendance.getMember();
+
+               Optional<ClubMemberMapping> clubMemberMappingOptional = Optional.ofNullable(clubMemberMappingRepository.findByMember_MemberId(member.getMemberId()));
+               ClubMemberMapping clubMemberMapping = clubMemberMappingOptional.orElseGet(() -> {
+                   // 값이 없는 경우 ClubMemberMapping을 빌드하여 생성
+                   ClubMemberMapping newClubMemberMapping = ClubMemberMapping.builder()
+                           .member(member)
+                           .club(member.getClub())
+                            .build();
+
+                   // 생성한 ClubMemberMapping 저장
+                   clubMemberMappingRepository.save(newClubMemberMapping);
+                   return newClubMemberMapping;
+               });
+
+               clubMemberMappingOptional.ifPresent(value -> {
+                   CheckedListByUser checkedListByUser = checkedListByUserRepository.findByClubMemberMapping_ClubMemberMappingId(clubMemberMapping.getClubMemberMappingId());
+                   if(attendance.getAttendanceType().equals("출석")){
+                       checkedListByUser.setCheckedCount(checkedListByUser.getCheckedCount()+1);
+                   }else if(attendance.getAttendanceType().equals("결석")){
+                       checkedListByUser.setAbsentCount(checkedListByUser.getAbsentCount()+1);
+                   } else if (attendance.getAttendanceType().equals("공결")) {
+                       checkedListByUser.setOfficialAbsentCount(checkedListByUser.getOfficialAbsentCount()+1);
+                   }else {
+                          return;
+                   }
+                   checkedListByUserRepository.save(checkedListByUser);
+               });
+
+           }
+              return ResponseEntity.ok("출석이 반영되었습니다.");
+    }
+
 }
 
 

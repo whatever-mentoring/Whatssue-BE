@@ -39,13 +39,14 @@ public class Member {
     @JoinColumn(name = "club_id")
     private Club club;
 
-
     @OneToOne(mappedBy = "member")
     private Admin admin;
 
     @OneToMany(mappedBy = "member")
     private List<ClubMemberMapping> clubList;
 
+    @OneToMany(mappedBy = "member")
+    private List<ClubMemberMapping> clubMemberMappingList = new ArrayList<>();
     @Builder
     public Member(String memberNickName, String memberPw, String memberName, String memberEmail, String memberPhone) {
         this.memberNickName = memberNickName;
