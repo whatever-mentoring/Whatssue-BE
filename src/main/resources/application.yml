@@ -15,6 +15,7 @@ spring:
     init:
       encoding: UTF-8
 
+
 server:
   port: 8090
   error:

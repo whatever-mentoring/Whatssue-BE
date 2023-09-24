@@ -3,7 +3,7 @@ package gdg.whatssue.controller.inter;
 import io.swagger.v3.oas.annotations.Operation;
 import jdk.jshell.spi.ExecutionControl.NotImplementedException;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
+//import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
@@ -21,9 +21,9 @@ public interface MemberController {
     @PostMapping("/join-refuse/{joinId}")
     ResponseEntity refuseJoinRequest(@PathVariable Long joinId) throws NotImplementedException;
 
-    //멤버 가입요청 리스트 조회
-    @GetMapping("/join-list")
-    ResponseEntity getJoinRequestList(Authentication auth) throws NotImplementedException;
+//    //멤버 가입요청 리스트 조회
+//    @GetMapping("/join-list")
+//    ResponseEntity getJoinRequestList(Authentication auth) throws NotImplementedException;
 
     //멤버 목록 조회
     @GetMapping("/manage")

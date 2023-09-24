@@ -64,28 +64,32 @@ public class AttendanceService {
                 .collect(Collectors.toList());
         return ResponseEntity.ok(AttendanceStateBySheduleList);
     }
-
     // 출석 하기
     public ResponseEntity doAttendance(Long scheduleId, Integer num) throws Exception {
         //어떤 클럽의 schedule을 찾을 것인지 모르니 일단 임시로 1번 user가 속한 클럽의 스케줄을 조회
         Long memberId = 1L;
+        Optional<Integer> checkNum = Optional.ofNullable(checkNumMap.get(scheduleId));
+        if(checkNum.isEmpty()){
+            return new ResponseEntity("해당 일정에 대한 출석이 시작되지 않았습니다.", null, 404);
+        }
         // 이미 해당 스케줄에 대하여 해당 멤버가 출석을 했는지 확인-> 만약 출석을 한 적이 있다면 예외 처리
-        if(attendanceByUserByScheduleRepository.findBySchedule_ScheduleIdAndMember_MemberId(scheduleId, memberId) != null) {
-            throw new ResponseStatusException(BAD_REQUEST, "이미 출석을 하셨습니다."); //404
+        AttendanceByUserBySchedule attendance = attendanceByUserByScheduleRepository.findBySchedule_ScheduleIdAndMember_MemberId(scheduleId,memberId).orElseThrow(
+                () -> new ResponseStatusException(BAD_REQUEST, "해당 스케줄에 대한 출석 정보가 없습니다."));
+        if (attendance.getAttendanceType().equals("출석")) {
+            throw new ResponseStatusException(BAD_REQUEST, "이미 출석을 하셨습니다.");
         }
 
+        //출석 번호가 일치하는지 확인
         if (checkNumMap.get(scheduleId).equals(num)) {
 //            AttendanceByUserBySchedule attendance =  AttendanceByUserBySchedule.builder()
 //                    .attendanceType("출석")
 //                    .member(memberRepository.findById(memberId).get())
 //                    .schedule(scheduleRepository.findById(scheduleId).get())
 //                    .build();
-            AttendanceByUserBySchedule attendance = attendanceByUserByScheduleRepository.findBySchedule_ScheduleIdAndMember_MemberId(scheduleId,memberId);
             attendance.setAttendanceType("출석");
             attendanceByUserByScheduleRepository.save(attendance);
-        }else return new ResponseEntity("출석 번호가 일치하지 않습니다.", null, 404);
+        } else return new ResponseEntity("출석 번호가 일치하지 않습니다.", null, 404);
         return ResponseEntity.ok("출석 완료.");
-
     }
     // 출석 열기 (출석 시도)
     public ResponseEntity openAttendance(Long scheduleId){
@@ -99,11 +103,50 @@ public class AttendanceService {
             Schedule schedule = scheduleRepository.findById(scheduleId).get();
             schedule.setIsChecked(true);
             scheduleRepository.save(schedule);
+            reflectAttendanceByUser(scheduleId); // 출석 내용 멤버별 출석 사항에 반영
             return ResponseEntity.ok("출석이 종료되었습니다.");
         }else return new ResponseEntity("출석이 종료되지 않았습니다.", null, 404);
     }
+    public ResponseEntity<?> attendanceByUser(Long ScheduleId)   {
+        List<AttendanceByUserBySchedule> attendanceByUser = attendanceByUserByScheduleRepository.findBySchedule_ScheduleId(ScheduleId);
+            Long memberId = 1L;
+          int checkedCount = 0;
+         int absentCount = 0;
+         int officialAbsentCount = 0;
+        for(AttendanceByUserBySchedule attendance : attendanceByUser){
+            if(attendance.getAttendanceType().equals("출석")){
+                checkedCount++;
+            }else if(attendance.getAttendanceType().equals("결석")){
+                absentCount++;
+            }else if(attendance.getAttendanceType().equals("공결")){
+                officialAbsentCount++;
+            }
+        }
+        Optional<ClubMemberMapping> clubMemberMappingOptional = Optional.ofNullable(clubMemberMappingRepository.findByMember_MemberId(memberId));
+        ClubMemberMapping clubMemberMapping = clubMemberMappingOptional.orElseGet(() -> {
+            // 값이 없는 경우 ClubMemberMapping을 빌드하여 생성
+            ClubMemberMapping newClubMemberMapping = ClubMemberMapping.builder()
+                    .member(memberRepository.findById(memberId).get())
+                    .club(memberRepository.findById(memberId).get().getClub())
+                    .build();
 
-    public ResponseEntity<?> reflectAttendanceByUser(Long scheduleId){
+            // 생성한 ClubMemberMapping 저장
+            clubMemberMappingRepository.save(newClubMemberMapping);
+            return newClubMemberMapping;
+        });
+
+        CheckedListByUser checkedListByUser = CheckedListByUser.builder()
+                .checkedCount(checkedCount)
+                .absentCount(absentCount)
+                .officialAbsentCount(officialAbsentCount)
+                .clubMemberMapping(clubMemberMapping)
+                .build();
+
+        checkedListByUserRepository.save(checkedListByUser);
+        return ResponseEntity.ok("해당 유저의 출석이 반영되었습니다.");
+    }
+
+    public void reflectAttendanceByUser(Long scheduleId){
            List<AttendanceByUserBySchedule> AScheUserList = attendanceByUserByScheduleRepository.findBySchedule_ScheduleId(scheduleId);
 
            for(AttendanceByUserBySchedule attendance : AScheUserList){
@@ -135,9 +178,7 @@ public class AttendanceService {
                    }
                    checkedListByUserRepository.save(checkedListByUser);
                });
-
            }
-              return ResponseEntity.ok("출석이 반영되었습니다.");
     }
 
 }

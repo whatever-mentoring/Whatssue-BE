@@ -7,11 +7,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface AttendanceByUserByScheduleRepository extends JpaRepository<AttendanceByUserBySchedule, Long> {
-    AttendanceByUserBySchedule findBySchedule_ScheduleIdAndMember_MemberId(Long scheduleId,Long MemberId);
+    Optional<AttendanceByUserBySchedule> findBySchedule_ScheduleIdAndMember_MemberId(Long scheduleId, Long MemberId);
     List<AttendanceByUserBySchedule> findBySchedule_ScheduleId(Long scheduleId);
     AttendanceByUserBySchedule findByMemberAndSchedule(Member member, Schedule schedule);
     List<AttendanceByUserBySchedule> findBySchedule(Schedule schedule);
+    List<AttendanceByUserBySchedule> findByMember_MemberId(Long memberId);
 }
