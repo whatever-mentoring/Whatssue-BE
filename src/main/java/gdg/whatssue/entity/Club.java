@@ -42,6 +42,9 @@ public class Club {
     @OneToOne(mappedBy = "club", cascade = CascadeType.ALL, orphanRemoval = true)
     private MoneyBook moneyBook;
 
+    @OneToMany(mappedBy = "club", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ClubMemberMapping> clubMemberMappingList = new ArrayList<>();
+
     @Builder
     public Club(String clubName, String clubInfo, String clubCategory, List<Admin> adminList, List<Member> memberList, List<Schedule> scheduleList, Link link) {
         this.clubName = clubName;
