@@ -24,7 +24,7 @@ public interface AdminController {
 
     //초대 링크 생성
     @PostMapping("/link")
-    ResponseEntity createInviteLink(LinkInfoDto linkInfoDto) throws NotImplementedException;
+    ResponseEntity createInviteLink(@RequestBody LinkInfoDto linkInfoDto) throws NotImplementedException;
 
     //초대 링크 삭제
     @DeleteMapping("/link/{linkId}")

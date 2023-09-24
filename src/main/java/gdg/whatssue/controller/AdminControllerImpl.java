@@ -10,7 +10,10 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.NotImplementedException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.sql.SQLOutput;
 
 @RestController
 @RequiredArgsConstructor
@@ -43,6 +46,7 @@ public class AdminControllerImpl implements AdminController {
             description = "Request Body로 초대 링크 정보를 json 형태로 입력 받아 초대 링크를 생성")
     public ResponseEntity createInviteLink(LinkInfoDto linkInfoDto) throws NotImplementedException {
         Long userId = 1L;
+        System.out.println("링크닉네임:"+ linkInfoDto.getLinkName());
         return adminService.createInviteLink(userId,linkInfoDto);
 
     }

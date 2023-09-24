@@ -9,13 +9,17 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class Link {
-    private String linkName;
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long linkId;
 
     private String linkUrl;
+
+
+    @Column(name = "link_name")
+    private String linkName;
 
     @OneToOne
     @JoinColumn(name = "club_id")
