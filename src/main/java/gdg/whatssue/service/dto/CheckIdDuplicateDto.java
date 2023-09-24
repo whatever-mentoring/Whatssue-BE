@@ -7,7 +7,6 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class CheckIdDuplicateDto {
-
     @NotBlank
     String memberNickName;
 }

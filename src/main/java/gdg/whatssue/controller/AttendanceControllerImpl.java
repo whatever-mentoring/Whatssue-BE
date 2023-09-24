@@ -34,6 +34,7 @@ public class AttendanceControllerImpl implements AttendanceController {
             description = "관리자가 출석을 종료")
     @DeleteMapping("/{scheduleId}/attendance")
     public ResponseEntity<?> finishAttendance(Long scheduleId) throws NotImplementedException {
+        attendanceService.reflectAttendanceByUser(scheduleId);
         return attendanceService.finishAttendance(scheduleId);
     }
     // 출석 재시작
@@ -72,5 +73,4 @@ public class AttendanceControllerImpl implements AttendanceController {
     public ResponseEntity<?> doAttendance(@PathVariable Long scheduleId, @RequestBody CheckNumDto dto) throws Exception {
         return attendanceService.doAttendance(scheduleId, dto.getNumber());
     }
-
 }

@@ -1,20 +1,17 @@
 package gdg.whatssue.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 @Entity
 @Getter
-@AllArgsConstructor
 @Builder
+@AllArgsConstructor
 @NoArgsConstructor
+@Setter
 public class CheckedListByUser {
     @Id
-    @GeneratedValue(strategy= GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long checkedListByUserId;
 
     private int checkedCount;
@@ -24,4 +21,6 @@ public class CheckedListByUser {
     @OneToOne
     @JoinColumn(name = "club_member_mapping_id")
     private ClubMemberMapping club_member_mapping;
+
+
 }

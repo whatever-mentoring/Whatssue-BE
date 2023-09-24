@@ -4,5 +4,5 @@ import gdg.whatssue.entity.ClubMemberMapping;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface ClubMemberMappingRepository extends JpaRepository<ClubMemberMapping, Long> {
-
+        ClubMemberMapping findByMember_MemberId(Long memberId);
 }

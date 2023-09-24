@@ -16,6 +16,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @Builder
+@NoArgsConstructor
 public class ClubMemberMapping {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,6 +33,4 @@ public class ClubMemberMapping {
     @OneToOne(mappedBy = "club_member_mapping")
     private CheckedListByUser checkedListByUser;
 
-    public ClubMemberMapping() {
-    }
 }
