@@ -76,7 +76,9 @@ public class AdminService {
 
     }
 
+    @Transactional
     public ResponseEntity createInviteLink(Long userId, LinkInfoDto linkInfoDto){
+
         Club club = memberRepository.findById(userId).get().getClub();
         //클럽이 존재하지 않는경우 예외처리
         if (club == null) {
@@ -94,19 +96,21 @@ public class AdminService {
                 String str = createLink();
                 String link = "member/join/request?teamId=" + str;
                 //Link Entity 에 Builder 이용 저장
-                linkRepository.save(Link.builder()
+                Link linkbuilder = Link.builder()
                         .linkName(linkInfoDto.getLinkName())
                         .linkUrl(link)
                         .club(club)
-                        .build());
+                        .build();
+
+                linkRepository.save(linkbuilder);
 
                 //save 후 생긴 linkId get
-                Long linkId = linkRepository.findByLinkUrl(link).get().getLinkId();
+                Link linkResult = linkRepository.findByLinkUrl(link).orElse(null);
                 //결과
                 LinkResultDto linkResultDto = LinkResultDto.builder()
-                        .LinkId(linkId.toString())
+                        .LinkId(String.valueOf(linkResult.getLinkId()))
                         .LinkUrl(link)
-                        .LinkName(linkInfoDto.getLinkName())
+                        .LinkName(linkResult.getLinkName())
                         .build();
 
                 return ResponseEntity.ok().body(linkResultDto);

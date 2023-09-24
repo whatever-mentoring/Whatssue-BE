@@ -1,10 +1,12 @@
 package gdg.whatssue.service.dto;
 
-import lombok.Builder;
-import lombok.Getter;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.*;
 
 @Getter
-@Builder
+@NoArgsConstructor
 public class LinkInfoDto {
+    @JsonProperty("linkName")
     String linkName;
+
 }
