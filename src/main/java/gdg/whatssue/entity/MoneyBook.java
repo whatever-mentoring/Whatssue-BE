@@ -7,6 +7,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.OneToOne;
 import lombok.*;
 import org.hibernate.annotations.Formula;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -51,10 +53,12 @@ public class MoneyBook {
     public void saveClub(Club club){
         this.club = club;
     }
-    public void updateMoneyBook(MoneyBook updateMoneyBook) {
+    public void updateMoneyBook(String bookTitle,BigDecimal bookAmount,Club club,BigDecimal totalPaidAmount) {
 
-        this.bookTitle = updateMoneyBook.bookTitle;
-        this.bookAmount = updateMoneyBook.bookAmount;
+        this.bookTitle = bookTitle;
+        this.bookAmount = bookAmount;
+        this.club = club;
+        this.totalPaidAmount = totalPaidAmount;
     }
 
 
