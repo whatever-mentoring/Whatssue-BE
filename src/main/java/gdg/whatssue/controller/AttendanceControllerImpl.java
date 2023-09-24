@@ -1,6 +1,7 @@
 package gdg.whatssue.controller;
 
 import gdg.whatssue.controller.inter.AttendanceController;
+import gdg.whatssue.entity.CheckedListByUser;
 import gdg.whatssue.service.AttendanceService;
 import gdg.whatssue.service.dto.CheckNumDto;
 import io.swagger.v3.oas.annotations.Operation;
@@ -34,7 +35,6 @@ public class AttendanceControllerImpl implements AttendanceController {
             description = "관리자가 출석을 종료")
     @DeleteMapping("/{scheduleId}/attendance")
     public ResponseEntity<?> finishAttendance(Long scheduleId) throws NotImplementedException {
-        attendanceService.reflectAttendanceByUser(scheduleId);
         return attendanceService.finishAttendance(scheduleId);
     }
     // 출석 재시작
@@ -73,4 +73,13 @@ public class AttendanceControllerImpl implements AttendanceController {
     public ResponseEntity<?> doAttendance(@PathVariable Long scheduleId, @RequestBody CheckNumDto dto) throws Exception {
         return attendanceService.doAttendance(scheduleId, dto.getNumber());
     }
+    @Operation(
+            summary = "유저별 출공결 횟수",
+            description = "유저별로 출석, 공결, 결석 횟수 반환")
+    @GetMapping("/attendance/check/memeber")
+    public ResponseEntity<?> getAttendanceByUser(Long memberId) throws Exception {
+        return attendanceService.attendanceByUser(memberId);
+    }
+
+
 }

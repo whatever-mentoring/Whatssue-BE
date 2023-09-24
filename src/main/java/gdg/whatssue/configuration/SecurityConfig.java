@@ -34,7 +34,9 @@ public class SecurityConfig {
                     "/api/user/**",
                         "/v3/api-docs/**",
                         "/swagger-ui/**").permitAll()
+//                        .anyRequest().permitAll())
                         .requestMatchers("/api/**").authenticated()) //전부 권한 필요
+
             .addFilterBefore(new JwtTokenFilter(userService, secretKey), UsernamePasswordAuthenticationFilter.class)
             .build();
     }
