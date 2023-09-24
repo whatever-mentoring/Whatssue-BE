@@ -10,11 +10,13 @@ import jakarta.servlet.http.HttpServletRequest;
 import jdk.jshell.spi.ExecutionControl.NotImplementedException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
+@CrossOrigin
 @RequiredArgsConstructor
 @Tag(name = "Absent", description = "공결 신청, 조회, 수락, 거절")
 public class AbsentControllerImpl implements AbsentController {

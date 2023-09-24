@@ -23,4 +23,6 @@ public interface MoneyBookRepository extends JpaRepository<MoneyBook,Long> {
 
     @Query("select m.totalPaidAmount from MoneyBook m where m.club = :club")
     BigDecimal findTotalAmountByClub(Club club);
+
+    void deleteByClub(Club club);
 }

@@ -51,18 +51,13 @@ public class AccountService {
     public ResponseEntity createBook(AccountBookCreateDto accountBookCreateDto) {
         Long clubId = 1L;
         Optional<Club> optionalClub = clubRepository.findById(clubId);
+        BigDecimal  bookAmount = new BigDecimal(accountBookCreateDto.getBookAmount());
+        BigDecimal totalAmount = new BigDecimal(0);
         //club 이 존재 할 경우
         if (optionalClub.isPresent()) {
             Club club = optionalClub.get();
             //MoneyBook moneyBook = MoneyBookCreateMapper.INSTANCE.toEntity(accountBookCreateDto);
 
-            //builder 이용
-            MoneyBook moneyBook = MoneyBook.builder()
-                    .club(club)
-                    //bookAmount 형변환
-                    .bookAmount(new BigDecimal(accountBookCreateDto.getBookAmount()))
-                    .bookTitle(accountBookCreateDto.getBookTitle())
-                    .build();
 
             try {
                 //기존에 clubId 와 일치하는 리스트 가져오기
@@ -70,33 +65,37 @@ public class AccountService {
 
                 if (moneyBookList.size() != 0) {
                     //moneyBookList 에서 totalPaidAmount를 가져온다.
-                    BigDecimal totalAmount = moneyBookRepository.findTotalAmountByClub(club);
-
+                    totalAmount = moneyBookList.get(0).getTotalPaidAmount();
                     //totalAmount 에 입력받은 bookamount 를 더해준다.
-                    totalAmount = totalAmount.add(moneyBook.getBookAmount());
+                    totalAmount = totalAmount.add(bookAmount);
                     System.out.println("totalAmount2 = " + totalAmount   );
-                    if(totalAmount.compareTo(BigDecimal.ZERO) < 0){
-                        totalAmount = BigDecimal.ZERO;
-                    }
-
-                    //입출금 내역 생성
-                    moneyBook.saveClub(club);
-                    //clubId 에 해당하는 모든 totalAmount 의 값을 forEach 로 변경해준다.
-                    for (MoneyBook book : moneyBookList) {
-                        book.saveMoneyBook(club, totalAmount);
-                    }
-
-                    moneyBookRepository.save(moneyBook);
                 }
                 else{
                     //totalAmount 에 입력받은 bookamount 를 더해준다.
-                    BigDecimal totalAmount = moneyBook.getBookAmount();
-                    System.out.println("totalAmount2 = " + totalAmount   );
-
-                    //입출금 내역 생성
-                    moneyBook.saveMoneyBook(club, totalAmount);
-                    moneyBookRepository.save(moneyBook);
+                    totalAmount = bookAmount;
+                    System.out.println("totalAmount3 = " + totalAmount   );
                 }
+
+                if(totalAmount.compareTo(BigDecimal.ZERO) < 0){
+                    totalAmount = BigDecimal.ZERO;
+                }
+                //입출금 내역 생성
+                for (MoneyBook book : moneyBookList) {
+                    book.setTotalPaidAmount(totalAmount);
+                }
+
+                //builder 이용
+                MoneyBook moneyBook = MoneyBook.builder()
+                        .club(club)
+                        //bookAmount 형변환
+                        .bookAmount(new BigDecimal(accountBookCreateDto.getBookAmount()))
+                        .bookTitle(accountBookCreateDto.getBookTitle())
+                        //totalPaidAmount 는 clubId 가 같은 모든 bookAmount 의 합
+                        .totalPaidAmount(totalAmount)
+                        .build();
+
+                moneyBookList.add(moneyBook);
+                moneyBookList.forEach(money -> moneyBookRepository.save(money));
 
                 return ResponseEntity.ok("입출금 내역 생성 완료");
 
@@ -109,6 +108,122 @@ public class AccountService {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("클럽을 찾을 수 없습니다.");
         }
     }
+
+
+    @Transactional
+    public ResponseEntity updateBook(Long bookId, AccountBookCreateDto accountBookCreateDto) {
+        Long clubId = 1L;
+        Optional<Club> optionalClub = clubRepository.findById(clubId);
+        //bookId 와 일치하는 Moneybook 가져오기
+        MoneyBook moneyBook = moneyBookRepository.findById(bookId).orElseThrow(() -> (
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "입출금 내역을 찾을 수 없습니다.")
+        ));
+
+        //이전의 bookAmount
+        BigDecimal bookAmount = moneyBook.getBookAmount();
+        //이전의 totalAmount
+        BigDecimal totalAmount = moneyBook.getTotalPaidAmount();
+        //BigDecimal 타입으로 변환
+        BigDecimal updateAmount = new BigDecimal(accountBookCreateDto.getBookAmount());
+        if(optionalClub.isPresent()){
+            Club club = optionalClub.get();
+            try{
+                //clubId 와 일치하는 List 가져오기
+                List<MoneyBook> moneyBookList = moneyBookRepository.findAllByClub(club);
+                if(moneyBookList.size()!=0) {
+                    //if BookAmount 가 양수일 경우
+                    if (bookAmount.compareTo(BigDecimal.ZERO) > 0) {
+                        //update 전의 totalAmount 에서 이전의 bookAmount 를 뺀다.
+                        totalAmount = totalAmount.subtract(bookAmount);
+                        //뺀다음에 update 할 값을 totalAmount 에 더해야겠지
+                        totalAmount = totalAmount.add(updateAmount);
+                    } else {
+                        //update 전의 totalAmount 에서 update 후의 bookAmount 를 더한다.
+                        totalAmount = totalAmount.add(bookAmount);
+                        //뺀다음에 update 할 값을 totalAmount 에 더해야겠지
+                        totalAmount = totalAmount.add(updateAmount);
+                    }
+                }else{
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("입출금 내역이 없습니다.");
+                }
+
+                //totalAmount 가 음수 일때
+                if(totalAmount.compareTo(BigDecimal.ZERO) < 0){
+                    totalAmount = BigDecimal.ZERO;
+                }
+
+                //clubId와 일치하는 입출금내역의 totalAmount 를 update
+                for(MoneyBook moneyBook2 : moneyBookList){
+                    moneyBook2.setTotalPaidAmount(totalAmount);
+                }
+
+
+                //moneyBook을 이용해 수정
+                //moneyBookList.add(moneyBook);
+                moneyBook.updateMoneyBook(accountBookCreateDto.getBookTitle(),bookAmount,club,totalAmount);
+
+                return ResponseEntity.ok("update success");
+
+            }catch (Exception e){
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("입출금 내역 수정 실패");
+            }
+        }else{
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("클럽을 찾을 수 없습니다.");
+        }
+    }
+
+
+    @Transactional
+    public ResponseEntity deleteBook(Long bookId) {
+        Long clubId = 1L;
+        //bookID가 moneybook 테이블에 존재하는지 확인
+        //club 와 bookID가 moneybook 테이블에 존재하는지 확인
+        Optional<Club> optionalClub = clubRepository.findById(clubId);
+        //삭제할 금액
+        MoneyBook moneyBook = moneyBookRepository.findById(bookId).orElseThrow(() -> (
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "입출금 내역을 찾을 수 없습니다.")
+        ));
+        BigDecimal bookAmount = moneyBook.getBookAmount();
+        BigDecimal totalAmount = moneyBook.getTotalPaidAmount();
+
+        if(optionalClub.isPresent()) {
+            try {
+                Club club = optionalClub.get();
+                List<MoneyBook> moneyBookList = moneyBookRepository.findAllByClub(club);
+                if (moneyBookList.size() != 0) {
+                    //update 전의 totalAmount 에서 delete 후의 bookAmount 를 뺀다.
+                    totalAmount = totalAmount.subtract(bookAmount);
+                    // 삭제할 Moneybook이 리스트에 있다면 제거
+                    moneyBookList.removeIf(mb -> mb.getMoneyBookId().equals(bookId));
+                } else {
+                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("입출금 내역이 없습니다.");
+                }
+                //totalAmount 가 0일때
+                if (totalAmount.compareTo(BigDecimal.ZERO) < 0) {
+                    totalAmount = BigDecimal.ZERO;
+                }
+
+
+                moneyBook.setClub(null);
+                //moneyBookRepository.save(moneyBook);
+                //clubId 와 bookId 가 일치하는 입출금 내역 삭제
+                moneyBookRepository.deleteById(bookId);
+
+                //clubId와 일치하는 입출금내역의 totalAmount 를 update
+                for (MoneyBook moneyBook1 : moneyBookList) {
+                    moneyBook1.setTotalPaidAmount(totalAmount);
+                }
+
+                return ResponseEntity.ok("입출금 내역 삭제 완료");
+            } catch (Exception e) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("입출금 내역 삭제 실패");
+            }
+        }else{
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("클럽을 찾을 수 없습니다.");
+
+            }
+    }
+
 
     public ResponseEntity getBookList() {
         Long clubId = 1L;
@@ -168,46 +283,7 @@ public class AccountService {
         }
     }
 
-    @Transactional
-    public ResponseEntity updateBook(Long bookId, AccountBookCreateDto accountBookCreateDto) {
-        Long clubId = 1L;
-        //club 와 bookID가 moneybook 테이블에 존재하는지 확인
-        MoneyBook moneyBook = moneyBookRepository.findByClubIdAndMoneyBookId(clubId, bookId).orElseThrow(() -> (
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "입출금 내역을 찾을 수 없습니다.")
-        ));
-
-        if (moneyBook != null) {
-            //dto -> entity 로 매핑
-            MoneyBook updateMoneyBook = MoneyBookCreateMapper.INSTANCE.toEntity(accountBookCreateDto);
-
-            //수정
-            moneyBook.updateMoneyBook(updateMoneyBook);
-
-            return ResponseEntity.ok("입출금 내역 수정 완료");
-
-        } else {
-            // 클럽이 없을 경우에 대한 처리를 추가할 수 있음
-            // 예: ResponseEntity를 사용하여 클럽이 없음을 반환하거나 다른 응답을 반환
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("클럽을 찾을 수 없습니다.");
-        }
-    }
 
 
-    @Transactional
-    public ResponseEntity deleteBook(Long bookId) {
-        Long clubId = 1L;
-        //bookID가 moneybook 테이블에 존재하는지 확인
-        MoneyBook moneyBook = moneyBookRepository.findByClubIdAndMoneyBookId(clubId,bookId).orElseThrow(() -> (
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "입출금 내역을 찾을 수 없습니다."
-        )));
-
-        try {
-            moneyBook.setClub(null);
-            moneyBookRepository.delete(moneyBookRepository.findByMoneyBookId(bookId).orElseThrow(() -> new EntityNotFoundException("존재하지 않는 데이터 입니다.")));
-            return ResponseEntity.ok("입출금 내역 삭제 완료");
-        } catch (EmptyResultDataAccessException e) {
-            return ResponseEntity.badRequest().body("존재하지 않는 데이터 입니다.");
-        }
-    }
 
 }

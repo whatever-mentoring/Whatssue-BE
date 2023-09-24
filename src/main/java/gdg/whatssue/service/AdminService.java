@@ -96,7 +96,7 @@ public class AdminService {
                 //Link Entity 에 Builder 이용 저장
                 linkRepository.save(Link.builder()
                         .linkName(linkInfoDto.getLinkName())
-                        .linkUrl(str)
+                        .linkUrl(link)
                         .club(club)
                         .build());
 
