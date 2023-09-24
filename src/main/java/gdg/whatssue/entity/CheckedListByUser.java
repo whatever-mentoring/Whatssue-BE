@@ -20,7 +20,7 @@ public class CheckedListByUser {
 
     @OneToOne
     @JoinColumn(name = "club_member_mapping_id")
-    private ClubMemberMapping club_member_mapping;
+    private ClubMemberMapping clubMemberMapping;
 
 
 }
