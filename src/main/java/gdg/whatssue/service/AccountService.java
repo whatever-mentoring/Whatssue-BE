@@ -47,6 +47,14 @@ public class AccountService {
         return ResponseEntity.ok("정산 청구 완료");
     }
 
+    public ResponseEntity<?> getClaimList(Long ClubId) {
+        Club club = clubRepository.findById(ClubId).orElseThrow(() -> (
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "클럽을 찾을 수 없습니다.")
+        ));
+        List<Claim> claimList = claimRepository.findAllByClub(club);
+        return ResponseEntity.ok(claimList);
+    }
+
 
     @Transactional
     //변경 (삭제, 입력) 이 일어날때마다 clubId에 해당하는 모든 TotalPaidAmount 가 같은 값을 가져야하는데 그게 안됨 (어려움)

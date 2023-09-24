@@ -12,6 +12,9 @@ public interface AccountingController {
     @PostMapping("/claim")
     ResponseEntity<?> claim(@RequestBody AccountClaimDto dto) throws Exception;
 
+    @GetMapping("/claim/list")
+    ResponseEntity<?> claimList() throws Exception;
+
     //입출금 내역 입력
     @PostMapping("/book/create")
     ResponseEntity createBook(@RequestBody AccountBookCreateDto accountBookCreateDto) throws Exception;
@@ -31,5 +34,6 @@ public interface AccountingController {
     //입출금 내역 삭제
     @DeleteMapping("/book/{bookId}")
     ResponseEntity deleteBook(@PathVariable Long bookId) throws Exception;
+
 
 }
