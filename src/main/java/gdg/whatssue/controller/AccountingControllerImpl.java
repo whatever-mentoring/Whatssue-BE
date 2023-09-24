@@ -32,6 +32,16 @@ public class AccountingControllerImpl implements AccountingController {
         return accountService.createClaim(dto);
     }
 
+    @Operation(
+            summary = "정산 청구 리스트 api",
+            description = "클럽에 소속된 모든 user에게 청구 신청"
+    )
+    public ResponseEntity<?> claimList() throws Exception {
+        log.info("정산 청구 리스트 api 호출");
+        Long clubId = 1L;
+        return accountService.getClaimList(clubId);
+    }
+
     @Override
     @Operation(
             summary = "입출금 내역 입력 api",
