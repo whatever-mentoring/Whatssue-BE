@@ -30,7 +30,7 @@ public class ClubMemberMapping {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @OneToOne(mappedBy = "club_member_mapping")
+    @OneToOne(mappedBy = "clubMemberMapping")
     private CheckedListByUser checkedListByUser;
 
 }
