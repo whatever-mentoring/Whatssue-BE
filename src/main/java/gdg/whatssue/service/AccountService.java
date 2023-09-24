@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.math.BigDecimal;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
 
@@ -47,6 +48,7 @@ public class AccountService {
     }
 
 
+    @Transactional
     //변경 (삭제, 입력) 이 일어날때마다 clubId에 해당하는 모든 TotalPaidAmount 가 같은 값을 가져야하는데 그게 안됨 (어려움)
     public ResponseEntity createBook(AccountBookCreateDto accountBookCreateDto) {
         Long clubId = 1L;
@@ -191,10 +193,20 @@ public class AccountService {
         if(optionalClub.isPresent()) {
             try {
                 Club club = optionalClub.get();
+                List<MoneyBook> moneyBooksInClub = club.getMoneyBooks();
+                // Check if the Moneybook to be deleted exists in the list
+                boolean isExistInList = false;
+                for (MoneyBook mb : moneyBooksInClub) {
+                    if (mb.getMoneyBookId().equals(bookId)) {
+                        isExistInList = true;
+                        break;
+                    }
+                }
 
+                if (!isExistInList) return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("don't find moneybook");
 
                 List<MoneyBook> moneyBookList = moneyBookRepository.findAllByClub(club);
-                if (moneyBookList.size() != 0 && club.getMoneyBook().equals(moneyBook)) {
+                if (moneyBookList.size() != 0) {
                     //update 전의 totalAmount 에서 delete 하는 bookAmount 를 뺀다.
                     //if bookAmount 가 음수면 더해준다.
                     if(bookAmount.compareTo(BigDecimal.ZERO) < 0)
@@ -204,10 +216,15 @@ public class AccountService {
                         totalAmount = totalAmount.subtract(bookAmount);
                     }
                     // 삭제할 Moneybook이 리스트에 있다면 제거
-                    moneyBookList.removeIf(mb -> mb.getMoneyBookId().equals(bookId));
+                    Iterator<MoneyBook> iterator=club.getMoneyBooks().iterator();
+                    while(iterator.hasNext()){
+                        MoneyBook mb=iterator.next();
+                        if(mb.getMoneyBookId().equals(moneyBook.getMoneyBookId())){
+                            iterator.remove();
+                            break;
+                        }
+                    }
 
-                } else {
-                    return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("don't find moneybook");
                 }
                 /*
                 //totalAmount 가 0일때
@@ -215,10 +232,10 @@ public class AccountService {
                     totalAmount = BigDecimal.ZERO;
                 }
                 */
-
+                //moneyBookList.removeIf(mb->mb.getMoneyBookId().equals(bookId));
                 //Club 엔티티에는 MoneyBook 객체에 대한 참조가 존재함.
-                club.setMoneyBook(null); // 하...club 에서 moneybook 객체 정의해둔지 몰랐음ㅋㅋ
-                moneyBookRepository.save(moneyBook);
+                //club.setMoneyBooks(moneyBookList); // 하...club 에서 moneybook 객체 정의해둔지 몰랐음ㅋㅋ
+               // moneyBookRepository.save(moneyBook);
                 moneyBookRepository.delete(moneyBook);
 
                 //clubId와 일치하는 입출금내역의 totalAmount 를 update
