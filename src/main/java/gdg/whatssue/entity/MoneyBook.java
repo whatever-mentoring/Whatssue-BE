@@ -27,7 +27,7 @@ public class MoneyBook {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long moneyBookId;
 
-    @OneToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "club_id")
     private Club club;
 
