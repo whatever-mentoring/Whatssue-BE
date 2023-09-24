@@ -39,8 +39,8 @@ public class Club {
     @OneToMany(mappedBy = "club", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Claim> claimList = new ArrayList<>();
 
-    @OneToOne(mappedBy = "club", cascade = CascadeType.ALL, orphanRemoval = true)
-    private MoneyBook moneyBook;
+    @OneToMany(mappedBy = "club", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<MoneyBook> moneyBooks;
 
     @OneToMany(mappedBy = "club", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ClubMemberMapping> clubMemberMappingList = new ArrayList<>();
