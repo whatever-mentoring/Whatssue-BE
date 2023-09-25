@@ -15,6 +15,7 @@ public class ApplyOfficialAbsent {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long applyOfficialAbsentId;
+
     private String absentReason;
     private LocalDate absentDate;
     private String absentIsAccepted;
