@@ -15,10 +15,11 @@ public interface AccountingController {
     @GetMapping("/claim/list")
     ResponseEntity<?> claimList() throws Exception;
 
-    @PostMapping("/claim/{memberId}/{claimId}")
-    ResponseEntity<?> claimMemberIsPaid(@PathVariable Long memberId, @PathVariable Long claimId) throws Exception;
+    @PostMapping("/claim/{claimResultId}")
+    ResponseEntity<?> claimMemberIsPaid(@PathVariable Long claimResultId) throws Exception;
 
-
+    @GetMapping("/claim/result/list/{claimId}")
+    ResponseEntity<?> claimResultList(@PathVariable Long claimId) throws Exception;
     //입출금 내역 입력
     @PostMapping("/book/create")
     ResponseEntity createBook(@RequestBody AccountBookCreateDto accountBookCreateDto) throws Exception;

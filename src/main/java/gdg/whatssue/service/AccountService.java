@@ -6,6 +6,7 @@ import gdg.whatssue.repository.*;
 import gdg.whatssue.service.dto.AccountBookCreateDto;
 import gdg.whatssue.service.dto.AccountBookListDto;
 import gdg.whatssue.service.dto.AccountClaimDto;
+import gdg.whatssue.service.dto.AccountClaimResDto;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -45,6 +46,7 @@ public class AccountService {
                 .claimName(dto.getClaimName())
                 .build();
         claimRepository.save(claim);
+
         List<Member> members = memberRepository.findAllByClub(club);
         for(Member member : members){
             ClaimResult claimResult = ClaimResult.builder()
@@ -58,6 +60,7 @@ public class AccountService {
                 .member(null)
                 .claim(claim)
                 .build();
+
         return ResponseEntity.ok("정산 청구 완료");
     }
 
@@ -76,14 +79,9 @@ public class AccountService {
         return ResponseEntity.ok(accountClaimDtoList);
         }else return ResponseEntity.status(HttpStatus.NOT_FOUND).body("클럽을 찾을 수 없습니다.");
     }
-    public ResponseEntity<?> checkMemberPaid(Long memberId, Long claimId){
-        Member member = memberRepository.findById(memberId).orElseThrow(() -> (
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "멤버를 찾을 수 없습니다.")
-        ));
-        Claim claim = claimRepository.findById(claimId).orElseThrow(() -> (
-                new ResponseStatusException(HttpStatus.NOT_FOUND, "정산 청구를 찾을 수 없습니다.")
-        ));
-        ClaimResult claimResult = claimResultRepository.findByMemberAndClaim(member,claim).orElseThrow(() -> (
+
+    public ResponseEntity<?> checkMemberPaid(Long claimResultId){
+        ClaimResult claimResult = claimResultRepository.findById(claimResultId).orElseThrow(() -> (
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "일치하는 유저의 청구 결과표가 없습니다.")
         ));
         claimResult.setIsPaid(true);
@@ -91,6 +89,19 @@ public class AccountService {
         return ResponseEntity.ok("정산 청구 결과 저장 완료");
     }
 
+    public ResponseEntity<?> getMemberPaidList(Long claimId){
+        Claim claim = claimRepository.findById(claimId).orElseThrow(() -> (
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "정산 청구를 찾을 수 없습니다.")
+        ));
+        List<ClaimResult> claimResultList = claimResultRepository.findAllByClaim(claim);
+        List<AccountClaimResDto> accountClaimResDtosList = claimResultList.stream().map(claimResult -> AccountClaimResDto.builder()
+                .memberName(claimResult.getMember().getMemberName())
+                .claimResultId(claimResult.getClaimResultId())
+                .claimAmount(claimResult.getClaim().getClaimAmount().toString())
+                .isPaid(claimResult.getIsPaid())
+                .build()).toList();
+        return ResponseEntity.ok(accountClaimResDtosList);
+    }
     @Transactional
     //변경 (삭제, 입력) 이 일어날때마다 clubId에 해당하는 모든 TotalPaidAmount 가 같은 값을 가져야하는데 그게 안됨 (어려움)
     public ResponseEntity createBook(AccountBookCreateDto accountBookCreateDto) {
