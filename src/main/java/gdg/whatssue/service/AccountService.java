@@ -76,7 +76,6 @@ public class AccountService {
         return ResponseEntity.ok(accountClaimDtoList);
         }else return ResponseEntity.status(HttpStatus.NOT_FOUND).body("클럽을 찾을 수 없습니다.");
     }
-
     public ResponseEntity<?> checkMemberPaid(Long memberId, Long claimId){
         Member member = memberRepository.findById(memberId).orElseThrow(() -> (
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "멤버를 찾을 수 없습니다.")
