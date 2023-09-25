@@ -8,6 +8,7 @@ import gdg.whatssue.service.dto.AccountBookListDto;
 import gdg.whatssue.service.dto.AccountClaimDto;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,6 +23,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class AccountService {
     private final ClaimRepository claimRepository;
     private final ClubRepository clubRepository;
@@ -63,8 +65,16 @@ public class AccountService {
         Club club = clubRepository.findById(ClubId).orElseThrow(() -> (
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "클럽을 찾을 수 없습니다.")
         ));
+        log.info("club = " + club);
         List<Claim> claimList = claimRepository.findAllByClub(club);
-        return ResponseEntity.ok(claimList);
+        if(claimList.size() != 0){
+        List<AccountClaimDto> accountClaimDtoList = claimList.stream().map(claim -> AccountClaimDto.builder()
+                .claimName(claim.getClaimName())
+                .claimAmount(claim.getClaimAmount().toString())
+                .claimDate(claim.getClaimDate().toString())
+                .build()).toList();
+        return ResponseEntity.ok(accountClaimDtoList);
+        }else return ResponseEntity.status(HttpStatus.NOT_FOUND).body("클럽을 찾을 수 없습니다.");
     }
     public ResponseEntity<?> checkMemberPaid(Long memberId, Long claimId){
         Member member = memberRepository.findById(memberId).orElseThrow(() -> (
@@ -92,8 +102,6 @@ public class AccountService {
         if (optionalClub.isPresent()) {
             Club club = optionalClub.get();
             //MoneyBook moneyBook = MoneyBookCreateMapper.INSTANCE.toEntity(accountBookCreateDto);
-
-
             try {
                 //기존에 clubId 와 일치하는 리스트 가져오기
                 List<MoneyBook> moneyBookList = moneyBookRepository.findAllByClub(club);
