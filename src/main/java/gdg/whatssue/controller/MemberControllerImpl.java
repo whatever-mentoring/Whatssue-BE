@@ -13,9 +13,10 @@ import jdk.jshell.spi.ExecutionControl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-//import org.springframework.security.core.Authentication;
+import org.springframework.security.core.Authentication;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RestController;
+
 
 @RestController
 @Transactional
@@ -70,15 +71,15 @@ public class MemberControllerImpl implements MemberController {
         return ResponseEntity.status(HttpStatus.OK).body("가입요청 거절 완료");
     }
 
-//    @Override
-//    @Operation(
-//            summary = "멤버 클럽 가입 요청 조회 api",
-//            description = "멤버 클럽 가입 요청 조회")
-//    public ResponseEntity getJoinRequestList(Authentication auth) {
-//        System.out.println(auth.getName());
-//        List<ClubJoinRequestListDto> joinRequestList = memberService.getJoinRequestList();
-//        return ResponseEntity.status(HttpStatus.OK).body(joinRequestList);
-//    }
+    @Override
+    @Operation(
+            summary = "멤버 클럽 가입 요청 조회 api",
+            description = "멤버 클럽 가입 요청 조회")
+    public ResponseEntity getJoinRequestList(Authentication auth) {
+        System.out.println(auth.getName());
+        List<ClubJoinRequestListDto> joinRequestList = memberService.getJoinRequestList();
+        return ResponseEntity.status(HttpStatus.OK).body(joinRequestList);
+    }
 
     @Override
     @Operation(

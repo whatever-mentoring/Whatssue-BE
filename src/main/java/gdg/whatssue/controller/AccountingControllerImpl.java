@@ -44,6 +44,17 @@ public class AccountingControllerImpl implements AccountingController {
 
     @Override
     @Operation(
+            summary = "청구 관련 지불한 멤버 check",
+            description = "클럽에 소속된 모든 user에게 청구 신청"
+    )
+    public ResponseEntity<?> claimMemberIsPaid(@PathVariable(name ="memberId") Long memberId,@PathVariable(name="claimId") Long claimId) throws Exception{
+        log.info("정산 청구 api 호출");
+        log.info(memberId.toString());
+        return accountService.checkMemberPaid(memberId,claimId);
+    };
+
+    @Override
+    @Operation(
             summary = "입출금 내역 입력 api",
             description = "입출금 내역 입력")
     public ResponseEntity createBook(AccountBookCreateDto accountBookCreateDto) throws Exception {
