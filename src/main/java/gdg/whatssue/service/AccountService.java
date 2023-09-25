@@ -1,12 +1,8 @@
 package gdg.whatssue.service;
 
-import gdg.whatssue.entity.Claim;
-import gdg.whatssue.entity.Club;
-import gdg.whatssue.entity.MoneyBook;
+import gdg.whatssue.entity.*;
 import gdg.whatssue.mapper.MoneyBookCreateMapper;
-import gdg.whatssue.repository.ClaimRepository;
-import gdg.whatssue.repository.ClubRepository;
-import gdg.whatssue.repository.MoneyBookRepository;
+import gdg.whatssue.repository.*;
 import gdg.whatssue.service.dto.AccountBookCreateDto;
 import gdg.whatssue.service.dto.AccountBookListDto;
 import gdg.whatssue.service.dto.AccountClaimDto;
@@ -30,12 +26,15 @@ public class AccountService {
     private final ClaimRepository claimRepository;
     private final ClubRepository clubRepository;
     private final MoneyBookRepository moneyBookRepository;
+    private final MemberRepository memberRepository;
+    private final ClaimResultRepository claimResultRepository;
 
     public ResponseEntity<?> createClaim(AccountClaimDto dto) throws Exception {
         Long clubId = 1L; // 1로 가정
         Club club = clubRepository.findById(clubId).orElseThrow(() -> (
                 new ResponseStatusException(HttpStatus.NOT_FOUND, "클럽을 찾을 수 없습니다.")
         ));
+
         Claim claim = Claim.builder()
                 .club(club)
                 .isClosed(false)
@@ -44,6 +43,19 @@ public class AccountService {
                 .claimName(dto.getClaimName())
                 .build();
         claimRepository.save(claim);
+        List<Member> members = memberRepository.findAllByClub(club);
+        for(Member member : members){
+            ClaimResult claimResult = ClaimResult.builder()
+                    .member(member)
+                    .claim(claim)
+                    .isPaid(false)
+                    .build();
+            claimResultRepository.save(claimResult);
+        }
+        ClaimResult claimResult = ClaimResult.builder()
+                .member(null)
+                .claim(claim)
+                .build();
         return ResponseEntity.ok("정산 청구 완료");
     }
 
@@ -54,7 +66,20 @@ public class AccountService {
         List<Claim> claimList = claimRepository.findAllByClub(club);
         return ResponseEntity.ok(claimList);
     }
-
+    public ResponseEntity<?> checkMemberPaid(Long memberId, Long claimId){
+        Member member = memberRepository.findById(memberId).orElseThrow(() -> (
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "멤버를 찾을 수 없습니다.")
+        ));
+        Claim claim = claimRepository.findById(claimId).orElseThrow(() -> (
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "정산 청구를 찾을 수 없습니다.")
+        ));
+        ClaimResult claimResult = claimResultRepository.findByMemberAndClaim(member,claim).orElseThrow(() -> (
+                new ResponseStatusException(HttpStatus.NOT_FOUND, "일치하는 유저의 청구 결과표가 없습니다.")
+        ));
+        claimResult.setIsPaid(true);
+        claimResultRepository.save(claimResult);
+        return ResponseEntity.ok("정산 청구 결과 저장 완료");
+    }
 
     @Transactional
     //변경 (삭제, 입력) 이 일어날때마다 clubId에 해당하는 모든 TotalPaidAmount 가 같은 값을 가져야하는데 그게 안됨 (어려움)
