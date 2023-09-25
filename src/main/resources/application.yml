@@ -15,6 +15,14 @@ spring:
     defer-datasource-initialization: true
 
 
+  jpa:
+    hibernate:
+      ddl-auto: none
+
+    generate-ddl: true
+    defer-datasource-initialization: true
+
+
   mvc:
     pathmatch:
       matching-strategy: ant_path_matcher
