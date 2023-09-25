@@ -47,12 +47,15 @@ public class AccountingControllerImpl implements AccountingController {
             summary = "청구 관련 지불한 멤버 check",
             description = "클럽에 소속된 모든 user에게 청구 신청"
     )
-    public ResponseEntity<?> claimMemberIsPaid(@PathVariable(name ="memberId") Long memberId,@PathVariable(name="claimId") Long claimId) throws Exception{
+    public ResponseEntity<?> claimMemberIsPaid(@PathVariable Long claimResultId ) throws Exception{
         log.info("정산 청구 api 호출");
-        log.info(memberId.toString());
-        return accountService.checkMemberPaid(memberId,claimId);
+        return accountService.checkMemberPaid(claimResultId);
     };
 
+    @Override
+    public ResponseEntity<?> claimResultList(@PathVariable Long claimId) throws Exception {
+        return accountService.getMemberPaidList(claimId);
+    }
     @Override
     @Operation(
             summary = "입출금 내역 입력 api",

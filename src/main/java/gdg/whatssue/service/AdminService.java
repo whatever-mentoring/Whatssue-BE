@@ -41,7 +41,7 @@ public class AdminService {
             return ResponseEntity.badRequest().body("이미 클럽이 존재합니다.");
         }
         //존재하지 않는 경우
-        else{
+        else {
             Club newclub = Club.builder()
                     .clubName(clubDetailDto.getClubName())
                     .clubInfo(clubDetailDto.getClubInfo())
@@ -60,7 +60,6 @@ public class AdminService {
             return ResponseEntity.ok().build();
         }
 
-
     }
 
     public ResponseEntity updateClub(ClubDetailDto clubDetailDto) {
@@ -78,7 +77,6 @@ public class AdminService {
 
     @Transactional
     public ResponseEntity createInviteLink(Long userId, LinkInfoDto linkInfoDto){
-
         Club club = memberRepository.findById(userId).get().getClub();
         //클럽이 존재하지 않는경우 예외처리
         if (club == null) {
