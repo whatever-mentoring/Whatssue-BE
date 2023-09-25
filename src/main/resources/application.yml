@@ -7,6 +7,13 @@ spring:
 
 #  profiles:
 #    include: mysql
+  jpa:
+    hibernate:
+      ddl-auto: update
+
+    generate-ddl: true
+    defer-datasource-initialization: true
+
 
   jpa:
     hibernate:
