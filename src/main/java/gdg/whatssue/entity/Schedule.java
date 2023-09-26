@@ -37,8 +37,8 @@ public class Schedule {
     @JoinColumn(name = "club_id")
     private Club club;
 
-    @OneToOne(mappedBy = "schedule")
-    private ApplyOfficialAbsent applyOfficialAbsent;
+    @OneToMany(mappedBy = "schedule")
+    private List<ApplyOfficialAbsent> applyOfficialAbsents;
 
     @OneToMany(mappedBy = "schedule")
     private List<AttendanceByUserBySchedule> attendanceByUserByScheduleList;
