@@ -20,7 +20,7 @@ public class ApplyOfficialAbsent {
     private LocalDate absentDate;
     private String absentIsAccepted;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "schedule_id")
     private Schedule schedule;
 
